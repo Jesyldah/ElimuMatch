@@ -1,0 +1,22 @@
+persona,intervention_id,intervention,priority_score,priority_label,sponsor_action,unit_cost_kes,owner
+Health-Constrained,school_fee_support,School Fee Support,2,Recommended,Pay term fees / bursary,15000,Sponsor / Bursary fund
+Health-Constrained,academic_tutoring,Academic Tutoring,1,Optional,Fund remedial / catch-up classes,8000,School + education NGO
+Health-Constrained,transport_support,Transport / Boarding,1,Optional,Subsidize commute or boarding,6000,Sponsor / County transport
+Health-Constrained,health_support,Health & Attendance,3,Priority,Medical vouchers + attendance follow-up,5000,School health partner
+Health-Constrained,digital_access,Digital Access Kit,1,Optional,Shared device / data bundle,7000,Sponsor / CSR partner
+Health-Constrained,counseling,Psychosocial Counseling,2,Recommended,Counselor hours / peer support,4000,School counseling unit
+Health-Constrained,enrichment,STEM Enrichment,0,Not indicated,"Clubs, mentoring, competitions",3000,School / alumni mentors
+Academic Strugglers,school_fee_support,School Fee Support,2,Recommended,Pay term fees / bursary,15000,Sponsor / Bursary fund
+Academic Strugglers,academic_tutoring,Academic Tutoring,3,Priority,Fund remedial / catch-up classes,8000,School + education NGO
+Academic Strugglers,transport_support,Transport / Boarding,1,Optional,Subsidize commute or boarding,6000,Sponsor / County transport
+Academic Strugglers,health_support,Health & Attendance,1,Optional,Medical vouchers + attendance follow-up,5000,School health partner
+Academic Strugglers,digital_access,Digital Access Kit,2,Recommended,Shared device / data bundle,7000,Sponsor / CSR partner
+Academic Strugglers,counseling,Psychosocial Counseling,1,Optional,Counselor hours / peer support,4000,School counseling unit
+Academic Strugglers,enrichment,STEM Enrichment,0,Not indicated,"Clubs, mentoring, competitions",3000,School / alumni mentors
+Stable Achievers,school_fee_support,School Fee Support,0,Not indicated,Pay term fees / bursary,15000,Sponsor / Bursary fund
+Stable Achievers,academic_tutoring,Academic Tutoring,0,Not indicated,Fund remedial / catch-up classes,8000,School + education NGO
+Stable Achievers,transport_support,Transport / Boarding,0,Not indicated,Subsidize commute or boarding,6000,Sponsor / County transport
+Stable Achievers,health_support,Health & Attendance,0,Not indicated,Medical vouchers + attendance follow-up,5000,School health partner
+Stable Achievers,digital_access,Digital Access Kit,1,Optional,Shared device / data bundle,7000,Sponsor / CSR partner
+Stable Achievers,counseling,Psychosocial Counseling,0,Not indicated,Counselor hours / peer support,4000,School counseling unit
+Stable Achievers,enrichment,STEM Enrichment,3,Priority,"Clubs, mentoring, competitions",3000,School / alumni mentors

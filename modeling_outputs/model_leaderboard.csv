@@ -1,0 +1,5 @@
+model,cv_auc_mean,cv_auc_std,test_auc,accuracy,recall_dropout,precision_dropout,f1_dropout,recall_retained,best_params
+Gradient Boosting,0.7354,0.0363,0.7543,0.808,0.3333,0.3333,0.3333,0.8879,"{'learning_rate': 0.05, 'max_depth': 6, 'max_iter': 150}"
+Logistic Regression,0.7621,0.0418,0.7527,0.708,0.6667,0.2824,0.3967,0.715,{'C': 0.1}
+Random Forest,0.7694,0.0428,0.7421,0.844,0.0833,0.3333,0.1333,0.972,"{'max_depth': 10, 'min_samples_leaf': 2, 'n_estimators': 400}"
+Majority Class Baseline,0.5,0.0,0.5,0.856,0.0,0.0,0.0,1.0,{}

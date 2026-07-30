@@ -1,0 +1,16 @@
+feature,mean_abs_shap
+Chronic Health Risk Score,0.3223509907709848
+Health Burden Index,0.295742698195884
+Academic Ses Interaction,0.283785352089491
+Social Integration Score,0.2221396263344008
+Barrier Burden Index,0.2139881365130826
+Health Related Absences,0.20919579842183045
+Cash Flow Volatility,0.20584428065591143
+Long Commute Flag,0.14368608369448002
+Nutritional Support Access,0.1394809149320583
+Absence Intensity,0.13854668495347522
+Failed Subjects Count,0.13154655464483664
+Health Commute Interaction,0.1275564225843524
+Gender,0.1209870262411069
+Digital Equity Access Score,0.11510321093433473
+Ses Disadvantage Score,0.10727604274007732

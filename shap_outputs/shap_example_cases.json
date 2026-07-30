@@ -1,0 +1,84 @@
+[
+  {
+    "student_id": 190,
+    "school_id": 13,
+    "prob_dropout": 0.9572,
+    "actual_retained": 0,
+    "case": "high_risk",
+    "top_features": [
+      {
+        "feature": "Academic Ses Interaction",
+        "shap": 1.0964
+      },
+      {
+        "feature": "Barrier Burden Index",
+        "shap": 0.61
+      },
+      {
+        "feature": "Ses Commute Interaction",
+        "shap": 0.4485
+      },
+      {
+        "feature": "Failed Subjects Count",
+        "shap": 0.3838
+      },
+      {
+        "feature": "Commute Barrier Score",
+        "shap": 0.3413
+      },
+      {
+        "feature": "Health Burden Index",
+        "shap": -0.2685
+      },
+      {
+        "feature": "Social Integration Score",
+        "shap": 0.2681
+      },
+      {
+        "feature": "Long Commute Flag",
+        "shap": -0.2647
+      }
+    ]
+  },
+  {
+    "student_id": 745,
+    "school_id": 19,
+    "prob_dropout": 0.0098,
+    "actual_retained": 1,
+    "case": "low_risk",
+    "top_features": [
+      {
+        "feature": "Barrier Burden Index",
+        "shap": -0.691
+      },
+      {
+        "feature": "Cash Flow Volatility",
+        "shap": -0.5998
+      },
+      {
+        "feature": "Academic Ses Interaction",
+        "shap": -0.3836
+      },
+      {
+        "feature": "Social Integration Score",
+        "shap": -0.3627
+      },
+      {
+        "feature": "Chronic Health Risk Score",
+        "shap": -0.3057
+      },
+      {
+        "feature": "Support Coverage Score",
+        "shap": -0.2587
+      },
+      {
+        "feature": "Digital Equity Access Score",
+        "shap": -0.2479
+      },
+      {
+        "feature": "Socioeconomic Status Index",
+        "shap": -0.2196
+      }
+    ]
+  }
+]

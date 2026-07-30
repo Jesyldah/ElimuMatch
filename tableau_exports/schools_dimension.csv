@@ -1,0 +1,48 @@
+school_id,school_name,county,school_type
+1,Kilimani Day Secondary,Nairobi,Day
+2,Nyandarua Mixed Secondary,Nyandarua,Boarding
+3,Kisumu Lakeside Secondary,Kisumu,Day
+4,Machakos Hilltop Secondary,Machakos,Boarding
+5,Nakuru Valley Secondary,Nakuru,Day
+6,Mombasa Coast Secondary,Mombasa,Day
+7,Eldoret Highlands Secondary,Uasin Gishu,Boarding
+8,Thika Green Secondary,Kiambu,Day
+9,Kakamega Forest Secondary,Kakamega,Boarding
+10,Nyeri Ridge Secondary,Nyeri,Boarding
+11,Kitale Plains Secondary,Trans Nzoia,Day
+12,Garissa Horizon Secondary,Garissa,Boarding
+13,Meru Mountain Secondary,Meru,Boarding
+14,Bungoma West Secondary,Bungoma,Day
+15,Embu Sunrise Secondary,Embu,Day
+16,Kericho Highlands Secondary,Kericho,Boarding
+17,Malindi Shore Secondary,Kilifi,Day
+18,Narok Savannah Secondary,Narok,Boarding
+19,Isiolo North Secondary,Isiolo,Boarding
+20,Busia Border Secondary,Busia,Day
+21,Kabarnet Rift Secondary,Baringo,Boarding
+22,Bomet Tea Highlands Secondary,Bomet,Day
+23,Iten Escarpment Secondary,Elgeyo-Marakwet,Boarding
+24,Homa Bay Lakeside Secondary,Homa Bay,Day
+25,Kajiado Plains Secondary,Kajiado,Boarding
+26,Kerugoya Valley Secondary,Kirinyaga,Day
+27,Kisii Highlands Secondary,Kisii,Boarding
+28,Kitui East Secondary,Kitui,Day
+29,Kwale Coast Secondary,Kwale,Day
+30,Nanyuki Plateau Secondary,Laikipia,Boarding
+31,Lamu Island Secondary,Lamu,Day
+32,Wote Ukambani Secondary,Makueni,Day
+33,Mandera Frontier Secondary,Mandera,Boarding
+34,Marsabit Desert Secondary,Marsabit,Boarding
+35,Migori River Secondary,Migori,Day
+36,Murang'a Hills Secondary,Murang'a,Day
+37,Kapsabet Nandi Secondary,Nandi,Boarding
+38,Nyamira Highlands Secondary,Nyamira,Day
+39,Maralal Samburu Secondary,Samburu,Boarding
+40,Siaya Lakeside Secondary,Siaya,Day
+41,Voi Taita Secondary,Taita-Taveta,Boarding
+42,Hola Tana Secondary,Tana River,Day
+43,Chuka Tharaka Secondary,Tharaka-Nithi,Day
+44,Lodwar Turkana Secondary,Turkana,Boarding
+45,Mbale Vihiga Secondary,Vihiga,Day
+46,Wajir North Secondary,Wajir,Boarding
+47,Kapenguria West Pokot Secondary,West Pokot,Boarding

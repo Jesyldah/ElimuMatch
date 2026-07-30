@@ -1,0 +1,20 @@
+ElimuMatch Capstone — START HERE
+================================
+
+FASTEST PATH
+------------
+1. Open:  03_Demos\index.html   (double-click in File Explorer)
+2. Use the three cards: Helper portal | Ops monitor | Analytics
+
+Optional (live gifts / ledger — needs Python):
+   Double-click  03_Demos\OPEN_DEMO.bat
+
+READ FIRST (optional)
+---------------------
+01_Docs\Concept_Exploration_Answers_ElimuMatch.docx
+01_Docs\DATA_AND_LIMITATIONS.md
+01_Docs\COST_BENEFIT_ANALYSIS.md
+
+Full technical reproduce steps: 00_README.md
+
+Capstone = MVP only (HTML dashboards OK). Synthetic data is factually grounded.

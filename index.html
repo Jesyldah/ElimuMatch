@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ElimuMatch — Home</title>
+  <style>
+    :root {
+      --bg: #f4f7f8;
+      --ink: #1a2b32;
+      --muted: #5b6b73;
+      --line: #d7e0e4;
+      --teal: #1f7a6c;
+      --navy: #243b48;
+      --surface: #ffffff;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: "Segoe UI", system-ui, sans-serif;
+      color: var(--ink);
+      min-height: 100vh;
+      background:
+        radial-gradient(1000px 420px at 8% -10%, #dceeea 0%, transparent 55%),
+        radial-gradient(800px 360px at 100% 0%, #e8eef2 0%, transparent 50%),
+        var(--bg);
+      line-height: 1.45;
+    }
+    header {
+      background: linear-gradient(120deg, var(--navy), #1f5c55 70%);
+      color: #f5faf9;
+      padding: 2.25rem 1.5rem 1.75rem;
+    }
+    .wrap { max-width: 960px; margin: 0 auto; padding: 0 1.25rem 2.5rem; }
+    header .wrap { padding-bottom: 0; }
+    .eyebrow {
+      font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase;
+      opacity: 0.8; margin-bottom: 0.4rem;
+    }
+    h1 { font-size: 1.85rem; font-weight: 700; margin-bottom: 0.4rem; }
+    .sub { opacity: 0.9; max-width: 36rem; font-size: 1rem; }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 0.85rem;
+      margin-top: 1.5rem;
+    }
+    a.card {
+      display: block;
+      text-decoration: none;
+      color: inherit;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 1.1rem 1.15rem;
+      transition: border-color 0.15s ease, transform 0.15s ease;
+    }
+    a.card:hover {
+      border-color: var(--teal);
+      transform: translateY(-2px);
+    }
+    a.card .label {
+      font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.06em;
+      color: var(--teal); font-weight: 700; margin-bottom: 0.35rem;
+    }
+    a.card h2 { font-size: 1.05rem; margin-bottom: 0.3rem; }
+    a.card p { font-size: 0.85rem; color: var(--muted); }
+    .note {
+      margin-top: 1.5rem; font-size: 0.8rem; color: var(--muted);
+    }
+    .note code {
+      background: #e8eef2; padding: 0.1rem 0.35rem; border-radius: 4px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <div class="eyebrow">Quantic MSBA Capstone · Proof of Concept</div>
+      <h1>ElimuMatch</h1>
+      <p class="sub">
+        Retention risk scoring, helper matching, and ops monitoring for Kenyan secondary schools.
+      </p>
+    </div>
+  </header>
+
+  <div class="wrap">
+    <div class="grid">
+      <a class="card" href="sponsor_portal.html">
+        <div class="label">Helpers</div>
+        <h2>Sponsor portal</h2>
+        <p>County → school → student → term arrears → gift.</p>
+      </a>
+      <a class="card" href="ops_dashboard.html">
+        <div class="label">Organization</div>
+        <h2>Ops monitor</h2>
+        <p>KPIs, investigation queue, pilot criteria, progress.</p>
+      </a>
+      <a class="card" href="dashboard.html">
+        <div class="label">Analytics</div>
+        <h2>Retention analytics</h2>
+        <p>EDA, model, SHAP, personas, intervention matrix.</p>
+      </a>
+      <a class="card" href="db/schema_dashboard.html">
+        <div class="label">Data model</div>
+        <h2>Schema docs</h2>
+        <p>ERD, dictionary, views, fee ledger design.</p>
+      </a>
+    </div>
+    <p class="note">
+      <strong>Open this page first</strong> (project home). Then use the cards above.<br />
+      For demos with live ledger: double-click <code>OPEN_DEMO.bat</code>
+      or run <code>python db/portal_server.py --open</code>.<br />
+      Full instructions: <code>START_HERE.md</code> in the project / zip root.
+    </p>
+  </div>
+</body>
+</html>

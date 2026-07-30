@@ -1,0 +1,11 @@
+risk_signal,intervention_id,matrix_weight,policy_note,intervention
+Low SES (Q1–Q2),school_fee_support,3,Primary bursary eligibility,School Fee Support
+High cash-flow volatility,school_fee_support,3,Income shock → fee support,School Fee Support
+≥3 failed subjects,academic_tutoring,3,Remediation priority,Academic Tutoring
+Steep GPA decline,academic_tutoring,2,Catch-up classes,Academic Tutoring
+Commute > 8 km,transport_support,3,Transport / boarding,Transport / Boarding
+High health absences,health_support,3,Health & attendance,Health & Attendance
+Chronic health risk ≥ 2,health_support,2,Medical follow-up,Health & Attendance
+No digital access,digital_access,2,Device / data kit,Digital Access Kit
+Low social integration,counseling,2,Psychosocial support,Psychosocial Counseling
+Science talent + stable GPA,enrichment,3,STEM enrichment,STEM Enrichment

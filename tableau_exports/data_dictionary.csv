@@ -1,0 +1,22 @@
+Field,Table,Description,Tableau Role
+Student ID,students_exploration.csv,Unique student identifier,Dimension
+School Name,students_exploration.csv,Named secondary school (synthetic),Dimension
+Gender,students_exploration.csv,Boy / Girl,Dimension
+SES Label,students_exploration.csv,Socioeconomic quintile label,Dimension
+SES Quintile,students_exploration.csv,1 (lowest) to 5 (highest),Dimension / Measure
+Commute Distance (km),students_exploration.csv,Estimated travel distance to school,Measure
+Digital Access,students_exploration.csv,No access / Shared / Personal,Dimension
+GPA Trend,students_exploration.csv,Year-over-year GPA change,Measure
+Failed Subjects,students_exploration.csv,Count of failed core subjects,Measure
+Health Absences (days),students_exploration.csv,School days missed due to illness,Measure
+Cash Flow Volatility,students_exploration.csv,Household income instability (0.12–0.32),Measure
+Retained,students_exploration.csv,Yes = still enrolled; No = dropped out,Dimension
+Dropout Reason,students_exploration.csv,Primary reason if dropped; else Still enrolled,Dimension
+Risk Persona,students_exploration.csv,K-Means persona label,Dimension
+Academic Risk Index,students_exploration.csv,Engineered: failures − GPA trend,Measure
+Barrier Burden Index,students_exploration.csv,Engineered access/SES barrier composite,Measure
+Recommended Intervention,students_exploration.csv,Primary sponsor action match,Dimension
+Recommended Cost (KES),students_exploration.csv,Illustrative unit cost of intervention,Measure
+Model Risk Score (oracle),students_exploration.csv,"Synthetic generator probability — exploration only, not for modeling claims",Measure
+Retention Rate (%),schools_summary.csv,Share retained at school,Measure
+Fee Support Candidates,schools_summary.csv,Students whose primary match is school fee support,Measure

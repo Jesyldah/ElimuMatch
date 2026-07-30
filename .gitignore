@@ -1,0 +1,34 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+.env
+.env.*
+
+# OS / editor
+.DS_Store
+Thumbs.db
+*.swp
+.idea/
+.vscode/
+
+# Local caches / notebooks checkpoints
+.ipynb_checkpoints/
+.pytest_cache/
+.mypy_cache/
+
+# Regenerable / heavy local artefacts (keep HTML demos in repo)
+# Uncomment if GitHub rejects large pushes:
+# visualizations/*.png
+# modeling_gallery.html
+
+# Quantic / course materials — keep local (copyright)
+Capstone Handbook.pdf
+concept exploration tool/
+concept exploration tool
+
+# Optional: local OneDrive conflict copies
+*_conflict_*
+~$*

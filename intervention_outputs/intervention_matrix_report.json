@@ -1,0 +1,89 @@
+{
+  "priority_scale": {
+    "0": "Not indicated",
+    "1": "Optional",
+    "2": "Recommended",
+    "3": "Priority"
+  },
+  "interventions": {
+    "school_fee_support": {
+      "label": "School Fee Support",
+      "sponsor_action": "Pay term fees / bursary",
+      "unit_cost_kes": 15000,
+      "owner": "Sponsor / Bursary fund"
+    },
+    "academic_tutoring": {
+      "label": "Academic Tutoring",
+      "sponsor_action": "Fund remedial / catch-up classes",
+      "unit_cost_kes": 8000,
+      "owner": "School + education NGO"
+    },
+    "transport_support": {
+      "label": "Transport / Boarding",
+      "sponsor_action": "Subsidize commute or boarding",
+      "unit_cost_kes": 6000,
+      "owner": "Sponsor / County transport"
+    },
+    "health_support": {
+      "label": "Health & Attendance",
+      "sponsor_action": "Medical vouchers + attendance follow-up",
+      "unit_cost_kes": 5000,
+      "owner": "School health partner"
+    },
+    "digital_access": {
+      "label": "Digital Access Kit",
+      "sponsor_action": "Shared device / data bundle",
+      "unit_cost_kes": 7000,
+      "owner": "Sponsor / CSR partner"
+    },
+    "counseling": {
+      "label": "Psychosocial Counseling",
+      "sponsor_action": "Counselor hours / peer support",
+      "unit_cost_kes": 4000,
+      "owner": "School counseling unit"
+    },
+    "enrichment": {
+      "label": "STEM Enrichment",
+      "sponsor_action": "Clubs, mentoring, competitions",
+      "unit_cost_kes": 3000,
+      "owner": "School / alumni mentors"
+    }
+  },
+  "persona_matrix": {
+    "Health-Constrained": [
+      2,
+      1,
+      1,
+      3,
+      1,
+      2,
+      0
+    ],
+    "Academic Strugglers": [
+      2,
+      3,
+      1,
+      1,
+      2,
+      1,
+      0
+    ],
+    "Stable Achievers": [
+      0,
+      0,
+      0,
+      0,
+      1,
+      0,
+      3
+    ]
+  },
+  "primary_mix": {
+    "STEM Enrichment": 339,
+    "School Fee Support": 282,
+    "Academic Tutoring": 222,
+    "Health & Attendance": 148,
+    "Digital Access Kit": 9
+  },
+  "n_students_assigned": 1000
+}

@@ -1,0 +1,921 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Elimu Match — Database Schema</title>
+  <script type="module">
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: 'dark',
+      er: {
+        layoutDirection: 'TB',
+        entityPadding: 12,
+        useMaxWidth: false,
+      },
+      themeVariables: {
+        darkMode: true,
+        background: '#1a2332',
+        primaryColor: '#243044',
+        primaryTextColor: '#e8edf4',
+        primaryBorderColor: '#2a9d8f',
+        lineColor: '#94a3b8',
+        secondaryColor: '#264653',
+        tertiaryColor: '#1a2332',
+        fontFamily: 'Segoe UI, system-ui, sans-serif',
+      },
+    });
+  </script>
+  <style>
+    :root {
+      --bg: #0f1419;
+      --surface: #1a2332;
+      --surface2: #243044;
+      --text: #e8edf4;
+      --muted: #94a3b8;
+      --teal: #2a9d8f;
+      --coral: #e76f51;
+      --gold: #e9c46a;
+      --navy: #264653;
+      --border: rgba(255,255,255,0.08);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+    }
+    .hero {
+      background: linear-gradient(135deg, #1a2332 0%, #264653 50%, #1a3a4a 100%);
+      padding: 2.5rem 2rem 2rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .hero-inner { max-width: 1280px; margin: 0 auto; }
+    .badge {
+      display: inline-block;
+      background: rgba(42,157,143,0.2);
+      color: var(--teal);
+      padding: 0.3rem 0.75rem;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      margin-bottom: 0.75rem;
+    }
+    h1 { font-size: 2rem; font-weight: 700; margin-bottom: 0.4rem; }
+    .subtitle { color: var(--muted); max-width: 720px; font-size: 1.05rem; }
+    .meta { color: var(--muted); font-size: 0.85rem; margin-top: 1rem; }
+    .meta a { color: var(--teal); }
+    .hero-actions {
+      display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 1rem;
+    }
+    .hero-actions a {
+      display: inline-block;
+      padding: 0.4rem 0.85rem;
+      border-radius: 8px;
+      border: 1px solid rgba(255,255,255,0.25);
+      color: #e8edf4;
+      text-decoration: none;
+      font-size: 0.85rem;
+    }
+    .hero-actions a.primary {
+      background: rgba(42,157,143,0.25);
+      border-color: var(--teal);
+      color: var(--teal);
+      font-weight: 600;
+    }
+    .hero-actions a:hover { background: rgba(255,255,255,0.1); }
+
+    .kpi-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 1rem;
+      max-width: 1280px;
+      margin: -1.5rem auto 0;
+      padding: 0 2rem;
+      position: relative;
+      z-index: 2;
+    }
+    .kpi {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.1rem 1.25rem;
+      text-align: center;
+    }
+    .kpi .value { font-size: 1.6rem; font-weight: 700; color: var(--teal); }
+    .kpi .label {
+      font-size: 0.75rem; color: var(--muted); margin-top: 0.2rem;
+      text-transform: uppercase; letter-spacing: 0.05em;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 240px 1fr;
+      gap: 2rem;
+      max-width: 1280px;
+      margin: 2rem auto;
+      padding: 0 2rem 3rem;
+    }
+    @media (max-width: 900px) {
+      .layout { grid-template-columns: 1fr; }
+      .sidebar { position: static !important; }
+    }
+    .sidebar { position: sticky; top: 1rem; align-self: start; }
+    .nav-label {
+      font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.08em;
+      color: var(--muted); margin-bottom: 0.6rem; font-weight: 600;
+    }
+    .nav a {
+      display: block;
+      padding: 0.55rem 0.85rem;
+      color: var(--muted);
+      text-decoration: none;
+      border-radius: 8px;
+      font-size: 0.92rem;
+      margin-bottom: 0.25rem;
+      border: 1px solid transparent;
+    }
+    .nav a:hover, .nav a.active {
+      background: var(--surface2);
+      color: var(--text);
+      border-color: var(--border);
+    }
+    .nav a.active { color: var(--teal); border-color: rgba(42,157,143,0.35); }
+
+    section.panel {
+      display: none;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 1.75rem;
+    }
+    section.panel.active { display: block; }
+    section.panel h2 {
+      font-size: 1.35rem;
+      margin-bottom: 0.5rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 1px solid var(--border);
+    }
+    section.panel h3 {
+      font-size: 1.05rem;
+      margin: 1.5rem 0 0.6rem;
+      color: var(--gold);
+    }
+    .lead { color: var(--muted); margin-bottom: 1.25rem; }
+
+    .callout {
+      background: rgba(42,157,143,0.1);
+      border: 1px solid rgba(42,157,143,0.3);
+      border-radius: 10px;
+      padding: 1rem 1.15rem;
+      margin: 1rem 0;
+      color: var(--text);
+      font-size: 0.95rem;
+    }
+    .callout.warn {
+      background: rgba(231,111,81,0.1);
+      border-color: rgba(231,111,81,0.35);
+    }
+    .callout strong { color: var(--teal); }
+    .callout.warn strong { color: var(--coral); }
+
+    .erd-wrap {
+      overflow: auto;
+      background: #121820;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.25rem;
+      margin-top: 1rem;
+      max-height: 85vh;
+    }
+    .erd-wrap .mermaid { display: flex; justify-content: center; min-width: 1100px; }
+
+    table.data {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.88rem;
+      margin-top: 0.75rem;
+    }
+    table.data th, table.data td {
+      text-align: left;
+      padding: 0.55rem 0.7rem;
+      border-bottom: 1px solid var(--border);
+      vertical-align: top;
+    }
+    table.data th {
+      color: var(--muted);
+      font-weight: 600;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      background: var(--surface2);
+      position: sticky;
+      top: 0;
+    }
+    table.data tr:hover td { background: rgba(255,255,255,0.02); }
+    .pk { color: var(--gold); font-weight: 600; }
+    .fk { color: var(--teal); font-weight: 600; }
+    .uk { color: #7dd3c0; }
+    .pill {
+      display: inline-block;
+      font-size: 0.72rem;
+      padding: 0.15rem 0.5rem;
+      border-radius: 999px;
+      background: var(--surface2);
+      color: var(--muted);
+      border: 1px solid var(--border);
+      margin-right: 0.25rem;
+    }
+    .pill.high { color: var(--teal); border-color: rgba(42,157,143,0.4); }
+    .pill.med { color: var(--gold); border-color: rgba(233,196,106,0.4); }
+    .pill.low { color: var(--coral); border-color: rgba(231,111,81,0.4); }
+
+    .tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      margin: 1rem 0;
+    }
+    .tabs button {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      color: var(--muted);
+      padding: 0.4rem 0.75rem;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.82rem;
+      font-family: inherit;
+    }
+    .tabs button:hover { color: var(--text); }
+    .tabs button.active {
+      color: var(--teal);
+      border-color: rgba(42,157,143,0.45);
+      background: rgba(42,157,143,0.12);
+    }
+    .dict-panel { display: none; }
+    .dict-panel.active { display: block; }
+
+    pre.ddl {
+      background: #121820;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1rem 1.15rem;
+      overflow: auto;
+      font-size: 0.78rem;
+      line-height: 1.45;
+      color: #c8d4e4;
+      margin-top: 0.75rem;
+      max-height: 420px;
+    }
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+    @media (max-width: 700px) { .grid-2 { grid-template-columns: 1fr; } }
+    .card-mini {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1rem 1.15rem;
+    }
+    .card-mini h4 { color: var(--teal); margin-bottom: 0.5rem; font-size: 0.95rem; }
+    .card-mini ul { margin-left: 1.1rem; color: var(--muted); font-size: 0.88rem; }
+    .card-mini li { margin-bottom: 0.35rem; }
+    code {
+      font-family: ui-monospace, Consolas, monospace;
+      font-size: 0.85em;
+      background: rgba(255,255,255,0.06);
+      padding: 0.1rem 0.35rem;
+      border-radius: 4px;
+    }
+    .legend {
+      display: flex; flex-wrap: wrap; gap: 1rem;
+      margin: 0.75rem 0 0; font-size: 0.85rem; color: var(--muted);
+    }
+    .legend span::before {
+      content: '';
+      display: inline-block;
+      width: 10px; height: 10px;
+      border-radius: 2px;
+      margin-right: 0.4rem;
+      vertical-align: middle;
+    }
+    .legend .l-pk::before { background: var(--gold); }
+    .legend .l-fk::before { background: var(--teal); }
+    .legend .l-rel::before { background: var(--muted); }
+  
+    .site-homebar {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: rgba(15, 20, 25, 0.92);
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      backdrop-filter: blur(8px);
+    }
+    .site-homebar-inner {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0.65rem 2rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem 1rem;
+      align-items: center;
+    }
+    .site-homebar a {
+      color: #2a9d8f;
+      font-weight: 700;
+      text-decoration: none;
+      font-size: 0.92rem;
+    }
+    .site-homebar a:hover { text-decoration: underline; }
+    .site-homebar .sep { color: #94a3b8; font-size: 0.85rem; }
+    .site-homebar .sep a { color: #94a3b8; font-weight: 500; }
+
+  </style>
+</head>
+<body>
+
+  <nav class="site-homebar" aria-label="Project navigation">
+    <div class="site-homebar-inner">
+      <a href="../index.html">← Project home</a>
+      <span class="sep">
+        <a href="../ops_dashboard.html">Ops</a> ·
+        <a href="../sponsor_portal.html">Sponsor</a> ·
+        <a href="../dashboard.html">Analytics</a> ·
+        <a href="schema_dashboard.html">Schema</a>
+      </span>
+    </div>
+  </nav>
+
+  <header class="hero">
+    <div class="hero-inner">
+      <div class="badge">Database · Schema documentation</div>
+      <h1>Elimu Match data model</h1>
+      <p class="subtitle">
+        ERD with columns, relationship map, data dictionary, views, normalization notes, and DDL —
+        SQLite PoC, Postgres-ready for scale.
+      </p>
+      <p class="meta">
+        Source: <code>db/elimu_match.db</code> ·
+        DDL: <code>db/ddl.sql</code> ·
+        Docs: <code>db/SCHEMA_DOCUMENTATION.md</code> ·
+        Rebuild: <code>python db/init_db.py</code>
+      </p>
+    </div>
+  </header>
+
+  <div class="kpi-row">
+    <div class="kpi"><div class="value">12</div><div class="label">Base tables</div></div>
+    <div class="kpi"><div class="value">4</div><div class="label">Views</div></div>
+    <div class="kpi"><div class="value">12</div><div class="label">FK links</div></div>
+    <div class="kpi"><div class="value">~3NF</div><div class="label">Normalization</div></div>
+    <div class="kpi"><div class="value">SQLite</div><div class="label">PoC stack</div></div>
+  </div>
+
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="nav-label">Browse</div>
+      <nav class="nav" id="main-nav">
+        <a href="#erd" class="active" data-panel="erd">ERD (with columns)</a>
+        <a href="#relationships" data-panel="relationships">Relationship map</a>
+        <a href="#dictionary" data-panel="dictionary">Data dictionary</a>
+        <a href="#views" data-panel="views">Views</a>
+        <a href="#normalization" data-panel="normalization">Normalization</a>
+        <a href="#ddl" data-panel="ddl">DDL</a>
+        <a href="#stack" data-panel="stack">Stack &amp; scaling</a>
+      </nav>
+    </aside>
+
+    <main>
+      <!-- ERD -->
+      <section id="erd" class="panel active">
+        <h2>Entity-Relationship Diagram (ERD)</h2>
+        <p class="lead">
+          Each box is a table; rows inside are columns (PK / FK marked). Crow’s-foot lines show
+          cardinality. Highlighted grain: <code>student × term × category</code> fees + payment allocations.
+        </p>
+        <div class="legend">
+          <span class="l-pk">PK — primary key</span>
+          <span class="l-fk">FK — foreign key</span>
+          <span class="l-rel">||--o{ = one-to-many</span>
+        </div>
+        <div class="callout">
+          <strong>Why columns on the ERD?</strong> A name-only diagram hides the fee grain and partial-pay design.
+          Showing attributes makes the UNIQUE <code>(student_id, term_id, fee_category_id)</code> and allocation pattern visible for the report.
+        </div>
+        <div class="erd-wrap">
+          <pre class="mermaid">
+erDiagram
+    counties ||--o{ schools : "has"
+    schools ||--o{ students : "enrolls"
+    schools ||--o{ payments : "receives_audit"
+    students ||--o{ student_term_fees : "owes"
+    students ||--o{ student_risk_snapshots : "scored_in"
+    students ||--o{ payments : "supported_by"
+    academic_terms ||--o{ student_term_fees : "billed_in"
+    fee_categories ||--o{ student_term_fees : "categorized_as"
+    refresh_runs ||--o{ student_risk_snapshots : "produces"
+    sponsors ||--o{ payments : "makes"
+    payments ||--o{ payment_allocations : "splits_into"
+    student_term_fees ||--o{ payment_allocations : "reduces"
+
+    counties {
+        int county_id PK
+        text county_name UK
+    }
+    schools {
+        int school_id PK
+        text school_name
+        int county_id FK
+        text school_type
+        int is_active
+    }
+    academic_terms {
+        int term_id PK
+        int academic_year
+        int term_number
+        text term_label
+        text start_date
+        text due_date
+    }
+    fee_categories {
+        int fee_category_id PK
+        text category_code UK
+        text category_name
+    }
+    interventions {
+        int intervention_id PK
+        text intervention_code UK
+        text intervention_name
+        int unit_cost_kes
+        text owner
+    }
+    students {
+        int student_id PK
+        int school_id FK
+        text display_name
+        int age_at_enrollment
+        text gender
+        text enrollment_status
+        text created_at
+        text updated_at
+    }
+    refresh_runs {
+        int run_id PK
+        text run_type
+        text source
+        text started_at
+        text finished_at
+        text status
+        text notes
+    }
+    student_risk_snapshots {
+        int snapshot_id PK
+        int refresh_run_id FK
+        int student_id FK
+        int ses_quintile
+        float dropout_risk
+        text persona
+        int retained_flag
+        text primary_intervention_code
+        text scored_at
+    }
+    student_term_fees {
+        int student_term_fee_id PK
+        int student_id FK
+        int term_id FK
+        int fee_category_id FK
+        int amount_due_kes
+        int amount_paid_kes
+        text status
+        text updated_at
+    }
+    sponsors {
+        int sponsor_id PK
+        text display_name
+        text email
+        text created_at
+    }
+    payments {
+        int payment_id PK
+        int sponsor_id FK
+        int student_id FK
+        int school_id FK
+        int amount_kes
+        text currency
+        text payment_method
+        text status
+        text paid_at
+        text external_ref
+        text notes
+    }
+    payment_allocations {
+        int allocation_id PK
+        int payment_id FK
+        int student_term_fee_id FK
+        int amount_kes
+        text allocated_at
+    }
+          </pre>
+        </div>
+      </section>
+
+      <!-- Relationships -->
+      <section id="relationships" class="panel">
+        <h2>Relationship map</h2>
+        <p class="lead">Foreign-key links and cardinality (N : 1 = many child rows per parent).</p>
+        <table class="data">
+          <thead>
+            <tr><th>From</th><th>To</th><th>Cardinality</th><th>FK</th><th>Notes</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>schools</td><td>counties</td><td>N : 1</td><td class="fk">county_id</td><td>School belongs to one county</td></tr>
+            <tr><td>students</td><td>schools</td><td>N : 1</td><td class="fk">school_id</td><td>Current enrollment</td></tr>
+            <tr><td>student_term_fees</td><td>students</td><td>N : 1</td><td class="fk">student_id</td><td>Fee lines per student</td></tr>
+            <tr><td>student_term_fees</td><td>academic_terms</td><td>N : 1</td><td class="fk">term_id</td><td>Term arrears grain</td></tr>
+            <tr><td>student_term_fees</td><td>fee_categories</td><td>N : 1</td><td class="fk">fee_category_id</td><td>Tuition / boarding / lunch / activity</td></tr>
+            <tr><td>student_risk_snapshots</td><td>students</td><td>N : 1</td><td class="fk">student_id</td><td>Many scores over time</td></tr>
+            <tr><td>student_risk_snapshots</td><td>refresh_runs</td><td>N : 1</td><td class="fk">refresh_run_id</td><td>Scoring batch</td></tr>
+            <tr><td>payments</td><td>sponsors</td><td>N : 1</td><td class="fk">sponsor_id</td><td>Nullable for anonymous PoC</td></tr>
+            <tr><td>payments</td><td>students</td><td>N : 1</td><td class="fk">student_id</td><td>Beneficiary</td></tr>
+            <tr><td>payments</td><td>schools</td><td>N : 1</td><td class="fk">school_id</td><td>Denormalized audit at pay time</td></tr>
+            <tr><td>payment_allocations</td><td>payments</td><td>N : 1</td><td class="fk">payment_id</td><td>Partial-pay splits</td></tr>
+            <tr><td>payment_allocations</td><td>student_term_fees</td><td>N : 1</td><td class="fk">student_term_fee_id</td><td>Which arrears line</td></tr>
+          </tbody>
+        </table>
+        <div class="callout" style="margin-top:1.25rem">
+          <strong>Soft link (not enforced FK):</strong>
+          <code>student_risk_snapshots.primary_intervention_code</code> ↔
+          <code>interventions.intervention_code</code>
+        </div>
+      </section>
+
+      <!-- Dictionary -->
+      <section id="dictionary" class="panel">
+        <h2>Data dictionary</h2>
+        <p class="lead">Column definitions with nullability, keys, meaning, and real-world data availability.</p>
+        <div class="tabs" id="dict-tabs"></div>
+        <div id="dict-panels"></div>
+      </section>
+
+      <!-- Views -->
+      <section id="views" class="panel">
+        <h2>Reporting views</h2>
+        <p class="lead">Denormalized read models for ops and the sponsor portal — not base tables.</p>
+        <table class="data">
+          <thead>
+            <tr><th>View</th><th>Purpose</th><th>Primary use</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>v_term_arrears</code></td>
+              <td>Outstanding lines by student / term / category</td>
+              <td>Bursar / ops detail</td>
+            </tr>
+            <tr>
+              <td><code>v_student_fee_summary</code></td>
+              <td>Totals + term1 / term2 / term3 arrears columns</td>
+              <td>Quick balance rollup</td>
+            </tr>
+            <tr>
+              <td><code>v_payment_detail</code></td>
+              <td>Payment → allocation audit trail</td>
+              <td>Reconciliation</td>
+            </tr>
+            <tr>
+              <td><code>v_sponsor_fee_candidates</code></td>
+              <td>Students with arrears + latest risk snapshot</td>
+              <td>Sponsor portal feed</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- Normalization -->
+      <section id="normalization" class="panel">
+        <h2>Normalization</h2>
+        <div class="callout">
+          <strong>Report-ready:</strong> Operational tables are normalized to ~3NF (dimensions + student × term × category fee facts + payment allocations).
+          Reporting views are denormalized for sponsor/ops use. Fee balances are the system of record for sponsorship; risk scores are refreshed snapshots, not duplicated raw survey features.
+        </div>
+        <div class="grid-2">
+          <div class="card-mini">
+            <h4>Normalized (write path)</h4>
+            <ul>
+              <li>Lookups: counties, schools, terms, fee_categories, interventions</li>
+              <li>Fee fact grain: <code>student_term_fees</code></li>
+              <li>Payment header + <code>payment_allocations</code> lines</li>
+              <li>Versioned scores via <code>refresh_runs</code></li>
+            </ul>
+          </div>
+          <div class="card-mini">
+            <h4>Intentional denormalization</h4>
+            <ul>
+              <li>Views flatten joins for portal/reporting</li>
+              <li><code>payments.school_id</code> kept for transfer audit</li>
+              <li><code>term_label</code> redundant with year + number (display)</li>
+              <li>37 modeling features stay out of this DB</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- DDL -->
+      <section id="ddl" class="panel">
+        <h2>DDL — CREATE TABLE</h2>
+        <p class="lead">Core statements below. Full script: <code>db/ddl.sql</code> (also in <code>schema.py</code>).</p>
+
+        <h3>student_term_fees (core grain)</h3>
+        <pre class="ddl">CREATE TABLE student_term_fees (
+    student_term_fee_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    student_id          INTEGER NOT NULL REFERENCES students(student_id),
+    term_id             INTEGER NOT NULL REFERENCES academic_terms(term_id),
+    fee_category_id     INTEGER NOT NULL REFERENCES fee_categories(fee_category_id),
+    amount_due_kes      INTEGER NOT NULL CHECK (amount_due_kes >= 0),
+    amount_paid_kes     INTEGER NOT NULL DEFAULT 0 CHECK (amount_paid_kes >= 0),
+    status              TEXT NOT NULL DEFAULT 'unpaid'
+        CHECK (status IN ('unpaid', 'partial', 'paid', 'waived')),
+    updated_at          TEXT NOT NULL DEFAULT (datetime('now')),
+    UNIQUE (student_id, term_id, fee_category_id),
+    CHECK (amount_paid_kes <= amount_due_kes)
+);</pre>
+
+        <h3>payments + payment_allocations (partial pay)</h3>
+        <pre class="ddl">CREATE TABLE payments (
+    payment_id     INTEGER PRIMARY KEY AUTOINCREMENT,
+    sponsor_id     INTEGER REFERENCES sponsors(sponsor_id),
+    student_id     INTEGER NOT NULL REFERENCES students(student_id),
+    school_id      INTEGER NOT NULL REFERENCES schools(school_id),
+    amount_kes     INTEGER NOT NULL CHECK (amount_kes > 0),
+    currency       TEXT NOT NULL DEFAULT 'KES',
+    payment_method TEXT NOT NULL DEFAULT 'simulated',
+    status         TEXT NOT NULL DEFAULT 'completed',
+    paid_at        TEXT NOT NULL DEFAULT (datetime('now')),
+    external_ref   TEXT,
+    notes          TEXT
+);
+
+CREATE TABLE payment_allocations (
+    allocation_id       INTEGER PRIMARY KEY AUTOINCREMENT,
+    payment_id          INTEGER NOT NULL REFERENCES payments(payment_id),
+    student_term_fee_id INTEGER NOT NULL REFERENCES student_term_fees(student_term_fee_id),
+    amount_kes          INTEGER NOT NULL CHECK (amount_kes > 0),
+    allocated_at        TEXT NOT NULL DEFAULT (datetime('now'))
+);</pre>
+
+        <div class="callout warn">
+          <strong>Apply:</strong> prefer <code>python db/init_db.py</code> (creates tables + seeds data).
+          Or empty structure: <code>sqlite3 db/elimu_match.db &lt; db/ddl.sql</code>
+        </div>
+      </section>
+
+      <!-- Stack -->
+      <section id="stack" class="panel">
+        <h2>Technical stack &amp; scaling</h2>
+        <table class="data">
+          <thead><tr><th>Layer</th><th>PoC choice</th></tr></thead>
+          <tbody>
+            <tr><td>Database</td><td>SQLite (<code>db/elimu_match.db</code>)</td></tr>
+            <tr><td>DDL</td><td><code>db/ddl.sql</code> + <code>schema.py</code></td></tr>
+            <tr><td>Access</td><td>Python <code>sqlite3</code></td></tr>
+            <tr><td>Seed / rebuild</td><td><code>python db/init_db.py</code></td></tr>
+            <tr><td>Writes</td><td><code>python db/record_payment.py</code></td></tr>
+            <tr><td>Reads</td><td>SQL views</td></tr>
+          </tbody>
+        </table>
+        <h3>Scaling</h3>
+        <div class="callout">
+          <strong>Paste-ready:</strong> The PoC uses SQLite for portability and zero ops cost.
+          The logical model is DBMS-agnostic. For a multi-school pilot with concurrent school and sponsor activity,
+          deploy the same schema on <strong>PostgreSQL</strong>, with termly fee sync, periodic risk rescoring,
+          and event-driven payment updates (e.g. M-Pesa). Scaling is operational — not a redesign of the fee grain.
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    const DICT = [
+      {
+        id: 'counties', title: 'counties', role: 'Geography dimension',
+        avail: 'High — public geography', availClass: 'high',
+        cols: [
+          ['county_id', 'INTEGER', 'N', 'PK', 'Surrogate key', 'System'],
+          ['county_name', 'TEXT', 'N', 'UK', 'County name', 'High'],
+        ],
+      },
+      {
+        id: 'schools', title: 'schools', role: 'Partner school list',
+        avail: 'High — MoE / partner directories', availClass: 'high',
+        cols: [
+          ['school_id', 'INTEGER', 'N', 'PK', 'School identifier', 'High'],
+          ['school_name', 'TEXT', 'N', '—', 'Display name', 'High'],
+          ['county_id', 'INTEGER', 'N', 'FK', '→ counties', 'High'],
+          ['school_type', 'TEXT', 'N', '—', 'Day or Boarding', 'High'],
+          ['is_active', 'INTEGER', 'N', '—', '1 = active in portal', 'Ops'],
+        ],
+      },
+      {
+        id: 'academic_terms', title: 'academic_terms', role: 'Billing calendar',
+        avail: 'High — school calendar', availClass: 'high',
+        cols: [
+          ['term_id', 'INTEGER', 'N', 'PK', 'Surrogate key', 'System'],
+          ['academic_year', 'INTEGER', 'N', 'UK*', 'Academic year', 'High'],
+          ['term_number', 'INTEGER', 'N', 'UK*', '1, 2, or 3', 'High'],
+          ['term_label', 'TEXT', 'N', '—', 'e.g. 2026 Term 2', 'High'],
+          ['start_date', 'TEXT', 'Y', '—', 'Term start', 'High'],
+          ['due_date', 'TEXT', 'Y', '—', 'Fee due date', 'High'],
+        ],
+      },
+      {
+        id: 'fee_categories', title: 'fee_categories', role: 'Fee type lookup',
+        avail: 'Medium–high (some schools: one balance only)', availClass: 'med',
+        cols: [
+          ['fee_category_id', 'INTEGER', 'N', 'PK', 'Surrogate key', 'System'],
+          ['category_code', 'TEXT', 'N', 'UK', 'tuition / boarding / lunch / activity', 'Medium'],
+          ['category_name', 'TEXT', 'N', '—', 'Human-readable label', 'Medium'],
+        ],
+      },
+      {
+        id: 'interventions', title: 'interventions', role: 'Elimu Match config',
+        avail: 'Internal — not school-sourced', availClass: 'med',
+        cols: [
+          ['intervention_id', 'INTEGER', 'N', 'PK', 'Surrogate key', 'Internal'],
+          ['intervention_code', 'TEXT', 'N', 'UK', 'Matrix code', 'Internal'],
+          ['intervention_name', 'TEXT', 'N', '—', 'Display name', 'Internal'],
+          ['unit_cost_kes', 'INTEGER', 'Y', '—', 'Indicative unit cost', 'Internal'],
+          ['owner', 'TEXT', 'Y', '—', 'School / Elimu / sponsor', 'Internal'],
+        ],
+      },
+      {
+        id: 'students', title: 'students', role: 'Minimal identity',
+        avail: 'High for MVP (admin register)', availClass: 'high',
+        cols: [
+          ['student_id', 'INTEGER', 'N', 'PK', 'Anonymized student ID', 'High'],
+          ['school_id', 'INTEGER', 'N', 'FK', '→ schools', 'High'],
+          ['display_name', 'TEXT', 'N', '—', 'Sponsor-facing label', 'High'],
+          ['age_at_enrollment', 'INTEGER', 'Y', '—', 'Age', 'High'],
+          ['gender', 'TEXT', 'Y', '—', 'Boy / Girl / Other / Unknown', 'High'],
+          ['enrollment_status', 'TEXT', 'N', '—', 'enrolled / dropped / …', 'High'],
+          ['created_at', 'TEXT', 'N', '—', 'Row created', 'System'],
+          ['updated_at', 'TEXT', 'N', '—', 'Last update', 'System'],
+        ],
+      },
+      {
+        id: 'refresh_runs', title: 'refresh_runs', role: 'Update cadence log',
+        avail: 'System-generated', availClass: 'high',
+        cols: [
+          ['run_id', 'INTEGER', 'N', 'PK', 'Batch ID', 'System'],
+          ['run_type', 'TEXT', 'N', '—', 'fee_sync / risk_rescore / payment_import', 'System'],
+          ['source', 'TEXT', 'Y', '—', 'csv / api / manual', 'System'],
+          ['started_at', 'TEXT', 'N', '—', 'Start timestamp', 'System'],
+          ['finished_at', 'TEXT', 'Y', '—', 'End timestamp', 'System'],
+          ['status', 'TEXT', 'N', '—', 'running / success / failed', 'System'],
+          ['notes', 'TEXT', 'Y', '—', 'Free text', 'System'],
+        ],
+      },
+      {
+        id: 'student_risk_snapshots', title: 'student_risk_snapshots', role: 'Scored analytics only',
+        avail: 'Derived from model — not clerk-typed', availClass: 'med',
+        cols: [
+          ['snapshot_id', 'INTEGER', 'N', 'PK', 'Surrogate key', 'System'],
+          ['refresh_run_id', 'INTEGER', 'N', 'FK', '→ refresh_runs', 'System'],
+          ['student_id', 'INTEGER', 'N', 'FK', '→ students', 'High'],
+          ['ses_quintile', 'INTEGER', 'Y', '—', '1–5 SES band', 'Derived'],
+          ['dropout_risk', 'REAL', 'Y', '—', 'Model risk score', 'Derived'],
+          ['persona', 'TEXT', 'Y', '—', 'Cluster persona', 'Derived'],
+          ['retained_flag', 'INTEGER', 'Y', '—', 'Historical outcome if known', 'Derived'],
+          ['primary_intervention_code', 'TEXT', 'Y', 'soft', 'Soft → interventions', 'Derived'],
+          ['scored_at', 'TEXT', 'N', '—', 'Score timestamp', 'System'],
+        ],
+      },
+      {
+        id: 'student_term_fees', title: 'student_term_fees', role: 'Core fee ledger',
+        avail: 'High if bursar keeps balances', availClass: 'high',
+        cols: [
+          ['student_term_fee_id', 'INTEGER', 'N', 'PK', 'Surrogate key', 'System'],
+          ['student_id', 'INTEGER', 'N', 'FK', '→ students', 'High'],
+          ['term_id', 'INTEGER', 'N', 'FK', '→ academic_terms', 'High'],
+          ['fee_category_id', 'INTEGER', 'N', 'FK', '→ fee_categories', 'Medium'],
+          ['amount_due_kes', 'INTEGER', 'N', '—', 'Amount billed (KES)', 'High'],
+          ['amount_paid_kes', 'INTEGER', 'N', '—', 'Cumulative paid — enables partial pay', 'High'],
+          ['status', 'TEXT', 'N', '—', 'unpaid / partial / paid / waived', 'High'],
+          ['updated_at', 'TEXT', 'N', '—', 'Last balance change', 'System'],
+        ],
+      },
+      {
+        id: 'sponsors', title: 'sponsors', role: 'Donor identity',
+        avail: 'Created at payment time', availClass: 'med',
+        cols: [
+          ['sponsor_id', 'INTEGER', 'N', 'PK', 'Surrogate key', 'System'],
+          ['display_name', 'TEXT', 'N', '—', 'Name or Anonymous Sponsor', 'PoC'],
+          ['email', 'TEXT', 'Y', '—', 'Optional contact', 'Phase 2+'],
+          ['created_at', 'TEXT', 'N', '—', 'Created', 'System'],
+        ],
+      },
+      {
+        id: 'payments', title: 'payments', role: 'Gross payment header',
+        avail: 'System on gift; M-Pesa Phase 2+', availClass: 'high',
+        cols: [
+          ['payment_id', 'INTEGER', 'N', 'PK', 'Surrogate key', 'System'],
+          ['sponsor_id', 'INTEGER', 'Y', 'FK', '→ sponsors', 'System'],
+          ['student_id', 'INTEGER', 'N', 'FK', 'Beneficiary', 'High'],
+          ['school_id', 'INTEGER', 'N', 'FK', 'School at pay time (audit)', 'High'],
+          ['amount_kes', 'INTEGER', 'N', '—', 'Gross payment; may be partial', 'High'],
+          ['currency', 'TEXT', 'N', '—', 'Default KES', 'High'],
+          ['payment_method', 'TEXT', 'N', '—', 'simulated / mpesa / …', 'PoC'],
+          ['status', 'TEXT', 'N', '—', 'pending / completed / …', 'System'],
+          ['paid_at', 'TEXT', 'N', '—', 'Timestamp', 'System'],
+          ['external_ref', 'TEXT', 'Y', '—', 'M-Pesa receipt', 'Phase 2+'],
+          ['notes', 'TEXT', 'Y', '—', 'Free text', 'System'],
+        ],
+      },
+      {
+        id: 'payment_allocations', title: 'payment_allocations', role: 'Split across fee lines',
+        avail: 'System-generated', availClass: 'high',
+        cols: [
+          ['allocation_id', 'INTEGER', 'N', 'PK', 'Surrogate key', 'System'],
+          ['payment_id', 'INTEGER', 'N', 'FK', '→ payments', 'System'],
+          ['student_term_fee_id', 'INTEGER', 'N', 'FK', '→ student_term_fees', 'System'],
+          ['amount_kes', 'INTEGER', 'N', '—', 'Portion applied to this line', 'System'],
+          ['allocated_at', 'TEXT', 'N', '—', 'Allocation timestamp', 'System'],
+        ],
+      },
+    ];
+
+    function keyClass(k) {
+      if (k === 'PK') return 'pk';
+      if (k === 'FK' || k === 'soft') return 'fk';
+      if (k.startsWith('UK')) return 'uk';
+      return '';
+    }
+
+    const tabsEl = document.getElementById('dict-tabs');
+    const panelsEl = document.getElementById('dict-panels');
+    DICT.forEach((t, i) => {
+      const btn = document.createElement('button');
+      btn.textContent = t.title;
+      btn.className = i === 0 ? 'active' : '';
+      btn.dataset.dict = t.id;
+      tabsEl.appendChild(btn);
+
+      const panel = document.createElement('div');
+      panel.className = 'dict-panel' + (i === 0 ? ' active' : '');
+      panel.id = 'dict-' + t.id;
+      panel.innerHTML = `
+        <p style="margin-top:0.5rem">
+          <strong>${t.title}</strong> — ${t.role}
+          <span class="pill ${t.availClass}" style="margin-left:0.5rem">${t.avail}</span>
+        </p>
+        <table class="data">
+          <thead>
+            <tr><th>Column</th><th>Type</th><th>Null</th><th>Key</th><th>Meaning</th><th>Availability</th></tr>
+          </thead>
+          <tbody>
+            ${t.cols.map(c => `
+              <tr>
+                <td><code>${c[0]}</code></td>
+                <td>${c[1]}</td>
+                <td>${c[2]}</td>
+                <td class="${keyClass(c[3])}">${c[3]}</td>
+                <td>${c[4]}</td>
+                <td>${c[5]}</td>
+              </tr>`).join('')}
+          </tbody>
+        </table>`;
+      panelsEl.appendChild(panel);
+    });
+
+    tabsEl.addEventListener('click', (e) => {
+      const btn = e.target.closest('button');
+      if (!btn) return;
+      tabsEl.querySelectorAll('button').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      panelsEl.querySelectorAll('.dict-panel').forEach(p => p.classList.remove('active'));
+      document.getElementById('dict-' + btn.dataset.dict).classList.add('active');
+    });
+
+    const nav = document.getElementById('main-nav');
+    const panels = document.querySelectorAll('section.panel');
+    function showPanel(id) {
+      panels.forEach(p => p.classList.toggle('active', p.id === id));
+      nav.querySelectorAll('a').forEach(a => a.classList.toggle('active', a.dataset.panel === id));
+    }
+    nav.addEventListener('click', (e) => {
+      const a = e.target.closest('a');
+      if (!a) return;
+      e.preventDefault();
+      showPanel(a.dataset.panel);
+      history.replaceState(null, '', '#' + a.dataset.panel);
+    });
+    const hash = (location.hash || '#erd').slice(1);
+    if (document.getElementById(hash)) showPanel(hash);
+  </script>
+</body>
+</html>

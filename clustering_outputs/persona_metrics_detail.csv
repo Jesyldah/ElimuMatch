@@ -1,0 +1,4 @@
+persona_id,n,retention_rate,avg_socioeconomic_status_index,avg_gpa_trend,avg_failed_subjects_count,avg_commute_barrier_score,avg_health_related_absences,avg_cash_flow_volatility,avg_digital_equity_access_score,avg_social_integration_score,avg_support_coverage_score,avg_academic_risk_index,avg_barrier_burden_index,avg_economic_instability_index,avg_health_burden_index,share_pct
+0,502,0.823,1.749,-1.433,2.102,7.923,5.211,0.276,0.383,0.873,1.216,3.535,2.065,0.488,6.259,50.2
+1,340,0.953,4.006,-0.344,1.038,5.475,6.132,0.217,1.111,1.141,1.592,1.382,1.12,0.317,8.9,34.0
+2,158,0.791,2.291,-1.302,2.089,6.275,14.076,0.259,0.644,0.487,1.317,3.391,1.746,0.444,36.741,15.8
