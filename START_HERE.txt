@@ -1,20 +1,27 @@
 ElimuMatch Capstone — START HERE
 ================================
 
-FASTEST PATH
-------------
-1. Open:  03_Demos\index.html   (double-click in File Explorer)
-2. Use the three cards: Helper portal | Ops monitor | Analytics
+RECOMMENDED (GitHub Pages — one link, no zip)
+---------------------------------------------
+Open:
+  https://jesyldah.github.io/ElimuMatch/
 
-Optional (live gifts / ledger — needs Python):
-   Double-click  03_Demos\OPEN_DEMO.bat
+Then use the three cards: Helper portal | Ops monitor | Analytics
+
+Gifts on Pages = offline demo mode (not live M-Pesa).
+
+OFFLINE / LOCAL LIVE LEDGER
+---------------------------
+1. Open:  index.html   (or 03_Demos\index.html from a Drive zip)
+2. Optional live gifts (needs Python):
+   Double-click  OPEN_DEMO.bat
 
 READ FIRST (optional)
 ---------------------
-01_Docs\Concept_Exploration_Answers_ElimuMatch.docx
-01_Docs\DATA_AND_LIMITATIONS.md
-01_Docs\COST_BENEFIT_ANALYSIS.md
+CONCEPT_EXPLORATION_ANSWERS.md
+DATA_AND_LIMITATIONS.md
+COST_BENEFIT_ANALYSIS.md
 
-Full technical reproduce steps: 00_README.md
+Full technical reproduce steps: README.md
 
-Capstone = MVP only (HTML dashboards OK). Synthetic data is factually grounded.
+Capstone = MVP only. Synthetic data is factually grounded.

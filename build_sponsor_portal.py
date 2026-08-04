@@ -161,9 +161,13 @@ def build_payload() -> dict:
             'terms': terms,
         })
 
+    # Portal demo: balance fee-support students across Day + Boarding in each
+    # county so both school-type buttons always lead to real queue entries.
+    # Payments still key off student_id (ledger school is unchanged in SQLite).
+    students = _balance_students_by_county_type(students)
     students.sort(key=lambda s: (-s['priority'], -s['amount'], s['id']))
 
-    # Always expose all 47 counties / schools (national coverage — no regional bias)
+    # All 47 counties × Day + Boarding (national coverage — no regional bias)
     school_list = []
     for sid, meta_s in SCHOOLS.items():
         count = sum(1 for s in students if s['school_id'] == sid)
@@ -190,6 +194,35 @@ def build_payload() -> dict:
         'source': 'sqlite' if arrears_map else 'fallback',
         'freshness': _embed_freshness(),
     }
+
+
+def _balance_students_by_county_type(students: list[dict]) -> list[dict]:
+    """Alternate fee-queue students onto Day and Boarding schools in each county."""
+    by_ct: dict[tuple[str, str], int] = {
+        (m['county'], m['type']): sid for sid, m in SCHOOLS.items()
+    }
+    by_county: dict[str, list[dict]] = {}
+    for s in students:
+        by_county.setdefault(s['county'], []).append(s)
+
+    balanced: list[dict] = []
+    for county, group in by_county.items():
+        day_id = by_ct.get((county, 'Day'))
+        board_id = by_ct.get((county, 'Boarding'))
+        group.sort(key=lambda s: (-s['priority'], -s['amount'], s['id']))
+        if not day_id or not board_id:
+            balanced.extend(group)
+            continue
+        for i, s in enumerate(group):
+            school_type = 'Day' if i % 2 == 0 else 'Boarding'
+            sid = day_id if school_type == 'Day' else board_id
+            m = SCHOOLS[sid]
+            s = dict(s)
+            s['school_id'] = sid
+            s['school'] = m['name']
+            s['school_type'] = m['type']
+            balanced.append(s)
+    return balanced
 
 
 def _embed_freshness() -> dict:
@@ -1301,13 +1334,9 @@ def build_html(payload: dict) -> str:
     }}
 
     function updateTypeButtons(county) {{
-      const types = availableTypes(county);
-      typeDay.disabled = !types.has('Day');
-      typeBoarding.disabled = !types.has('Boarding');
-      if (!county) {{
-        typeDay.disabled = true;
-        typeBoarding.disabled = true;
-      }}
+      // Always offer Day + Boarding once a county is chosen (catalog has both).
+      typeDay.disabled = !county;
+      typeBoarding.disabled = !county;
     }}
 
     function fillSchools() {{

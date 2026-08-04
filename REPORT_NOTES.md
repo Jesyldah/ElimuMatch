@@ -25,7 +25,7 @@ These are clarifications and framing points from the project build — **add the
 - Documented synthetic cohort, calibrated to known Kenya secondary patterns (fees/indirect costs, SES gradients, attendance–health links)
 - Risk model + explanations + intervention routing
 - Fee helper channel end to end (portal + term ledger)
-- **HTML** ops monitor + analytics dashboard (**instructor-confirmed OK**; Tableau optional)
+- **Streamlit** demo (Helper + Ops + Analytics) for one-click review; HTML dashboards remain as offline backup (**instructor-confirmed OK**; Tableau optional)
 - Illustrative cost–benefit + data-availability plan (have / messy / collect later)
 
 ### Explicitly out of Capstone scope
@@ -64,7 +64,8 @@ These are clarifications and framing points from the project build — **add the
 Sponsors should **not** see models, SHAP, 37 features, or personas.  
 Ops monitor day-to-day delivery; analytics explain *why* the routing works.
 
-**Demo:** double-click `OPEN_DEMO.bat` (or `python db/portal_server.py --open`) → http://127.0.0.1:8765/  
+**Demo (preferred):** Streamlit — `python -m streamlit run streamlit_app.py` (or the deployed Cloud URL).  
+**Demo (offline HTML):** double-click `OPEN_DEMO.bat` (or `python db/portal_server.py --open`) → http://127.0.0.1:8765/  
 HTML files also open offline via relative links; live gifts/ops refresh need the server.  
 **API:** `GET /api/ops`  
 
@@ -283,7 +284,7 @@ Stratified 75/25 split.
 
 ## 13. Tableau / exploration
 
-**Instructor confirmation:** HTML dashboards are acceptable for the Capstone PoC. Streamlit/Tableau are **not required**.
+**Instructor confirmation:** HTML dashboards are acceptable for the Capstone PoC. Streamlit/Tableau are **not required** — Streamlit is used here to reduce reviewer friction (one URL).
 
 - Primary deliverables: `dashboard.html`, `ops_dashboard.html`, `sponsor_portal.html`  
 - Optional: use `tableau_exports/students_exploration.csv` for extra exploration if useful  

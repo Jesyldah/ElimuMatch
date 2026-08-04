@@ -2,7 +2,7 @@
 
 **→ Reviewers: open [`START_HERE.md`](START_HERE.md) first** (or `START_HERE.txt`).
 
-EdTech proof of concept: **dropout-risk analytics**, multi-channel intervention routing, a working **fee helper portal** with term ledger, and **ops / analytics HTML dashboards**.
+EdTech proof of concept: **dropout-risk analytics**, multi-channel intervention routing, a working **fee helper portal** with term ledger, and **Streamlit + HTML** ops / analytics demos.
 
 **Capstone scope = MVP only.** Full multi-channel marketplaces, live school feeds, and M-Pesa are roadmap — not required for this submission.
 
@@ -12,6 +12,13 @@ Synthetic cohort is **factually grounded** (Kenya secondary patterns) and docume
 
 ## Quick demo (no rebuild)
 
+### Preferred — GitHub Pages (one link)
+**https://jesyldah.github.io/ElimuMatch/**
+
+Same HTML dashboards as in this repo. No zip download.  
+Hosted gifts use offline demo mode (not a live shared ledger).
+
+### Offline HTML / local live ledger
 **First file to open:** `index.html` (project home) — or read `START_HERE.md`.
 
 1. Double-click `OPEN_DEMO.bat`  
@@ -20,6 +27,13 @@ Synthetic cohort is **factually grounded** (Kenya secondary patterns) and docume
 3. Use **Helper portal**, **Ops monitor**, **Analytics dashboard**
 
 Offline: open `index.html` (relative links work). Live gifts / ops API need the local server.
+
+### Optional — Streamlit (experimental)
+```bash
+pip install -r requirements.txt
+python -m streamlit run streamlit_app.py
+```
+HTML via GitHub Pages is the preferred instructor link.
 
 ---
 

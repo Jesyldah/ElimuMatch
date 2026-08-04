@@ -1,15 +1,18 @@
 """
 Kenya secondary school catalog for Elimu Match PoC.
 
-One sample school per county (all 47) so the sponsor portal is nationally
-representative and not limited to a subset of counties.
+Every county has both a Day and a Boarding sample school so the helper
+portal can always offer both school types.
+
+- school_ids 1–47: original cohort schools (one per county) used by synthetic data
+- school_ids 101–147: same-county counterpart of the opposite type (portal demo)
 """
 
 from __future__ import annotations
 
 # school_id → name, county, Day/Boarding
 # IDs 1–20 preserve the original cohort schools; 21–47 cover remaining counties.
-SCHOOLS: dict[int, dict[str, str]] = {
+_CORE: dict[int, dict[str, str]] = {
     # —— Original 20 ——
     1:  {'name': 'Kilimani Day Secondary', 'county': 'Nairobi', 'type': 'Day'},
     2:  {'name': 'Nyandarua Mixed Secondary', 'county': 'Nyandarua', 'type': 'Boarding'},
@@ -47,7 +50,7 @@ SCHOOLS: dict[int, dict[str, str]] = {
     33: {'name': 'Mandera Frontier Secondary', 'county': 'Mandera', 'type': 'Boarding'},
     34: {'name': 'Marsabit Desert Secondary', 'county': 'Marsabit', 'type': 'Boarding'},
     35: {'name': 'Migori River Secondary', 'county': 'Migori', 'type': 'Day'},
-    36: {'name': 'Murang\'a Hills Secondary', 'county': 'Murang\'a', 'type': 'Day'},
+    36: {'name': "Murang'a Hills Secondary", 'county': "Murang'a", 'type': 'Day'},
     37: {'name': 'Kapsabet Nandi Secondary', 'county': 'Nandi', 'type': 'Boarding'},
     38: {'name': 'Nyamira Highlands Secondary', 'county': 'Nyamira', 'type': 'Day'},
     39: {'name': 'Maralal Samburu Secondary', 'county': 'Samburu', 'type': 'Boarding'},
@@ -61,10 +64,53 @@ SCHOOLS: dict[int, dict[str, str]] = {
     47: {'name': 'Kapenguria West Pokot Secondary', 'county': 'West Pokot', 'type': 'Boarding'},
 }
 
-N_SCHOOLS = len(SCHOOLS)
-assert N_SCHOOLS == 47, f'Expected 47 schools, got {N_SCHOOLS}'
-assert len({m['county'] for m in SCHOOLS.values()}) == 47, 'Each county must appear exactly once'
+# IDs used by synthetic cohort generation (school_id drawn from 1..N_SCHOOLS)
+N_SCHOOLS = len(_CORE)
+assert N_SCHOOLS == 47, f'Expected 47 core schools, got {N_SCHOOLS}'
+assert len({m['county'] for m in _CORE.values()}) == 47, 'Each county must appear once in core schools'
+
+
+def _counterpart_name(county: str, school_type: str) -> str:
+    if school_type == 'Day':
+        return f'{county} Day Secondary'
+    return f'{county} Boarding Secondary'
+
+
+def _build_full_catalog() -> dict[int, dict[str, str]]:
+    """Core schools + opposite Day/Boarding counterpart per county."""
+    schools = {sid: dict(meta) for sid, meta in _CORE.items()}
+    for sid, meta in _CORE.items():
+        opp = 'Boarding' if meta['type'] == 'Day' else 'Day'
+        cid = 100 + sid
+        schools[cid] = {
+            'name': _counterpart_name(meta['county'], opp),
+            'county': meta['county'],
+            'type': opp,
+        }
+    return schools
+
+
+SCHOOLS: dict[int, dict[str, str]] = _build_full_catalog()
+
+assert len(SCHOOLS) == 94, f'Expected 94 schools (Day+Boarding × 47), got {len(SCHOOLS)}'
+_by_county: dict[str, set[str]] = {}
+for m in SCHOOLS.values():
+    _by_county.setdefault(m['county'], set()).add(m['type'])
+assert all(_by_county[c] == {'Day', 'Boarding'} for c in _by_county), (
+    'Every county must offer both Day and Boarding'
+)
 
 
 def counties() -> list[str]:
-    return sorted({m['county'] for m in SCHOOLS.values()})
+    return sorted(_by_county.keys())
+
+
+def school_ids_for(county: str, school_type: str | None = None) -> list[int]:
+    out = []
+    for sid, m in SCHOOLS.items():
+        if m['county'] != county:
+            continue
+        if school_type and m['type'] != school_type:
+            continue
+        out.append(sid)
+    return sorted(out)
