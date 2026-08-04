@@ -1,4 +1,4 @@
-"""Ops monitor — KPIs, pilot criteria, investigation queue."""
+"""Ops monitor: KPIs, pilot criteria, investigation queue."""
 
 from __future__ import annotations
 
@@ -34,7 +34,7 @@ def render() -> None:
         st.error(data.get("error") or "Ops snapshot unavailable. Ensure db/elimu_match.db exists.")
         return
 
-    st.caption(f"Generated at {data.get('generated_at', '—')}")
+    st.caption(f"Generated at {data.get('generated_at', '-')}")
 
     kpis = data.get("kpis") or {}
     age = kpis.get("score_age_days")
@@ -46,7 +46,7 @@ def render() -> None:
         ("Fee clearance", f"{kpis.get('fee_clearance_pct', 0)}%"),
         ("High risk + arrears", f"{kpis.get('high_risk_with_arrears', 0):,}"),
         ("Gift volume (KES)", f"{kpis.get('gifts_kes', 0):,}"),
-        ("Score age (days)", "—" if age is None else str(age)),
+        ("Score age (days)", "-" if age is None else str(age)),
         ("Score SLA OK", "Yes" if kpis.get("score_sla_ok") else "No"),
     ])
 
@@ -57,7 +57,7 @@ def render() -> None:
         for p in pilot:
             if isinstance(p, dict):
                 rows.append({
-                    "Criterion": p.get("label") or p.get("name") or p.get("title") or "—",
+                    "Criterion": p.get("label") or p.get("name") or p.get("title") or "-",
                     "Status": p.get("status") or p.get("state") or ("OK" if p.get("ok") else "Watch"),
                     "Value": p.get("value") or p.get("current") or p.get("count") or p.get("detail") or "",
                     "Target": p.get("target") or "",
@@ -71,15 +71,15 @@ def render() -> None:
 
     impact = data.get("illustrative_impact") or {}
     if impact:
-        st.markdown("### Illustrative impact (synthetic labels — not causal)")
+        st.markdown("### Illustrative impact (synthetic labels, not causal)")
         theme.kpi_row([
             (
                 "Helped retained",
-                str(impact.get("helped_retained_pct", impact.get("with_gift_retention_pct", "—"))),
+                str(impact.get("helped_retained_pct", impact.get("with_gift_retention_pct", "-"))),
             ),
             (
                 "Peer retained",
-                str(impact.get("peer_retained_pct", impact.get("without_gift_retention_pct", "—"))),
+                str(impact.get("peer_retained_pct", impact.get("without_gift_retention_pct", "-"))),
             ),
         ])
         note = impact.get("note") or impact.get("disclaimer") or ""

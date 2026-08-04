@@ -1,4 +1,4 @@
-"""Retention analytics — model, SHAP, personas, interventions."""
+"""Retention analytics: model, SHAP, personas, interventions."""
 
 from __future__ import annotations
 
@@ -31,7 +31,7 @@ def render() -> None:
     theme.page_header(
         "Analytics",
         "Retention analytics",
-        "Proof-of-concept outputs from a documented synthetic cohort — not validated field results.",
+        "Proof-of-concept outputs from a documented synthetic cohort, not validated field results.",
     )
 
     section = st.radio(
@@ -70,10 +70,10 @@ def _overview() -> None:
 
     auc = metrics.get("auc")
     theme.kpi_row([
-        ("Selected model", str(report.get("selected_model", "—"))),
-        ("Test AUC", f"{auc:.3f}" if isinstance(auc, (int, float)) else "—"),
-        ("Dropout recall", f"{metrics.get('recall_dropout', 0):.1%}" if metrics else "—"),
-        ("Accuracy", f"{metrics.get('accuracy', 0):.1%}" if metrics else "—"),
+        ("Selected model", str(report.get("selected_model", "-"))),
+        ("Test AUC", f"{auc:.3f}" if isinstance(auc, (int, float)) else "-"),
+        ("Dropout recall", f"{metrics.get('recall_dropout', 0):.1%}" if metrics else "-"),
+        ("Accuracy", f"{metrics.get('accuracy', 0):.1%}" if metrics else "-"),
     ])
 
     theme.note(
@@ -99,7 +99,7 @@ def _model() -> None:
     preds = _load_csv(ROOT / "modeling_outputs" / "test_predictions.csv")
 
     st.markdown("### Selected model")
-    st.write(f"**{report.get('selected_model', '—')}**")
+    st.write(f"**{report.get('selected_model', '-')}**")
     if report.get("best_params"):
         st.json(report["best_params"])
 
@@ -130,7 +130,7 @@ def _model() -> None:
             st.bar_chart(top.set_index(label_col)[num_cols[:1]])
 
     if fairness is not None:
-        st.markdown("### Fairness — AUC by SES")
+        st.markdown("### Fairness: AUC by SES")
         st.dataframe(fairness, hide_index=True, use_container_width=True)
 
     if preds is not None:

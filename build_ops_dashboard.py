@@ -3,7 +3,7 @@ Build ElimuMatch organization ops dashboard (monitoring / issues / progress).
 
 Usage:
   python build_ops_dashboard.py
-  # Open ops_dashboard.html — or via server:
+  # Open ops_dashboard.html, or via server:
   #   python db/portal_server.py
   #   http://127.0.0.1:8765/ops_dashboard.html
 """
@@ -35,7 +35,9 @@ TEMPLATE = r"""<!DOCTYPE html>
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ElimuMatch — Ops Monitor</title>
+  <title>ElimuMatch | Ops Monitor</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+  <link rel="apple-touch-icon" href="favicon.svg" />
   <style>
     :root {
       --bg: #f4f7f8;
@@ -223,14 +225,14 @@ TEMPLATE = r"""<!DOCTYPE html>
 <body>
   <header>
     <div class="wrap">
-      <div class="eyebrow">ElimuMatch · Organization</div>
+      <div class="eyebrow">ElimuMatch | Organization</div>
       <h1>Ops Monitor</h1>
       <p class="sub">
         Track helper matching across channels, investigate cases, and see where schools need
-        fee, tutoring, health, or digital resources — for ops teams and foundation targeting.
+        fee, tutoring, health, or digital resources, for ops teams and foundation targeting.
       </p>
       <div class="meta-row">
-        <span class="pill" id="genAt">Generated —</span>
+        <span class="pill" id="genAt">Generated -</span>
         <span class="pill" id="apiPill">API offline · embedded snapshot</span>
       </div>
       <div class="actions">
@@ -248,7 +250,7 @@ TEMPLATE = r"""<!DOCTYPE html>
 
     <section class="panel full" style="margin-top:1rem">
       <h2>Pilot success criteria</h2>
-      <p class="hint">What “good” looks like in a live pilot — current PoC progress where measurable.</p>
+      <p class="hint">What “good” looks like in a live pilot, with current PoC progress where measurable.</p>
       <div class="pilot-strip" id="pilotKpis"></div>
       <p class="hint" id="fairnessCadence" style="margin:0.75rem 0 0"></p>
     </section>
@@ -275,12 +277,12 @@ TEMPLATE = r"""<!DOCTYPE html>
     <div class="grid3">
       <section class="panel">
         <h2>Term aging</h2>
-        <p class="hint">Outstanding arrears by term — older terms first for urgency.</p>
+        <p class="hint">Outstanding arrears by term (older terms first for urgency).</p>
         <div id="termAging"></div>
       </section>
       <section class="panel">
         <h2>Other help channels</h2>
-        <p class="hint">Tutoring, health, digital, enrichment — routed for schools and partners.</p>
+        <p class="hint">Tutoring, health, digital, enrichment, routed for schools and partners.</p>
         <div id="nonFee"></div>
       </section>
       <section class="panel">
@@ -298,14 +300,14 @@ TEMPLATE = r"""<!DOCTYPE html>
       </section>
       <section class="panel">
         <h2>Rejected settlements</h2>
-        <p class="hint">Blocked pays (overpayment / stale balance) — trust &amp; UX friction.</p>
+        <p class="hint">Blocked pays (overpayment / stale balance), trust and UX friction.</p>
         <div id="rejections"></div>
       </section>
     </div>
 
     <div class="grid">
       <section class="panel">
-        <h2>School concentration — arrears</h2>
+        <h2>School concentration: arrears</h2>
         <p class="hint">Schools holding the most outstanding balances.</p>
         <div style="overflow-x:auto">
           <table>
@@ -317,7 +319,7 @@ TEMPLATE = r"""<!DOCTYPE html>
         </div>
       </section>
       <section class="panel">
-        <h2>School concentration — gifts</h2>
+        <h2>School concentration: gifts</h2>
         <p class="hint">Where sponsor KES is landing (equity check).</p>
         <div id="schoolsGiftWarn" class="hint"></div>
         <div style="overflow-x:auto">
@@ -334,7 +336,7 @@ TEMPLATE = r"""<!DOCTYPE html>
     <section class="panel full">
       <h2>School resource targets</h2>
       <p class="hint">
-        For foundations and CSR: where need clusters by school — fee, tutoring, health, digital, enrichment.
+        For foundations and CSR: where need clusters by school: fee, tutoring, health, digital, enrichment.
         Use this to place labs, clinic partnerships, tutoring contracts, or fee funds.
       </p>
       <div style="overflow-x:auto">
@@ -357,7 +359,7 @@ TEMPLATE = r"""<!DOCTYPE html>
     </section>
 
     <section class="panel full">
-      <h2>County hotspots — fee support queue</h2>
+      <h2>County hotspots: fee support queue</h2>
       <p class="hint">Where arrears and recommended fee support concentrate (top 12).</p>
       <div style="overflow-x:auto">
         <table>
@@ -423,7 +425,7 @@ TEMPLATE = r"""<!DOCTYPE html>
         return;
       }
       const k = data.kpis || {};
-      document.getElementById('genAt').textContent = `Generated ${data.generated_at || '—'}`;
+      document.getElementById('genAt').textContent = `Generated ${data.generated_at || '-'}`;
 
       const slaWarn = k.score_sla_ok === false;
       const kpiItems = [
@@ -433,7 +435,7 @@ TEMPLATE = r"""<!DOCTYPE html>
         ['Total arrears (KES)', kes(k.total_arrears_kes), true],
         ['Oldest-term share', pct(k.oldest_term_arrears_pct), Number(k.oldest_term_arrears_pct) >= 40],
         ['Stuck partial pays', k.stuck_partial_pays, Number(k.stuck_partial_pays) > 0],
-        ['Score age (days)', k.score_age_days ?? '—', slaWarn],
+        ['Score age (days)', k.score_age_days ?? '-', slaWarn],
         ['Score SLA', slaWarn ? `Breach (>${k.score_sla_days}d)` : `OK (≤${k.score_sla_days}d)`, slaWarn],
         ['Rejected pays (7d)', k.rejected_settlements_7d, Number(k.rejected_settlements_7d) > 0],
         ['Gifts / raised', `${k.gifts_completed} · ${kes(k.gifts_kes)}`, false],
@@ -441,7 +443,7 @@ TEMPLATE = r"""<!DOCTYPE html>
         ['Fee queue covered', pct((data.progress || {}).fee_support_coverage_pct), false],
       ];
       document.getElementById('kpis').innerHTML = kpiItems.map(([l, v, warn]) => `
-        <div class="kpi"><div class="v ${warn ? 'warn' : ''}">${v ?? '—'}</div><div class="l">${l}</div></div>
+        <div class="kpi"><div class="v ${warn ? 'warn' : ''}">${v ?? '-'}</div><div class="l">${l}</div></div>
       `).join('');
 
       const statusLabel = { on_track: 'On track', watch: 'Watch', n_a: 'Pilot measure' };
@@ -457,7 +459,7 @@ TEMPLATE = r"""<!DOCTYPE html>
 
       const fc = data.fairness_cadence || {};
       document.getElementById('fairnessCadence').textContent =
-        `Fairness cadence: last check ${fc.last_check_at || '—'} · next due ${fc.next_due_date || '—'} · status ${fc.status || '—'} · ${fc.note || ''}`;
+        `Fairness cadence: last check ${fc.last_check_at || '-'} · next due ${fc.next_due_date || '-'} · status ${fc.status || '-'} · ${fc.note || ''}`;
 
       const imp = data.illustrative_impact || {};
       const cell = (g, title) => {
@@ -468,17 +470,17 @@ TEMPLATE = r"""<!DOCTYPE html>
           <table>
             <thead><tr><th></th><th>n</th><th>Retained %</th><th>Dropped</th></tr></thead>
             <tbody>
-              <tr><td>With gift</td><td>${h.students ?? 0}</td><td>${h.retention_pct == null ? '—' : pct(h.retention_pct)}</td><td>${h.dropped ?? 0}</td></tr>
-              <tr><td>No gift</td><td>${n.students ?? 0}</td><td>${n.retention_pct == null ? '—' : pct(n.retention_pct)}</td><td>${n.dropped ?? 0}</td></tr>
+              <tr><td>With gift</td><td>${h.students ?? 0}</td><td>${h.retention_pct == null ? '-' : pct(h.retention_pct)}</td><td>${h.dropped ?? 0}</td></tr>
+              <tr><td>No gift</td><td>${n.students ?? 0}</td><td>${n.retention_pct == null ? '-' : pct(n.retention_pct)}</td><td>${n.dropped ?? 0}</td></tr>
             </tbody>
           </table>
         </div>`;
       };
       document.getElementById('impact').innerHTML = `
-        <div class="disclaimer">${imp.disclaimer || ''}${imp.small_n_warning ? ' Gifted sample is small — treat gaps as method demo only.' : ''}</div>
+        <div class="disclaimer">${imp.disclaimer || ''}${imp.small_n_warning ? ' Gifted sample is small; treat gaps as method demo only.' : ''}</div>
         <p style="font-size:0.88rem;margin-bottom:0.65rem">
-          Cohort retention: <strong>${imp.cohort && imp.cohort.retention_pct != null ? pct(imp.cohort.retention_pct) : '—'}</strong>
-          (${imp.cohort ? imp.cohort.retained : '—'} / ${imp.cohort ? imp.cohort.students : '—'})
+          Cohort retention: <strong>${imp.cohort && imp.cohort.retention_pct != null ? pct(imp.cohort.retention_pct) : '-'}</strong>
+          (${imp.cohort ? imp.cohort.retained : '-'} / ${imp.cohort ? imp.cohort.students : '-'})
           ${imp.fee_support_retention_gap_pp != null
             ? ` · Fee-support retention gap (gifted − not): <strong>${imp.fee_support_retention_gap_pp} pp</strong>`
             : ''}
@@ -498,8 +500,8 @@ TEMPLATE = r"""<!DOCTYPE html>
             <tbody>
               ${iss.sample.slice(0, 8).map(s => `<tr>
                 <td>${s.display_name}</td>
-                <td>${s.county_name || '—'}</td>
-                <td>${s.dropout_risk == null ? '—' : Number(s.dropout_risk).toFixed(2)}</td>
+                <td>${s.county_name || '-'}</td>
+                <td>${s.dropout_risk == null ? '-' : Number(s.dropout_risk).toFixed(2)}</td>
                 <td>${kes(s.total_outstanding_kes)}</td>
               </tr>`).join('')}
             </tbody></table></div>`;
@@ -510,7 +512,7 @@ TEMPLATE = r"""<!DOCTYPE html>
             <span class="sev">${iss.severity || 'flag'} · ${iss.count ?? 0}</span>
           </div>
           <p>${iss.detail || ''}</p>
-          <p class="action"><strong>Next:</strong> ${iss.action || '—'}</p>
+          <p class="action"><strong>Next:</strong> ${iss.action || '-'}</p>
           ${sample}
         </article>`;
       }).join('');
@@ -537,7 +539,7 @@ TEMPLATE = r"""<!DOCTYPE html>
         <div class="bars" style="margin-top:0.35rem">
           ${(p.persona_mix || []).map(m => `
             <div class="bar-row">
-              <span>${m.persona || '—'}</span>
+              <span>${m.persona || '-'}</span>
               <div class="bar-track"><div class="bar-fill" style="width:${100 * (m.students || 0) / Math.max(...(p.persona_mix||[{students:1}]).map(x=>x.students),1)}%;background:#2f6f8f"></div></div>
               <span>${m.students}</span>
             </div>
@@ -601,17 +603,17 @@ TEMPLATE = r"""<!DOCTYPE html>
         <table><thead><tr><th>Gender</th><th>n</th><th>Avg risk</th><th>Arrears</th></tr></thead>
         <tbody>
           ${gRows.map(r => `<tr>
-            <td>${r.gender || '—'}</td><td>${r.students}</td>
+            <td>${r.gender || '-'}</td><td>${r.students}</td>
             <td>${Number(r.avg_risk || 0).toFixed(2)}</td><td>${kes(r.arrears_kes)}</td>
-          </tr>`).join('') || '<tr><td colspan="4">—</td></tr>'}
+          </tr>`).join('') || '<tr><td colspan="4">-</td></tr>'}
         </tbody></table>
         <p style="font-size:0.78rem;margin:0.7rem 0 0.35rem"><strong>By SES quintile</strong></p>
         <table><thead><tr><th>SES</th><th>n</th><th>Avg risk</th><th>Arrears</th></tr></thead>
         <tbody>
           ${sRows.map(r => `<tr>
-            <td>Q${r.ses_quintile ?? '—'}</td><td>${r.students}</td>
+            <td>Q${r.ses_quintile ?? '-'}</td><td>${r.students}</td>
             <td>${Number(r.avg_risk || 0).toFixed(2)}</td><td>${kes(r.arrears_kes)}</td>
-          </tr>`).join('') || '<tr><td colspan="4">—</td></tr>'}
+          </tr>`).join('') || '<tr><td colspan="4">-</td></tr>'}
         </tbody></table>
       `;
 
@@ -646,7 +648,7 @@ TEMPLATE = r"""<!DOCTYPE html>
               <div class="bar-track"><div class="bar-fill" style="width:${100 * (r.attempts || 0) / Math.max(...(rej.by_code||[{attempts:1}]).map(x=>x.attempts),1)}%;background:var(--coral)"></div></div>
               <span>${r.attempts}</span>
             </div>
-          `).join('') || '<p class="muted">No blocked settlements yet — will log on overpay / stale rejects.</p>'}
+          `).join('') || '<p class="muted">No blocked settlements yet; will log on overpay / stale rejects.</p>'}
         </div>
         <div style="overflow-x:auto"><table>
           <thead><tr><th>When</th><th>Code</th><th>Student</th><th>Amount</th></tr></thead>
@@ -654,9 +656,9 @@ TEMPLATE = r"""<!DOCTYPE html>
             ${(rej.recent || []).map(r => `<tr>
               <td>${(r.created_at || '').slice(0, 16)}</td>
               <td>${r.code}</td>
-              <td>${r.student_name || '—'}</td>
+              <td>${r.student_name || '-'}</td>
               <td>${kes(r.amount_kes)}</td>
-            </tr>`).join('') || '<tr><td colspan="4">—</td></tr>'}
+            </tr>`).join('') || '<tr><td colspan="4">-</td></tr>'}
           </tbody>
         </table></div>
       `;
@@ -674,7 +676,7 @@ TEMPLATE = r"""<!DOCTYPE html>
           <td>${r.students_in_arrears}</td>
           <td>${kes(r.arrears_kes)}</td>
         </tr>
-      `).join('') || `<tr><td colspan="4">—</td></tr>`;
+      `).join('') || `<tr><td colspan="4">-</td></tr>`;
       document.getElementById('schoolsGifts').innerHTML = (sc.by_gifts || []).map(r => `
         <tr>
           <td>${r.school_name}<div class="muted" style="font-size:0.72rem">${r.county_name}</div></td>
@@ -708,7 +710,7 @@ TEMPLATE = r"""<!DOCTYPE html>
         <tr>
           <td>${r.run_id}</td>
           <td>${r.run_type}</td>
-          <td>${r.source || '—'}</td>
+          <td>${r.source || '-'}</td>
           <td>${(r.finished_at || r.started_at || '').slice(0, 16)}</td>
           <td>${r.status}</td>
         </tr>
@@ -753,4 +755,4 @@ if __name__ == '__main__':
             f"KPIs: students={k['students']} fee_queue={k['fee_support_recommended']} "
             f"gifts={k['gifts_completed']} issues={len(snap.get('issues', []))}"
         )
-        print('Top issue:', snap['issues'][0]['title'] if snap.get('issues') else '—')
+        print('Top issue:', snap['issues'][0]['title'] if snap.get('issues') else '-')

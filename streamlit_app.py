@@ -1,5 +1,5 @@
 """
-ElimuMatch Capstone — Streamlit demo entry point.
+ElimuMatch Capstone. Streamlit demo entry point.
 
 Local:
   python -m streamlit run streamlit_app.py
@@ -10,6 +10,8 @@ Cloud:
 
 from __future__ import annotations
 
+from pathlib import Path
+
 import streamlit as st
 
 from elimu_streamlit import analytics, helper, ops
@@ -18,9 +20,11 @@ from elimu_streamlit import theme
 
 ensure_paths()
 
+_ICON = Path(__file__).resolve().parent / "favicon.svg"
+
 st.set_page_config(
     page_title="ElimuMatch Capstone",
-    page_icon="🌿",
+    page_icon=str(_ICON) if _ICON.exists() else "🌿",
     layout="wide",
     initial_sidebar_state="expanded",
 )
@@ -36,7 +40,7 @@ PAGES = [
 def _home() -> None:
     theme.hero(
         brand="ElimuMatch",
-        headline="Help a student stay in school — with risk scoring and ops behind the scenes.",
+        headline="Help a student stay in school, with risk scoring and ops behind the scenes.",
         sub="Retention analytics, helper matching, and a working fee ledger for Kenyan secondary schools.",
     )
 
@@ -45,7 +49,7 @@ def _home() -> None:
         theme.nav_card(
             "Helpers",
             "Sponsor portal",
-            "County → school → student → term arrears → gift.",
+            "Fee gifts by county, school, student, and term.",
         )
         if st.button("Open Helper portal", use_container_width=True, key="home_helper"):
             st.session_state["nav"] = "Helper portal"
@@ -54,7 +58,7 @@ def _home() -> None:
         theme.nav_card(
             "Organization",
             "Ops monitor",
-            "KPIs, investigation queue, pilot criteria, progress.",
+            "KPIs, queues, pilot criteria, and settlement health.",
         )
         if st.button("Open Ops monitor", use_container_width=True, key="home_ops"):
             st.session_state["nav"] = "Ops monitor"
@@ -63,18 +67,18 @@ def _home() -> None:
         theme.nav_card(
             "Analytics",
             "Retention analytics",
-            "EDA, model, SHAP, personas, intervention matrix.",
+            "Model evidence, SHAP, personas, and interventions.",
         )
         if st.button("Open Analytics", use_container_width=True, key="home_analytics"):
             st.session_state["nav"] = "Retention analytics"
             st.rerun()
 
     theme.note(
-        "<strong>Demo gifts</strong> are simulated settlements on a shared ledger — not live M-Pesa. "
+        "<strong>Demo gifts</strong> are simulated settlements on a shared ledger, not live M-Pesa. "
         "Synthetic cohort metrics are factually grounded PoC outputs, not field-validated results."
     )
     st.markdown(
-        '<div class="em-footer">Repo: github.com/Jesyldah/ElimuMatch · '
+        '<div class="em-footer">Repo: github.com/Jesyldah/ElimuMatch | '
         "HTML demos remain available offline via index.html</div>",
         unsafe_allow_html=True,
     )

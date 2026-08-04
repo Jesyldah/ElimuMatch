@@ -167,7 +167,7 @@ def build_payload() -> dict:
     students = _balance_students_by_county_type(students)
     students.sort(key=lambda s: (-s['priority'], -s['amount'], s['id']))
 
-    # All 47 counties × Day + Boarding (national coverage — no regional bias)
+    # All 47 counties × Day + Boarding (national coverage, no regional bias)
     school_list = []
     for sid, meta_s in SCHOOLS.items():
         count = sum(1 for s in students if s['school_id'] == sid)
@@ -244,7 +244,9 @@ def build_html(payload: dict) -> str:
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ElimuMatch — Help a Student</title>
+  <title>ElimuMatch | Help a Student</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+  <link rel="apple-touch-icon" href="favicon.svg" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet" />
@@ -814,7 +816,7 @@ def build_html(payload: dict) -> str:
       <a class="project-home-link" href="index.html">← Project home</a>
       <div class="brand">ElimuMatch</div>
       <h1>Support a student in the county you care about.</h1>
-      <p>Choose a school, see arrears by term, and give any amount — partial gifts welcome. Analytics already ranked who needs fee support most.</p>
+      <p>Choose a school, see arrears by term, and give any amount (partial gifts welcome). Analytics already ranked who needs fee support most.</p>
       <div class="hero-actions">
         <button class="cta" type="button" id="startSponsorBtn">Help a student →</button>
         <button class="cta-ghost" type="button" id="heroGiftsLink">Your gifts</button>
@@ -870,7 +872,7 @@ def build_html(payload: dict) -> str:
       <h3 id="payTitle">Choose terms &amp; amount</h3>
       <p class="sub" id="paySub"></p>
 
-      <label class="field">Arrears by term — tick what you want to cover</label>
+      <label class="field">Arrears by term: tick what you want to cover</label>
       <div class="quick-row">
         <button type="button" class="chip" id="chipOldest">Oldest unpaid only</button>
         <button type="button" class="chip" id="chipAll">All terms</button>
@@ -885,7 +887,7 @@ def build_html(payload: dict) -> str:
         </div>
         <button type="button" class="chip" id="chipFillSelected" style="margin-bottom:0.15rem">Fill selected total</button>
       </div>
-      <p class="hint" id="payHint">Payments apply to the <strong>oldest selected term first</strong>, then newer terms. The database re-checks balances at pay time — overpayments are blocked.</p>
+      <p class="hint" id="payHint">Payments apply to the <strong>oldest selected term first</strong>, then newer terms. The database re-checks balances at pay time; overpayments are blocked.</p>
       <p class="hint" id="verifiedAt" style="display:none;color:var(--leaf-deep)"></p>
       <p class="err" id="payErr"></p>
       <div class="pay-actions">
@@ -907,7 +909,7 @@ def build_html(payload: dict) -> str:
     <h3 style="font-family:'Fraunces',serif;font-size:1.25rem;margin:1.5rem 0 0.5rem">What this PoC represents</h3>
     <div class="layer" id="freshCoverage"></div>
     <h3 style="font-family:'Fraunces',serif;font-size:1.25rem;margin:1.5rem 0 0.5rem">Recent refresh runs</h3>
-    <p class="muted">Logged in <code>refresh_runs</code> — the audit trail for fee sync, scoring, and payments.</p>
+    <p class="muted">Logged in <code>refresh_runs</code> (the audit trail for fee sync, scoring, and payments).</p>
     <table class="runs-table" id="freshRuns">
       <thead>
         <tr><th>When</th><th>Type</th><th>Source</th><th>Status</th></tr>
@@ -928,7 +930,7 @@ def build_html(payload: dict) -> str:
       </div>
       <div class="history-total" id="historyTotal"></div>
     </div>
-    <p class="history-empty" id="historyEmpty">No gifts yet — when you help a student, a receipt appears here.</p>
+    <p class="history-empty" id="historyEmpty">No gifts yet. When you help a student, a receipt appears here.</p>
     <div id="historyList"></div>
     <button type="button" class="linkish" id="clearHistoryBtn" style="display:none;margin-top:0.5rem">Clear gift history (demo)</button>
   </section>
@@ -1034,7 +1036,7 @@ def build_html(payload: dict) -> str:
     }}
 
     function fmtWhen(iso) {{
-      if (!iso) return '—';
+      if (!iso) return '-';
       try {{
         return new Date(iso.includes('T') ? iso : iso.replace(' ', 'T') + 'Z').toLocaleString('en-KE', {{
           dateStyle: 'medium',
@@ -1087,7 +1089,7 @@ def build_html(payload: dict) -> str:
             <tr>
               <td>${{fmtWhen(r.finished_at || r.started_at)}}</td>
               <td>${{r.run_type}}</td>
-              <td>${{r.source || '—'}}</td>
+              <td>${{r.source || '-'}}</td>
               <td>${{r.status}}</td>
             </tr>`).join('')
         : '<tr><td colspan="4">No refresh runs logged yet.</td></tr>';
@@ -1393,7 +1395,7 @@ def build_html(payload: dict) -> str:
             <div class="name">${{s.display_name}}</div>
             <div class="meta">${{s.gender}} · Age ${{s.age}} · ${{s.school_type}}</div>
             <div class="why">${{s.why}}</div>
-            <div class="meta" style="margin-top:0.35rem">Arrears: ${{termSummary || '—'}}</div>
+            <div class="meta" style="margin-top:0.35rem">Arrears: ${{termSummary || '-'}}</div>
           </div>
           <div class="amount">${{formatKes(s.amount)}}<span>total owed</span></div>
         `;
@@ -1620,7 +1622,7 @@ def build_html(payload: dict) -> str:
             amountInput.value = freshSel;
             updatePreview();
             throw new Error(
-              `Overpayment blocked. Only ${{formatKes(freshSel)}} remains on the selected terms. Amount was updated — click Pay again to confirm.`
+              `Overpayment blocked. Only ${{formatKes(freshSel)}} remains on the selected terms. Amount was updated; click Pay again to confirm.`
             );
           }}
           const receipt = await postPaymentToDb(studentSnapshot.id, amt, freshLabels, freshSel);
@@ -1672,7 +1674,7 @@ def build_html(payload: dict) -> str:
         showScreen('confirm');
         confirmText.textContent =
           `You gave ${{formatKes(amt)}} toward school fees for ${{studentSnapshot.display_name}} at ${{studentSnapshot.school}}.`
-          + (apiOnline ? ' Verified against the fee ledger at payment time — no overpayment.' : '');
+          + (apiOnline ? ' Verified against the fee ledger at payment time (no overpayment).' : '');
         confirmReceipt.innerHTML = `
           <div class="receipt-top">
             <span class="receipt-id">${{gift.receipt_id}}</span>

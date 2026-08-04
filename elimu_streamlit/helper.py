@@ -1,4 +1,4 @@
-"""Helper portal — county → school → student → gift."""
+"""Helper portal: county to school to student to gift."""
 
 from __future__ import annotations
 
@@ -33,7 +33,7 @@ def render() -> None:
         "County → school type → school → student → select terms → gift.",
     )
     theme.note(
-        "<strong>Shared demo ledger</strong> — gifts from other reviewers may appear here, "
+        "<strong>Shared demo ledger.</strong> Gifts from other reviewers may appear here, "
         "and the database can reset when the cloud app sleeps or redeploys. Not live M-Pesa."
     )
 
@@ -212,7 +212,7 @@ def _render_recent_receipts() -> None:
         finally:
             conn.close()
     except Exception:
-        st.caption("Ledger unavailable — run `python db/init_db.py` if local.")
+        st.caption("Ledger unavailable. Run `python db/init_db.py` if local.")
         return
 
     if not receipts:

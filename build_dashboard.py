@@ -36,7 +36,7 @@ CHART_SECTIONS = [
     ('Overview', [
         ('00_pipeline_summary.png', 'Analytics Pipeline', 'End-to-end workflow from synthetic cohort to intervention routing.'),
         ('01_cohort_overview.png', 'Cohort Overview', 'Retention split, SES distribution, and primary dropout drivers.'),
-        ('02_retention_by_ses.png', 'Retention by SES', 'Socioeconomic gradient — disadvantage compounds dropout risk.'),
+        ('02_retention_by_ses.png', 'Retention by SES', 'Socioeconomic gradient: disadvantage compounds dropout risk.'),
     ]),
     ('Data Exploration', [
         ('03_distributions_by_retention.png', 'Key Distributions', 'GPA trend, failures, commute, and health absences by status.'),
@@ -49,12 +49,12 @@ CHART_SECTIONS = [
         ('08_intervention_risk_flags.png', 'Intervention Flags', 'Binary risk markers compared across dropped vs. retained students.'),
     ]),
     ('Model Performance', [
-        ('29_modeling_selection_scatter.png', 'Why This Model', 'Near-tied AUC — prefer higher dropout recall for interventions.'),
+        ('29_modeling_selection_scatter.png', 'Why This Model', 'Near-tied AUC; prefer higher dropout recall for interventions.'),
         ('25_modeling_metrics_panel.png', 'Full Metric Panel', 'AUC, dropout recall/precision/F1, and accuracy across models.'),
         ('26_modeling_cv_vs_test.png', 'CV vs Test AUC', 'Generalization check from cross-validation to held-out test.'),
-        ('20_modeling_comparison.png', 'AUC & Dropout Recall', 'Tuned models vs baseline — ranking vs business catch-rate.'),
+        ('20_modeling_comparison.png', 'AUC & Dropout Recall', 'Tuned models vs baseline: ranking vs business catch-rate.'),
         ('21_modeling_roc.png', 'ROC Curve (selected)', 'Selected model discrimination on the held-out test set.'),
-        ('28_modeling_pr_threshold.png', 'PR & Thresholds', 'Precision–recall and threshold trade-offs for dropout flagging.'),
+        ('28_modeling_pr_threshold.png', 'PR & Thresholds', 'Precision-recall and threshold trade-offs for dropout flagging.'),
         ('27_modeling_score_distributions.png', 'Score Distributions', 'Predicted dropout probabilities by actual outcome.'),
         ('22_modeling_confusion.png', 'Confusion Matrix', 'Trade-off between catching dropouts and false alarms.'),
         ('23_modeling_feature_importance.png', 'Feature Importance', 'Top drivers from the selected retention model.'),
@@ -65,8 +65,8 @@ CHART_SECTIONS = [
         ('31_shap_global_importance.png', 'SHAP Global Importance', 'Which features move predicted dropout risk the most.'),
         ('32_shap_beeswarm.png', 'SHAP Beeswarm', 'Direction of each feature’s effect across students.'),
         ('33_shap_bar_summary.png', 'SHAP Bar Summary', 'Average magnitude of feature contributions.'),
-        ('34_shap_waterfall_high_risk.png', 'Waterfall — High Risk', 'Why one at-risk student was flagged.'),
-        ('35_shap_waterfall_low_risk.png', 'Waterfall — Low Risk', 'Why a low-risk student scores as likely to stay.'),
+        ('34_shap_waterfall_high_risk.png', 'Waterfall: High Risk', 'Why one at-risk student was flagged.'),
+        ('35_shap_waterfall_low_risk.png', 'Waterfall: Low Risk', 'Why a low-risk student scores as likely to stay.'),
         ('36_shap_dependence_1.png', 'Dependence Plot 1', 'How a key driver’s value changes SHAP impact.'),
         ('37_shap_dependence_2.png', 'Dependence Plot 2', 'Second key driver dependence relationship.'),
     ]),
@@ -77,7 +77,7 @@ CHART_SECTIONS = [
         ('17_persona_radar.png', 'Risk Signatures', 'Relative academic, economic, health, barrier, and support profiles.'),
     ]),
     ('Matching & targeting', [
-        ('38_intervention_matrix_heatmap.png', 'Intervention Matrix', 'Persona × action priority — fees, tutoring, health, digital, enrichment.'),
+        ('38_intervention_matrix_heatmap.png', 'Intervention Matrix', 'Persona × action priority. fees, tutoring, health, digital, enrichment.'),
         ('39_signal_intervention_matrix.png', 'Signal Eligibility Guide', 'Which risk signals unlock which help channels.'),
         ('40_intervention_assignment_mix.png', 'Assignments Applied', 'How the matrix maps onto the student cohort by channel.'),
         ('18_sponsor_matching.png', 'Budget Portfolio', 'Illustrative allocation across support types including school fees.'),
@@ -205,7 +205,7 @@ def build_html(metrics: dict) -> str:
     if fresh.get('ok'):
         fresh_layer_rows = ''.join(
             f"<tr><td>{l['label']}</td><td>{l['mode']}</td><td>{l['cadence']}</td>"
-            f"<td>{l.get('last_updated') or '—'}</td></tr>"
+            f"<td>{l.get('last_updated') or '-'}</td></tr>"
             for l in fresh.get('layers', [])
         )
         cov = fresh.get('coverage', {})
@@ -260,7 +260,9 @@ def build_html(metrics: dict) -> str:
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ElimuMatch — Retention Analytics</title>
+  <title>ElimuMatch | Retention Analytics</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+  <link rel="apple-touch-icon" href="favicon.svg" />
   <style>
     :root {{
       --bg: #0f1419;
@@ -499,8 +501,8 @@ def build_html(metrics: dict) -> str:
       <span class="badge">Quantic MSBA Capstone · EdTech Proof of Concept</span>
       <h1>ElimuMatch Retention Analytics</h1>
       <p class="subtitle">
-        Dropout-risk scoring that routes students to the right help channel — fees, tutoring,
-        health, digital access, enrichment — and rolls up to schools for foundation targeting.
+        Dropout-risk scoring that routes students to the right help channel (fees, tutoring,
+        health, digital access, enrichment) and rolls up to schools for foundation targeting.
         Synthetic cohort (n={metrics['students']:,}) · documented pipeline · equity-aware evaluation.
       </p>
       <p class="meta">Generated {generated} · Data: elimu_match_data_v4.csv</p>
@@ -521,7 +523,7 @@ def build_html(metrics: dict) -> str:
     <div class="kpi"><div class="value">{metrics['lr_auc']}</div><div class="label">LR Test AUC</div></div>
     <div class="kpi"><div class="value">{metrics['rf_auc']}</div><div class="label">RF Test AUC</div></div>
     <div class="kpi"><div class="value">{metrics['selected_auc']}</div><div class="label">Selected AUC</div></div>
-    <div class="kpi"><div class="value">{'{:.0%}'.format(metrics['dropout_recall']) if metrics.get('dropout_recall') is not None else '—'}</div><div class="label">Dropout Recall</div></div>
+    <div class="kpi"><div class="value">{'{:.0%}'.format(metrics['dropout_recall']) if metrics.get('dropout_recall') is not None else '-'}</div><div class="label">Dropout Recall</div></div>
     <div class="kpi"><div class="value">{metrics['features_total']}</div><div class="label">Features</div></div>
     <div class="kpi"><div class="value">{metrics['n_personas']}</div><div class="label">Risk Personas</div></div>
   </div>
@@ -571,7 +573,7 @@ def build_html(metrics: dict) -> str:
   </div>
 
   <footer>
-    ElimuMatch · Quantic School of Business and Technology · MSBA Capstone BSAN 590
+    ElimuMatch | Quantic School of Business and Technology · MSBA Capstone BSAN 590
   </footer>
 </body>
 </html>"""

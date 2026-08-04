@@ -1,4 +1,4 @@
-"""Shared ElimuMatch look — mirrors sponsor_portal / index HTML brand."""
+"""Shared ElimuMatch look matching sponsor portal and index HTML brand."""
 
 from __future__ import annotations
 
@@ -393,6 +393,6 @@ def issue_card(title: str, detail: str, severity: str = "info") -> None:
         "medium" if sev in ("medium", "warn", "warning") else ""
     )
     st.markdown(
-        f'<div class="em-issue {cls}"><span class="t">{title}</span> — {detail}</div>',
+        f'<div class="em-issue {cls}"><span class="t">{title}</span>. {detail}</div>',
         unsafe_allow_html=True,
     )

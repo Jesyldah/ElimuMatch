@@ -3,8 +3,10 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Elimu Match — Database Schema</title>
-  <script type="module">
+  <title>Elimu Match | Database Schema</title>
+    <link rel="icon" type="image/svg+xml" href="../favicon.svg" />
+  <link rel="apple-touch-icon" href="../favicon.svg" />
+<script type="module">
     import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
     mermaid.initialize({
       startOnLoad: true,
@@ -358,8 +360,7 @@
       <div class="badge">Database · Schema documentation</div>
       <h1>Elimu Match data model</h1>
       <p class="subtitle">
-        ERD with columns, relationship map, data dictionary, views, normalization notes, and DDL —
-        SQLite PoC, Postgres-ready for scale.
+        ERD with columns, relationship map, data dictionary, views, normalization notes, and DDL: SQLite PoC, Postgres-ready for scale.
       </p>
       <p class="meta">
         Source: <code>db/elimu_match.db</code> ·
@@ -401,8 +402,8 @@
           cardinality. Highlighted grain: <code>student × term × category</code> fees + payment allocations.
         </p>
         <div class="legend">
-          <span class="l-pk">PK — primary key</span>
-          <span class="l-fk">FK — foreign key</span>
+          <span class="l-pk">PK. primary key</span>
+          <span class="l-fk">FK. foreign key</span>
           <span class="l-rel">||--o{ = one-to-many</span>
         </div>
         <div class="callout">
@@ -567,7 +568,7 @@ erDiagram
       <!-- Views -->
       <section id="views" class="panel">
         <h2>Reporting views</h2>
-        <p class="lead">Denormalized read models for ops and the sponsor portal — not base tables.</p>
+        <p class="lead">Denormalized read models for ops and the sponsor portal. not base tables.</p>
         <table class="data">
           <thead>
             <tr><th>View</th><th>Purpose</th><th>Primary use</th></tr>
@@ -628,7 +629,7 @@ erDiagram
 
       <!-- DDL -->
       <section id="ddl" class="panel">
-        <h2>DDL — CREATE TABLE</h2>
+        <h2>DDL: CREATE TABLE</h2>
         <p class="lead">Core statements below. Full script: <code>db/ddl.sql</code> (also in <code>schema.py</code>).</p>
 
         <h3>student_term_fees (core grain)</h3>
@@ -694,7 +695,7 @@ CREATE TABLE payment_allocations (
           <strong>Paste-ready:</strong> The PoC uses SQLite for portability and zero ops cost.
           The logical model is DBMS-agnostic. For a multi-school pilot with concurrent school and sponsor activity,
           deploy the same schema on <strong>PostgreSQL</strong>, with termly fee sync, periodic risk rescoring,
-          and event-driven payment updates (e.g. M-Pesa). Scaling is operational — not a redesign of the fee grain.
+          and event-driven payment updates (e.g. M-Pesa). Scaling is operational. not a redesign of the fee grain.
         </div>
       </section>
     </main>
@@ -704,7 +705,7 @@ CREATE TABLE payment_allocations (
     const DICT = [
       {
         id: 'counties', title: 'counties', role: 'Geography dimension',
-        avail: 'High — public geography', availClass: 'high',
+        avail: 'High. public geography', availClass: 'high',
         cols: [
           ['county_id', 'INTEGER', 'N', 'PK', 'Surrogate key', 'System'],
           ['county_name', 'TEXT', 'N', 'UK', 'County name', 'High'],
@@ -712,45 +713,45 @@ CREATE TABLE payment_allocations (
       },
       {
         id: 'schools', title: 'schools', role: 'Partner school list',
-        avail: 'High — MoE / partner directories', availClass: 'high',
+        avail: 'High. MoE / partner directories', availClass: 'high',
         cols: [
           ['school_id', 'INTEGER', 'N', 'PK', 'School identifier', 'High'],
-          ['school_name', 'TEXT', 'N', '—', 'Display name', 'High'],
+          ['school_name', 'TEXT', 'N', '-', 'Display name', 'High'],
           ['county_id', 'INTEGER', 'N', 'FK', '→ counties', 'High'],
-          ['school_type', 'TEXT', 'N', '—', 'Day or Boarding', 'High'],
-          ['is_active', 'INTEGER', 'N', '—', '1 = active in portal', 'Ops'],
+          ['school_type', 'TEXT', 'N', '-', 'Day or Boarding', 'High'],
+          ['is_active', 'INTEGER', 'N', '-', '1 = active in portal', 'Ops'],
         ],
       },
       {
         id: 'academic_terms', title: 'academic_terms', role: 'Billing calendar',
-        avail: 'High — school calendar', availClass: 'high',
+        avail: 'High. school calendar', availClass: 'high',
         cols: [
           ['term_id', 'INTEGER', 'N', 'PK', 'Surrogate key', 'System'],
           ['academic_year', 'INTEGER', 'N', 'UK*', 'Academic year', 'High'],
           ['term_number', 'INTEGER', 'N', 'UK*', '1, 2, or 3', 'High'],
-          ['term_label', 'TEXT', 'N', '—', 'e.g. 2026 Term 2', 'High'],
-          ['start_date', 'TEXT', 'Y', '—', 'Term start', 'High'],
-          ['due_date', 'TEXT', 'Y', '—', 'Fee due date', 'High'],
+          ['term_label', 'TEXT', 'N', '-', 'e.g. 2026 Term 2', 'High'],
+          ['start_date', 'TEXT', 'Y', '-', 'Term start', 'High'],
+          ['due_date', 'TEXT', 'Y', '-', 'Fee due date', 'High'],
         ],
       },
       {
         id: 'fee_categories', title: 'fee_categories', role: 'Fee type lookup',
-        avail: 'Medium–high (some schools: one balance only)', availClass: 'med',
+        avail: 'Medium-high (some schools: one balance only)', availClass: 'med',
         cols: [
           ['fee_category_id', 'INTEGER', 'N', 'PK', 'Surrogate key', 'System'],
           ['category_code', 'TEXT', 'N', 'UK', 'tuition / boarding / lunch / activity', 'Medium'],
-          ['category_name', 'TEXT', 'N', '—', 'Human-readable label', 'Medium'],
+          ['category_name', 'TEXT', 'N', '-', 'Human-readable label', 'Medium'],
         ],
       },
       {
         id: 'interventions', title: 'interventions', role: 'Elimu Match config',
-        avail: 'Internal — not school-sourced', availClass: 'med',
+        avail: 'Internal. not school-sourced', availClass: 'med',
         cols: [
           ['intervention_id', 'INTEGER', 'N', 'PK', 'Surrogate key', 'Internal'],
           ['intervention_code', 'TEXT', 'N', 'UK', 'Matrix code', 'Internal'],
-          ['intervention_name', 'TEXT', 'N', '—', 'Display name', 'Internal'],
-          ['unit_cost_kes', 'INTEGER', 'Y', '—', 'Indicative unit cost', 'Internal'],
-          ['owner', 'TEXT', 'Y', '—', 'School / Elimu / sponsor', 'Internal'],
+          ['intervention_name', 'TEXT', 'N', '-', 'Display name', 'Internal'],
+          ['unit_cost_kes', 'INTEGER', 'Y', '-', 'Indicative unit cost', 'Internal'],
+          ['owner', 'TEXT', 'Y', '-', 'School / Elimu / sponsor', 'Internal'],
         ],
       },
       {
@@ -759,12 +760,12 @@ CREATE TABLE payment_allocations (
         cols: [
           ['student_id', 'INTEGER', 'N', 'PK', 'Anonymized student ID', 'High'],
           ['school_id', 'INTEGER', 'N', 'FK', '→ schools', 'High'],
-          ['display_name', 'TEXT', 'N', '—', 'Sponsor-facing label', 'High'],
-          ['age_at_enrollment', 'INTEGER', 'Y', '—', 'Age', 'High'],
-          ['gender', 'TEXT', 'Y', '—', 'Boy / Girl / Other / Unknown', 'High'],
-          ['enrollment_status', 'TEXT', 'N', '—', 'enrolled / dropped / …', 'High'],
-          ['created_at', 'TEXT', 'N', '—', 'Row created', 'System'],
-          ['updated_at', 'TEXT', 'N', '—', 'Last update', 'System'],
+          ['display_name', 'TEXT', 'N', '-', 'Sponsor-facing label', 'High'],
+          ['age_at_enrollment', 'INTEGER', 'Y', '-', 'Age', 'High'],
+          ['gender', 'TEXT', 'Y', '-', 'Boy / Girl / Other / Unknown', 'High'],
+          ['enrollment_status', 'TEXT', 'N', '-', 'enrolled / dropped / …', 'High'],
+          ['created_at', 'TEXT', 'N', '-', 'Row created', 'System'],
+          ['updated_at', 'TEXT', 'N', '-', 'Last update', 'System'],
         ],
       },
       {
@@ -772,27 +773,27 @@ CREATE TABLE payment_allocations (
         avail: 'System-generated', availClass: 'high',
         cols: [
           ['run_id', 'INTEGER', 'N', 'PK', 'Batch ID', 'System'],
-          ['run_type', 'TEXT', 'N', '—', 'fee_sync / risk_rescore / payment_import', 'System'],
-          ['source', 'TEXT', 'Y', '—', 'csv / api / manual', 'System'],
-          ['started_at', 'TEXT', 'N', '—', 'Start timestamp', 'System'],
-          ['finished_at', 'TEXT', 'Y', '—', 'End timestamp', 'System'],
-          ['status', 'TEXT', 'N', '—', 'running / success / failed', 'System'],
-          ['notes', 'TEXT', 'Y', '—', 'Free text', 'System'],
+          ['run_type', 'TEXT', 'N', '-', 'fee_sync / risk_rescore / payment_import', 'System'],
+          ['source', 'TEXT', 'Y', '-', 'csv / api / manual', 'System'],
+          ['started_at', 'TEXT', 'N', '-', 'Start timestamp', 'System'],
+          ['finished_at', 'TEXT', 'Y', '-', 'End timestamp', 'System'],
+          ['status', 'TEXT', 'N', '-', 'running / success / failed', 'System'],
+          ['notes', 'TEXT', 'Y', '-', 'Free text', 'System'],
         ],
       },
       {
         id: 'student_risk_snapshots', title: 'student_risk_snapshots', role: 'Scored analytics only',
-        avail: 'Derived from model — not clerk-typed', availClass: 'med',
+        avail: 'Derived from model. not clerk-typed', availClass: 'med',
         cols: [
           ['snapshot_id', 'INTEGER', 'N', 'PK', 'Surrogate key', 'System'],
           ['refresh_run_id', 'INTEGER', 'N', 'FK', '→ refresh_runs', 'System'],
           ['student_id', 'INTEGER', 'N', 'FK', '→ students', 'High'],
-          ['ses_quintile', 'INTEGER', 'Y', '—', '1–5 SES band', 'Derived'],
-          ['dropout_risk', 'REAL', 'Y', '—', 'Model risk score', 'Derived'],
-          ['persona', 'TEXT', 'Y', '—', 'Cluster persona', 'Derived'],
-          ['retained_flag', 'INTEGER', 'Y', '—', 'Historical outcome if known', 'Derived'],
+          ['ses_quintile', 'INTEGER', 'Y', '-', '1-5 SES band', 'Derived'],
+          ['dropout_risk', 'REAL', 'Y', '-', 'Model risk score', 'Derived'],
+          ['persona', 'TEXT', 'Y', '-', 'Cluster persona', 'Derived'],
+          ['retained_flag', 'INTEGER', 'Y', '-', 'Historical outcome if known', 'Derived'],
           ['primary_intervention_code', 'TEXT', 'Y', 'soft', 'Soft → interventions', 'Derived'],
-          ['scored_at', 'TEXT', 'N', '—', 'Score timestamp', 'System'],
+          ['scored_at', 'TEXT', 'N', '-', 'Score timestamp', 'System'],
         ],
       },
       {
@@ -803,10 +804,10 @@ CREATE TABLE payment_allocations (
           ['student_id', 'INTEGER', 'N', 'FK', '→ students', 'High'],
           ['term_id', 'INTEGER', 'N', 'FK', '→ academic_terms', 'High'],
           ['fee_category_id', 'INTEGER', 'N', 'FK', '→ fee_categories', 'Medium'],
-          ['amount_due_kes', 'INTEGER', 'N', '—', 'Amount billed (KES)', 'High'],
-          ['amount_paid_kes', 'INTEGER', 'N', '—', 'Cumulative paid — enables partial pay', 'High'],
-          ['status', 'TEXT', 'N', '—', 'unpaid / partial / paid / waived', 'High'],
-          ['updated_at', 'TEXT', 'N', '—', 'Last balance change', 'System'],
+          ['amount_due_kes', 'INTEGER', 'N', '-', 'Amount billed (KES)', 'High'],
+          ['amount_paid_kes', 'INTEGER', 'N', '-', 'Cumulative paid. enables partial pay', 'High'],
+          ['status', 'TEXT', 'N', '-', 'unpaid / partial / paid / waived', 'High'],
+          ['updated_at', 'TEXT', 'N', '-', 'Last balance change', 'System'],
         ],
       },
       {
@@ -814,9 +815,9 @@ CREATE TABLE payment_allocations (
         avail: 'Created at payment time', availClass: 'med',
         cols: [
           ['sponsor_id', 'INTEGER', 'N', 'PK', 'Surrogate key', 'System'],
-          ['display_name', 'TEXT', 'N', '—', 'Name or Anonymous Sponsor', 'PoC'],
-          ['email', 'TEXT', 'Y', '—', 'Optional contact', 'Phase 2+'],
-          ['created_at', 'TEXT', 'N', '—', 'Created', 'System'],
+          ['display_name', 'TEXT', 'N', '-', 'Name or Anonymous Sponsor', 'PoC'],
+          ['email', 'TEXT', 'Y', '-', 'Optional contact', 'Phase 2+'],
+          ['created_at', 'TEXT', 'N', '-', 'Created', 'System'],
         ],
       },
       {
@@ -827,13 +828,13 @@ CREATE TABLE payment_allocations (
           ['sponsor_id', 'INTEGER', 'Y', 'FK', '→ sponsors', 'System'],
           ['student_id', 'INTEGER', 'N', 'FK', 'Beneficiary', 'High'],
           ['school_id', 'INTEGER', 'N', 'FK', 'School at pay time (audit)', 'High'],
-          ['amount_kes', 'INTEGER', 'N', '—', 'Gross payment; may be partial', 'High'],
-          ['currency', 'TEXT', 'N', '—', 'Default KES', 'High'],
-          ['payment_method', 'TEXT', 'N', '—', 'simulated / mpesa / …', 'PoC'],
-          ['status', 'TEXT', 'N', '—', 'pending / completed / …', 'System'],
-          ['paid_at', 'TEXT', 'N', '—', 'Timestamp', 'System'],
-          ['external_ref', 'TEXT', 'Y', '—', 'M-Pesa receipt', 'Phase 2+'],
-          ['notes', 'TEXT', 'Y', '—', 'Free text', 'System'],
+          ['amount_kes', 'INTEGER', 'N', '-', 'Gross payment; may be partial', 'High'],
+          ['currency', 'TEXT', 'N', '-', 'Default KES', 'High'],
+          ['payment_method', 'TEXT', 'N', '-', 'simulated / mpesa / …', 'PoC'],
+          ['status', 'TEXT', 'N', '-', 'pending / completed / …', 'System'],
+          ['paid_at', 'TEXT', 'N', '-', 'Timestamp', 'System'],
+          ['external_ref', 'TEXT', 'Y', '-', 'M-Pesa receipt', 'Phase 2+'],
+          ['notes', 'TEXT', 'Y', '-', 'Free text', 'System'],
         ],
       },
       {
@@ -843,8 +844,8 @@ CREATE TABLE payment_allocations (
           ['allocation_id', 'INTEGER', 'N', 'PK', 'Surrogate key', 'System'],
           ['payment_id', 'INTEGER', 'N', 'FK', '→ payments', 'System'],
           ['student_term_fee_id', 'INTEGER', 'N', 'FK', '→ student_term_fees', 'System'],
-          ['amount_kes', 'INTEGER', 'N', '—', 'Portion applied to this line', 'System'],
-          ['allocated_at', 'TEXT', 'N', '—', 'Allocation timestamp', 'System'],
+          ['amount_kes', 'INTEGER', 'N', '-', 'Portion applied to this line', 'System'],
+          ['allocated_at', 'TEXT', 'N', '-', 'Allocation timestamp', 'System'],
         ],
       },
     ];
@@ -870,7 +871,7 @@ CREATE TABLE payment_allocations (
       panel.id = 'dict-' + t.id;
       panel.innerHTML = `
         <p style="margin-top:0.5rem">
-          <strong>${t.title}</strong> — ${t.role}
+          <strong>${t.title}</strong>. ${t.role}
           <span class="pill ${t.availClass}" style="margin-left:0.5rem">${t.avail}</span>
         </p>
         <table class="data">
