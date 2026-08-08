@@ -614,7 +614,7 @@
     <div id="stepStudents" class="hidden">
       <div class="step-label">4. Student</div>
       <h2 class="section-title">Pick a student to keep in school</h2>
-      <p class="trust-inline">Real student at a named partner school. Need verified from school fee records. Reviewed before publish. Gifts pass through to school fee accounts.</p>
+      <p class="trust-inline" id="studentTrust">Real student at the school you choose. Need verified from school fee records. Reviewed before publish. Gifts pass through to school fee accounts.</p>
       <div class="student-list" id="studentList"></div>
     </div>
 
@@ -1142,6 +1142,15 @@
       studentList.innerHTML = '';
       selectedStudent = null;
       payPanel.classList.remove('visible');
+
+      const trust = document.getElementById('studentTrust');
+      const schoolName = (list[0] && list[0].school)
+        || (DATA.schools.find(s => s.id === Number(schoolId)) || {}).name
+        || 'this school';
+      if (trust) {
+        trust.textContent =
+          `Real student at ${schoolName}. Need verified from school fee records. Reviewed before publish. Gifts pass through to school fee accounts.`;
+      }
 
       if (!list.length) {
         studentList.innerHTML = '<p class="empty">No students currently need fee support at this school.</p>';
