@@ -24,7 +24,8 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 from schema import DB_PATH, SCHEMA_SQL  # noqa: E402
-from kenya_schools import SCHOOLS  # noqa: E402
+from kenya_schools import SCHOOLS
+from student_display import first_name_label  # noqa: E402
 
 RAW = ROOT / 'elimu_match_data_v4.csv'
 ASSIGN = ROOT / 'intervention_outputs' / 'student_intervention_assignments.csv'
@@ -161,7 +162,7 @@ def seed_students_and_fees(conn: sqlite3.Connection, refs: dict) -> None:
                 (student_id, school_id, display_name, age_at_enrollment, gender, enrollment_status, updated_at)
             VALUES (?, ?, ?, ?, ?, ?, datetime('now'))
             """,
-            (sid, school_id, f'Student #{sid}', int(row['age_at_enrollment']), gender, status),
+            (sid, school_id, first_name_label(sid, gender), int(row['age_at_enrollment']), gender, status),
         )
 
         school_type = SCHOOLS[school_id]['type']

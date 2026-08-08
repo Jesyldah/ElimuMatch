@@ -94,11 +94,11 @@ def freshness_report() -> dict:
             {
                 'id': 'fees',
                 'label': 'Fee balances',
-                'mode': 'Live (event-driven)',
-                'cadence': 'On each sponsor payment + termly school sync',
+                'mode': 'Gifts live · School sync periodic',
+                'cadence': 'Ledger updates on each gift. School books on extract cadence',
                 'last_updated': last_fee_update or last_payment,
-                'detail': f'{n_payments} completed payment(s) in DB',
-                'live_level': 'live',
+                'detail': f'{n_payments} Completed payment(s) in DB',
+                'live_level': 'mixed',
             },
             {
                 'id': 'risk',
@@ -106,7 +106,10 @@ def freshness_report() -> dict:
                 'mode': 'Periodic',
                 'cadence': 'Termly (or after each scoring run)',
                 'last_updated': last_scored or (risk_run or {}).get('finished_at'),
-                'detail': f'{n_snapshots} snapshot row(s); last run type: {(risk_run or {}).get("run_type", "—")}',
+                'detail': (
+                    f'{n_snapshots} Snapshot row(s). '
+                    f'Last run type: {(risk_run or {}).get("run_type", "-")}'
+                ),
                 'live_level': 'periodic',
             },
             {
@@ -122,9 +125,11 @@ def freshness_report() -> dict:
                 'id': 'cohort',
                 'label': 'Student cohort',
                 'mode': 'Illustrative (synthetic)',
-                'cadence': 'Regenerated for PoC builds — not a live MoE feed',
+                'cadence': 'Regenerated for PoC builds. Not a live MoE feed',
                 'last_updated': (fee_sync or {}).get('finished_at'),
-                'detail': f'{n_students:,} students · {n_schools} schools · {n_counties} counties',
+                'detail': (
+                    f'{n_students:,} Students · {n_schools} Schools · {n_counties} Counties'
+                ),
                 'live_level': 'illustrative',
             },
         ]
@@ -139,11 +144,11 @@ def freshness_report() -> dict:
                 'counties': n_counties,
                 'payments': n_payments,
                 'geography': 'Sample school in each of Kenya’s 47 counties',
-                'population': 'Scaled PoC cohort — not full national enrollment',
+                'population': 'Scaled PoC cohort. Not full national enrollment',
                 'time_window': 'Simulated academic terms (fee ledger)',
                 'honesty': (
-                    'Current situation in the demo means current fee balances and the '
-                    'last scoring run within the synthetic pilot cohort.'
+                    'Fee balances: Gifts update the ledger live. School sync is periodic. '
+                    'Risk scores are periodic. The cohort is a synthetic PoC pilot.'
                 ),
             },
             'recent_runs': [dict(r) for r in recent],

@@ -102,7 +102,7 @@ HTML files also open offline via relative links; live gifts/ops refresh need the
 
 | Layer | Mode | Cadence |
 |---|---|---|
-| Fee balances | **Live** (event-driven) | Each gift + termly school sync |
+| Fee balances | **Gifts live · School sync periodic** | Each gift + school extract |
 | Risk scores | **Periodic** | Termly / after scoring run (`refresh_runs`) |
 | Model retrain | **Periodic** | Each term on new outcomes |
 | Cohort | **Illustrative** | Synthetic PoC — not a live MoE feed |

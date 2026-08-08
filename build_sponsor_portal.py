@@ -16,6 +16,7 @@ from pathlib import Path
 import pandas as pd
 
 from kenya_schools import SCHOOLS
+from student_display import first_name_label
 
 ROOT = Path(__file__).parent
 MATCH_PATH = ROOT / 'intervention_outputs' / 'student_intervention_assignments.csv'
@@ -152,7 +153,7 @@ def build_payload() -> dict:
             'school': school['name'],
             'county': school['county'],
             'school_type': school['type'],
-            'display_name': f'Student #{sid}',
+            'display_name': first_name_label(sid, m['gender']),
             'age': m['age'],
             'gender': m['gender'],
             'why': m['why'],
@@ -244,7 +245,7 @@ def build_html(payload: dict) -> str:
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ElimuMatch | Help a Student</title>
+  <title>ElimuMatch | Keep a student in school</title>
   <link rel="icon" type="image/svg+xml" href="favicon.svg" />
   <link rel="apple-touch-icon" href="favicon.svg" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -342,6 +343,10 @@ def build_html(payload: dict) -> str:
       display: none;
     }}
     footer.note.screen-active {{ display: block; }}
+    footer.note .footer-mode {{
+      margin: 0;
+      line-height: 1.45;
+    }}
     .hero-inner {{ position: relative; z-index: 1; max-width: 720px; }}
     .project-home-link {{
       display: inline-flex;
@@ -500,7 +505,29 @@ def build_html(payload: dict) -> str:
     .student.selected {{ border-color: var(--leaf); background: var(--mist); }}
     .student .name {{ font-weight: 700; font-size: 1.1rem; margin-bottom: 0.2rem; }}
     .student .meta {{ color: var(--muted); font-size: 0.9rem; }}
-    .student .why {{ color: var(--leaf-deep); font-size: 0.88rem; margin-top: 0.4rem; }}
+    .trust-inline {{
+      font-size: 0.85rem;
+      color: var(--muted);
+      margin: 0.35rem 0 0.85rem;
+      line-height: 1.45;
+    }}
+    .mode-banner {{
+      display: none;
+      margin: 0 0 1rem;
+      padding: 0.55rem 0.75rem;
+      border-radius: 10px;
+      font-size: 0.82rem;
+      line-height: 1.4;
+      color: var(--muted);
+      background: rgba(20, 33, 61, 0.05);
+      border: 1px solid #e0d8cc;
+    }}
+    .mode-banner.show {{ display: block; }}
+    .mode-banner.live {{
+      color: var(--leaf-deep);
+      background: rgba(31, 122, 108, 0.08);
+      border-color: rgba(31, 122, 108, 0.22);
+    }}
     .student .amount {{
       font-family: 'Fraunces', serif;
       font-size: 1.35rem;
@@ -740,37 +767,6 @@ def build_html(payload: dict) -> str:
       margin: 0 auto 1.5rem;
       max-width: 360px;
     }}
-    .fresh-strip {{
-      margin-top: 1.75rem;
-      max-width: 520px;
-      background: rgba(0,0,0,0.22);
-      border: 1px solid rgba(255,255,255,0.18);
-      border-radius: 14px;
-      padding: 0.9rem 1.05rem;
-      animation: rise 0.8s ease-out 0.4s both;
-    }}
-    .fresh-strip h3 {{
-      font-size: 0.75rem;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      opacity: 0.85;
-      margin-bottom: 0.55rem;
-      font-weight: 600;
-    }}
-    .fresh-strip ul {{
-      list-style: none;
-      font-size: 0.88rem;
-      line-height: 1.45;
-    }}
-    .fresh-strip li {{
-      display: flex;
-      justify-content: space-between;
-      gap: 1rem;
-      padding: 0.2rem 0;
-      border-bottom: 1px solid rgba(255,255,255,0.08);
-    }}
-    .fresh-strip li:last-child {{ border-bottom: none; }}
-    .fresh-strip .mode {{ opacity: 0.8; white-space: nowrap; }}
     .fresh-screen .layer {{
       background: var(--white);
       border: 1.5px solid #e0d8cc;
@@ -793,6 +789,7 @@ def build_html(payload: dict) -> str:
       margin-bottom: 0.45rem;
     }}
     .tag.live {{ background: #d8f3ea; color: var(--leaf-deep); }}
+    .tag.mixed {{ background: #e4f0ea; color: var(--leaf-deep); }}
     .tag.periodic {{ background: #fff3d6; color: #8a6a12; }}
     .tag.illustrative {{ background: #e8eef5; color: #3a4a5c; }}
     .fresh-screen .muted {{ color: var(--muted); font-size: 0.9rem; }}
@@ -815,18 +812,12 @@ def build_html(payload: dict) -> str:
     <div class="hero-inner">
       <a class="project-home-link" href="index.html">← Project home</a>
       <div class="brand">ElimuMatch</div>
-      <h1>Support a student in the county you care about.</h1>
-      <p>Choose a school, see arrears by term, and give any amount (partial gifts welcome). Analytics already ranked who needs fee support most.</p>
+      <h1>Keep a student in school in the county you care about.</h1>
+      <p>Choose a school, see verified term arrears, and give any amount (partial gifts welcome). Students are shown by first name only.</p>
       <div class="hero-actions">
-        <button class="cta" type="button" id="startSponsorBtn">Help a student →</button>
+        <button class="cta" type="button" id="startSponsorBtn">Help Keep a Student in School →</button>
         <button class="cta-ghost" type="button" id="heroGiftsLink">Your gifts</button>
         <button class="cta-ghost" type="button" id="heroFreshLink">Data freshness</button>
-      </div>
-      <div class="fresh-strip" id="freshStrip">
-        <h3>Data freshness</h3>
-        <ul id="freshStripList">
-          <li><span>Loading…</span><span class="mode"></span></li>
-        </ul>
       </div>
     </div>
   </section>
@@ -836,8 +827,9 @@ def build_html(payload: dict) -> str:
       <button type="button" class="back-btn" id="backFromSponsor">← Home</button>
       <div class="brand-mini">ElimuMatch</div>
     </div>
+    <div class="mode-banner" id="modeBanner" role="status"></div>
     <div class="step-label">Find a student</div>
-    <h2 class="section-title">Where do you want to help?</h2>
+    <h2 class="section-title">Where do you want to keep a student in school?</h2>
 
     <div class="filters">
       <div>
@@ -863,7 +855,8 @@ def build_html(payload: dict) -> str:
 
     <div id="stepStudents" class="hidden">
       <div class="step-label">4. Student</div>
-      <h2 class="section-title">Pick who to help</h2>
+      <h2 class="section-title">Pick a student to keep in school</h2>
+      <p class="trust-inline">Real student at a named partner school. Need verified from school fee records. Reviewed before publish. Gifts pass through to school fee accounts.</p>
       <div class="student-list" id="studentList"></div>
     </div>
 
@@ -887,7 +880,7 @@ def build_html(payload: dict) -> str:
         </div>
         <button type="button" class="chip" id="chipFillSelected" style="margin-bottom:0.15rem">Fill selected total</button>
       </div>
-      <p class="hint" id="payHint">Payments apply to the <strong>oldest selected term first</strong>, then newer terms. The database re-checks balances at pay time; overpayments are blocked.</p>
+      <p class="hint" id="payHint">Payments apply to the <strong>oldest selected term first</strong>, then newer terms. Gifts cannot exceed arrears currently recorded on the fee ledger.</p>
       <p class="hint" id="verifiedAt" style="display:none;color:var(--leaf-deep)"></p>
       <p class="err" id="payErr"></p>
       <div class="pay-actions">
@@ -949,7 +942,9 @@ def build_html(payload: dict) -> str:
   </section>
 
   <footer class="note" id="siteFooter">
-    Demo portal for Quantic MSBA Capstone · Run <code>python db/portal_server.py</code> so gifts write to SQLite · Students anonymized
+    <p class="footer-mode" id="footerMode">
+      Demo portal for Quantic MSBA Capstone · Run <code>python db/portal_server.py</code> so gifts write to SQLite · First-name display only (no surnames)
+    </p>
   </footer>
 
   <script>
@@ -1026,13 +1021,27 @@ def build_html(payload: dict) -> str:
       }} catch (e) {{
         apiOnline = false;
       }}
-      const foot = document.getElementById('siteFooter');
-      if (foot) {{
-        foot.innerHTML = apiOnline
-          ? 'Connected to SQLite fee DB · gifts update live balances · Students anonymized'
-          : 'Offline demo mode (localStorage). For live DB writes run <code>python db/portal_server.py</code> then open the localhost URL.';
+      const footMode = document.getElementById('footerMode');
+      if (footMode) {{
+        footMode.innerHTML = apiOnline
+          ? 'Connected to the fee ledger · Gifts update ledger balances · First-name display only'
+          : 'Offline demo mode (browser only). For ledger writes run <code>python db/portal_server.py</code> then open the localhost URL.';
       }}
+      updateModeBanner();
       return apiOnline;
+    }}
+
+    function updateModeBanner() {{
+      const banner = document.getElementById('modeBanner');
+      if (!banner) return;
+      banner.classList.add('show');
+      if (apiOnline) {{
+        banner.classList.add('live');
+        banner.innerHTML = 'Connected to the fee ledger. Gifts write to balances.';
+      }} else {{
+        banner.classList.remove('live');
+        banner.innerHTML = 'Demo mode. Gifts save in this browser only. Run <code>python db/portal_server.py</code> for ledger writes.';
+      }}
     }}
 
     function fmtWhen(iso) {{
@@ -1049,18 +1058,15 @@ def build_html(payload: dict) -> str:
 
     function renderFreshness(report) {{
       if (!report || !report.ok) {{
-        document.getElementById('freshStripList').innerHTML =
-          '<li><span>Freshness unavailable</span><span class="mode">run init_db</span></li>';
+        const honesty = document.getElementById('freshHonesty');
+        if (honesty) honesty.textContent = 'Freshness unavailable. Run python db/init_db.py';
         return;
       }}
       const layers = report.layers || [];
-      document.getElementById('freshStripList').innerHTML = layers.slice(0, 3).map(l =>
-        `<li><span>${{l.label}}</span><span class="mode">${{l.mode}}</span></li>`
-      ).join('');
 
       document.getElementById('freshHonesty').textContent =
         (report.coverage && report.coverage.honesty) ||
-        'Fee ledger is event-driven; risk scores are periodic; the cohort is a synthetic PoC.';
+        'Gifts update the fee ledger live. School sync is periodic. The cohort is a synthetic PoC.';
 
       document.getElementById('freshLayers').innerHTML = layers.map(l => `
         <div class="layer">
@@ -1146,7 +1152,7 @@ def build_html(payload: dict) -> str:
         const badge = document.getElementById('verifiedAt');
         if (badge) {{
           badge.style.display = 'block';
-          badge.textContent = `Balances verified from the fee ledger just now (${{new Date().toLocaleTimeString('en-KE')}}). Overpayment is blocked at pay time.`;
+          badge.textContent = `Current fee-ledger balance loaded (${{new Date().toLocaleTimeString('en-KE')}}). Gift capped at recorded arrears.`;
         }}
         return data;
       }} catch (e) {{
@@ -1206,7 +1212,7 @@ def build_html(payload: dict) -> str:
       historyEmpty.classList.add('hidden');
       clearHistoryBtn.style.display = 'inline';
       const total = giftHistory.reduce((a, g) => a + g.amount, 0);
-      historyTotal.textContent = `${{giftHistory.length}} gift${{giftHistory.length === 1 ? '' : 's'}} · ${{formatKes(total)}} total`;
+      historyTotal.textContent = `${{giftHistory.length}} gift${{giftHistory.length === 1 ? '' : 's'}} · Total ${{formatKes(total)}}`;
 
       giftHistory.forEach(g => {{
         const card = document.createElement('article');
@@ -1393,11 +1399,9 @@ def build_html(payload: dict) -> str:
         btn.innerHTML = `
           <div>
             <div class="name">${{s.display_name}}</div>
-            <div class="meta">${{s.gender}} · Age ${{s.age}} · ${{s.school_type}}</div>
-            <div class="why">${{s.why}}</div>
-            <div class="meta" style="margin-top:0.35rem">Arrears: ${{termSummary || '-'}}</div>
+            <div class="meta">${{s.school_type}} · Arrears: ${{termSummary || '-'}}</div>
           </div>
-          <div class="amount">${{formatKes(s.amount)}}<span>total owed</span></div>
+          <div class="amount">${{formatKes(s.amount)}}<span>Total owed</span></div>
         `;
         btn.addEventListener('click', () => {{
           document.querySelectorAll('.student').forEach(el => el.classList.remove('selected'));
@@ -1417,10 +1421,10 @@ def build_html(payload: dict) -> str:
         return;
       }}
       selectedStudent = s;
-      document.getElementById('payTitle').textContent = `Sponsor ${{s.display_name}}`;
+      document.getElementById('payTitle').textContent = `Keep ${{s.display_name}} in school`;
       document.getElementById('paySub').textContent =
         `${{s.school}} · ${{s.county}} · ${{s.school_type}} · Total owed ${{formatKes(s.amount)}}`
-        + (apiOnline ? ' · live from DB' : '');
+        + (apiOnline ? ' · From fee ledger' : '');
       renderTermRows(s);
       selectTermsPolicy('all');
       amountInput.value = '';
@@ -1493,7 +1497,7 @@ def build_html(payload: dict) -> str:
         return;
       }}
       if (!amt || amt <= 0) {{
-        payPreview.textContent = `Selected arrears: ${{formatKes(sel)}} · enter any amount up to that (or less).`;
+        payPreview.textContent = `Selected arrears: ${{formatKes(sel)}} · Enter any amount up to that (or less).`;
         return;
       }}
       if (amt > sel) {{
@@ -1674,7 +1678,7 @@ def build_html(payload: dict) -> str:
         showScreen('confirm');
         confirmText.textContent =
           `You gave ${{formatKes(amt)}} toward school fees for ${{studentSnapshot.display_name}} at ${{studentSnapshot.school}}.`
-          + (apiOnline ? ' Verified against the fee ledger at payment time (no overpayment).' : '');
+          + (apiOnline ? ' Gift applied to the fee ledger and capped at recorded arrears.' : '');
         confirmReceipt.innerHTML = `
           <div class="receipt-top">
             <span class="receipt-id">${{gift.receipt_id}}</span>
