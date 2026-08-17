@@ -511,6 +511,19 @@ def build_html(payload: dict) -> str:
       margin: 0.35rem 0 0.85rem;
       line-height: 1.45;
     }}
+    .partial-note {{
+      font-size: 0.9rem;
+      color: var(--leaf-deep);
+      font-weight: 600;
+      margin: -0.35rem 0 1rem;
+      line-height: 1.45;
+    }}
+    .student .amount span.partial-hint {{
+      font-weight: 500;
+      font-size: 0.68rem;
+      margin-top: 0.25rem;
+      color: var(--leaf-deep);
+    }}
     .mode-banner {{
       display: none;
       margin: 0 0 1rem;
@@ -857,6 +870,7 @@ def build_html(payload: dict) -> str:
       <div class="step-label">4. Student</div>
       <h2 class="section-title">Pick a student to keep in school</h2>
       <p class="trust-inline" id="studentTrust">Real student at the school you choose. Need verified from school fee records. Reviewed before publish. Gifts pass through to school fee accounts.</p>
+      <p class="partial-note">You do not need to clear the full balance. Every gift helps. Give what you can.</p>
       <div class="student-list" id="studentList"></div>
     </div>
 
@@ -880,6 +894,7 @@ def build_html(payload: dict) -> str:
         </div>
         <button type="button" class="chip" id="chipFillSelected" style="margin-bottom:0.15rem">Fill selected total</button>
       </div>
+      <p class="partial-note" style="margin-top:0.35rem">Any amount up to the selected arrears. You do not need to clear the whole balance.</p>
       <p class="hint" id="payHint">Payments apply to the <strong>oldest selected term first</strong>, then newer terms. Gifts cannot exceed arrears currently recorded on the fee ledger.</p>
       <p class="hint" id="verifiedAt" style="display:none;color:var(--leaf-deep)"></p>
       <p class="err" id="payErr"></p>
@@ -1410,7 +1425,7 @@ def build_html(payload: dict) -> str:
             <div class="name">${{s.display_name}}</div>
             <div class="meta">${{s.school_type}} · Arrears: ${{termSummary || '-'}}</div>
           </div>
-          <div class="amount">${{formatKes(s.amount)}}<span>Total owed</span></div>
+          <div class="amount">${{formatKes(s.amount)}}<span>Total owed</span><span class="partial-hint">Partial gifts welcome</span></div>
         `;
         btn.addEventListener('click', () => {{
           document.querySelectorAll('.student').forEach(el => el.classList.remove('selected'));

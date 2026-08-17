@@ -32,7 +32,7 @@ st.set_page_config(
 PAGES = [
     "Home",
     "Helper portal",
-    "Ops monitor",
+    "Support Hub",
     "Retention analytics",
 ]
 
@@ -57,11 +57,11 @@ def _home() -> None:
     with c2:
         theme.nav_card(
             "Organization",
-            "Ops monitor",
-            "KPIs, queues, pilot criteria, and settlement health.",
+            "ElimuMatch Support Hub",
+            "See whether fee help is reaching students and where schools need support.",
         )
-        if st.button("Open Ops monitor", use_container_width=True, key="home_ops"):
-            st.session_state["nav"] = "Ops monitor"
+        if st.button("Open Support Hub", use_container_width=True, key="home_ops"):
+            st.session_state["nav"] = "Support Hub"
             st.rerun()
     with c3:
         theme.nav_card(
@@ -113,7 +113,7 @@ def main() -> None:
         _home()
     elif choice == "Helper portal":
         helper.render()
-    elif choice == "Ops monitor":
+    elif choice == "Support Hub":
         ops.render()
     else:
         analytics.render()

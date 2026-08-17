@@ -6,7 +6,7 @@ RECOMMENDED (GitHub Pages — one link, no zip)
 Open:
   https://jesyldah.github.io/ElimuMatch/
 
-Then use the three cards: Helper portal | Ops monitor | Analytics
+Then use the three cards: Helper portal | ElimuMatch Support Hub | Analytics
 
 Gifts on Pages = offline demo mode (not live M-Pesa).
 

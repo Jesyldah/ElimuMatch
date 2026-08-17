@@ -51,4 +51,4 @@ Ops / schools use this matrix to decide *what* to offer each student.
 
 ## Sponsor experience
 Students whose **primary** intervention is School Fee Support appear on `sponsor_portal.html`.
-Other interventions are routed to school partners (tutoring, health, transport).
+Other interventions are handed to school or partner owners on the Support Hub (owner, next step, handoff status), with the school worklist as the handoff artifact. Progress means listed for review, not completed tutoring or clinic visits.

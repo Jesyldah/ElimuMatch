@@ -144,6 +144,7 @@ def ops_snapshot() -> dict:
         schools = _school_concentration(conn)
         rejections = _rejected_settlements(conn)
         non_fee = _non_fee_backlog(conn, rid)
+        support_lanes = _support_lanes(conn, rid)
         school_targets = _school_resource_targets(conn, rid)
         fairness = _fee_queue_fairness(conn, rid)
         impact = _illustrative_impact(conn, rid)
@@ -167,6 +168,7 @@ def ops_snapshot() -> dict:
             'school_concentration': schools,
             'rejected_settlements': rejections,
             'non_fee_backlog': non_fee,
+            'support_lanes': support_lanes,
             'school_resource_targets': school_targets,
             'fee_queue_fairness': fairness,
             'issues': issues,
@@ -510,6 +512,66 @@ def _rejected_settlements(conn: sqlite3.Connection) -> dict:
     }
 
 
+# Non-fee lanes: ownership + next step (handoff, not fulfillment).
+# Fee support stays on the Helper portal; these stay school/partner channels.
+_SUPPORT_LANE_META = {
+    'academic_tutoring': {
+        'label': 'Academic tutoring',
+        'owner': 'School academic lead',
+        'channel': 'School',
+        'action': (
+            'Share this lane\'s school list with the academic lead. '
+            'Start catch-up for the highest-risk students first.'
+        ),
+    },
+    'health_support': {
+        'label': 'Health and attendance',
+        'owner': 'School clinic / county health partner',
+        'channel': 'School / partner',
+        'action': (
+            'Hand the school list to the clinic or attendance lead. '
+            'Prioritize students flagged high risk.'
+        ),
+    },
+    'digital_access': {
+        'label': 'Digital access',
+        'owner': 'CSR / device partner',
+        'channel': 'Partner',
+        'action': (
+            'Share the school list with the device or data partner. '
+            'Bundle kits where several students share one school.'
+        ),
+    },
+    'enrichment': {
+        'label': 'STEM enrichment',
+        'owner': 'School clubs / mentoring lead',
+        'channel': 'School',
+        'action': (
+            'Route the school list to clubs or mentoring. '
+            'Use for placement, not as a fee-gift queue.'
+        ),
+    },
+    'counseling': {
+        'label': 'Psychosocial counseling',
+        'owner': 'School counselor / peer support',
+        'channel': 'School',
+        'action': (
+            'Share the school list with counseling staff. '
+            'Schedule follow-up for high-risk students.'
+        ),
+    },
+    'transport_support': {
+        'label': 'Transport / boarding',
+        'owner': 'School admin / bursary partner',
+        'channel': 'School / partner',
+        'action': (
+            'Review the school list with admin or a bursary partner. '
+            'Confirm commute or boarding need before funding.'
+        ),
+    },
+}
+
+
 def _non_fee_backlog(conn: sqlite3.Connection, rid: int | None) -> list[dict]:
     if rid is None:
         return []
@@ -532,6 +594,123 @@ def _non_fee_backlog(conn: sqlite3.Connection, rid: int | None) -> list[dict]:
             (HIGH_RISK, rid),
         )
     ]
+
+
+def _lane_top_schools(
+    conn: sqlite3.Connection, rid: int, code: str, limit: int = 3
+) -> list[dict]:
+    return [
+        dict(r)
+        for r in conn.execute(
+            """
+            SELECT
+                sch.school_name,
+                c.county_name,
+                COUNT(*) AS students,
+                SUM(CASE WHEN rs.dropout_risk >= ? THEN 1 ELSE 0 END) AS high_risk
+            FROM student_risk_snapshots rs
+            JOIN students st ON st.student_id = rs.student_id
+            JOIN schools sch ON sch.school_id = st.school_id
+            JOIN counties c ON c.county_id = sch.county_id
+            WHERE rs.refresh_run_id = ?
+              AND rs.primary_intervention_code = ?
+            GROUP BY sch.school_id
+            ORDER BY students DESC, high_risk DESC
+            LIMIT ?
+            """,
+            (HIGH_RISK, rid, code, limit),
+        )
+    ]
+
+
+def _support_lanes(conn: sqlite3.Connection, rid: int | None) -> dict:
+    """
+    Fee channel + other support lanes with owner, next step, and handoff status.
+    Handoff = listed for review (no fake fulfillment tracking in the PoC).
+    """
+    fee_students = 0
+    fee_high = 0
+    if rid is not None:
+        row = conn.execute(
+            """
+            SELECT
+                COUNT(*) AS students,
+                SUM(CASE WHEN dropout_risk >= ? THEN 1 ELSE 0 END) AS high_risk
+            FROM student_risk_snapshots
+            WHERE refresh_run_id = ?
+              AND primary_intervention_code = 'school_fee_support'
+            """,
+            (HIGH_RISK, rid),
+        ).fetchone()
+        fee_students = int(row['students'] or 0)
+        fee_high = int(row['high_risk'] or 0)
+
+    fee_channel = {
+        'code': 'school_fee_support',
+        'label': 'School fee support',
+        'owner': 'Helpers via Helper portal',
+        'channel': 'Helper portal',
+        'students': fee_students,
+        'high_risk': fee_high,
+        'action': 'Open the Helper portal and place gifts against school fee balances.',
+        'handoff_status': 'live_channel',
+        'handoff_label': 'Live on Helper portal',
+        'top_schools': [],
+    }
+
+    by_code = {r['code']: r for r in _non_fee_backlog(conn, rid)}
+    other_lanes: list[dict] = []
+    known_order = list(_SUPPORT_LANE_META.keys())
+    codes = [c for c in known_order if c in by_code] + [
+        c for c in by_code if c not in _SUPPORT_LANE_META
+    ]
+    for code in known_order:
+        if code not in codes:
+            codes.append(code)
+
+    for code in codes:
+        meta = _SUPPORT_LANE_META.get(
+            code,
+            {
+                'label': str(code).replace('_', ' ').title(),
+                'owner': 'School / partner',
+                'channel': 'School / partner',
+                'action': 'Share the school worklist with the named owner for this need.',
+            },
+        )
+        stats = by_code.get(code) or {'students': 0, 'high_risk': 0, 'avg_risk': None}
+        n = int(stats.get('students') or 0)
+        other_lanes.append(
+            {
+                'code': code,
+                'label': meta['label'],
+                'owner': meta['owner'],
+                'channel': meta['channel'],
+                'students': n,
+                'high_risk': int(stats.get('high_risk') or 0),
+                'avg_risk': stats.get('avg_risk'),
+                'action': meta['action'],
+                'handoff_status': 'listed_for_review' if n else 'none_routed',
+                'handoff_label': (
+                    'Listed for school / partner review' if n else 'No students routed'
+                ),
+                'top_schools': (
+                    _lane_top_schools(conn, rid, code) if rid is not None and n else []
+                ),
+            }
+        )
+
+    other_lanes.sort(key=lambda x: (-(x['students'] or 0), x['label']))
+
+    return {
+        'note': (
+            'Fee help settles on the Helper portal. '
+            'Other needs are handed to school or partner owners using the school worklist below. '
+            'Progress here means handoff, not completed tutoring or clinic visits.'
+        ),
+        'fee_channel': fee_channel,
+        'other_lanes': other_lanes,
+    }
 
 
 def _school_resource_targets(conn: sqlite3.Connection, rid: int | None) -> list[dict]:
@@ -662,10 +841,8 @@ def _group_retention(conn: sqlite3.Connection, rid: int, where_extra: str) -> di
 
 def _illustrative_impact(conn: sqlite3.Connection, rid: int | None) -> dict:
     """
-    Illustrative impact view: historical retained_flag × gift receipt.
-
-    Not causal — synthetic cohort labels + demo gifts. For pilot design /
-    report framing only.
+    Retention comparison for helped vs not-helped students.
+    Use as an outcome check; confirm with next-term enrollment follow-up.
     """
     if rid is None:
         return {
@@ -707,8 +884,8 @@ def _illustrative_impact(conn: sqlite3.Connection, rid: int | None) -> dict:
     return {
         'illustrative': True,
         'disclaimer': (
-            'Illustrative only: uses synthetic retained labels and demo sponsor gifts. '
-            'Not a causal impact estimate — a live pilot must measure next-term outcomes.'
+            'Outcome comparison only. Treat differences carefully when samples are small. '
+            'A next-term follow-up should confirm whether helped students stay enrolled.'
         ),
         'fee_support': fee,
         'high_risk': high,
@@ -742,8 +919,8 @@ def _fairness_cadence(conn: sqlite3.Connection) -> dict:
         'days_since_check': age_days,
         'status': 'due' if due else 'ok',
         'note': (
-            'Fairness (SES / gender AUC) is reviewed with each full_rescore — '
-            'see analytics dashboard for detail.'
+            'We recheck that support recommendations stay balanced by gender and income group '
+            'whenever risk scores are updated. See the analytics dashboard for detail.'
         ),
     }
 
@@ -754,7 +931,7 @@ def _pilot_kpi_strip(
     kpis: dict,
     impact: dict,
 ) -> list[dict]:
-    """Pilot success criteria with current PoC progress where measurable."""
+    """Progress goals for the fee-support channel, with current measurable status."""
     coverage = 0.0
     if rid is not None:
         fee_total = conn.execute(
@@ -789,42 +966,51 @@ def _pilot_kpi_strip(
     items = [
         {
             'id': 'fee_coverage',
-            'label': 'Fee-queue gift coverage',
-            'target': f'≥ {PILOT_FEE_COVERAGE_TARGET_PCT:.0f}% of fee-support students get ≥1 gift',
-            'current': f'{coverage}%',
+            'label': 'Students who received a gift',
+            'target': (
+                f'At least {PILOT_FEE_COVERAGE_TARGET_PCT:.0f}% of students recommended '
+                'for fee support should receive one or more gifts'
+            ),
+            'current': f'{coverage}% have received a gift',
             'current_value': coverage,
             'status': (
                 'on_track' if coverage >= PILOT_FEE_COVERAGE_TARGET_PCT else 'watch'
             ),
-            'note': 'Pilot delivery KPI — expand outreach until target met.',
+            'note': 'Shows whether recommended students are actually getting help.',
         },
         {
             'id': 'score_sla',
-            'label': 'Scoring / fairness SLA',
-            'target': f'Rescore + fairness check ≤ every {SCORE_SLA_DAYS} days',
+            'label': 'Risk score freshness',
+            'target': f'Update risk scores at least every {SCORE_SLA_DAYS} days',
             'current': (
-                f"{kpis.get('score_age_days')}d since last score"
+                f"{kpis.get('score_age_days')} days since last update"
                 if kpis.get('score_age_days') is not None
-                else '—'
+                else '-'
             ),
             'current_value': kpis.get('score_age_days'),
             'status': 'on_track' if kpis.get('score_sla_ok') else 'watch',
-            'note': 'Pairs with analytics SES/gender fairness panel.',
+            'note': 'Stale scores mean recommendations may be out of date.',
         },
         {
             'id': 'ledger_integrity',
-            'label': 'Settlement integrity',
-            'target': '0 completed gifts without fee allocation; block overpays',
-            'current': f'{unallocated} unallocated / {kpis.get("rejected_settlements_7d", 0)} rejects (7d)',
+            'label': 'Gifts applied to school fees',
+            'target': 'Every completed gift should land on a fee term; overpayments blocked',
+            'current': (
+                f'{unallocated} gifts not yet applied to a fee term · '
+                f'{kpis.get("rejected_settlements_7d", 0)} blocked attempts in 7 days'
+            ),
             'current_value': unallocated,
             'status': 'on_track' if unallocated == 0 else 'watch',
-            'note': 'Trust prerequisite for sponsors and schools.',
+            'note': 'Helpers and schools need gifts to clear against real fee balances.',
         },
         {
             'id': 'oldest_term',
-            'label': 'Oldest-term arrears pressure',
-            'target': f'Term-1 share of arrears ≤ {PILOT_OLDEST_TERM_SHARE_MAX_PCT:.0f}%',
-            'current': f"{kpis.get('oldest_term_arrears_pct')}%",
+            'label': 'Old unpaid terms',
+            'target': (
+                f'Oldest-term share of unpaid fees should stay at or below '
+                f'{PILOT_OLDEST_TERM_SHARE_MAX_PCT:.0f}%'
+            ),
+            'current': f"{kpis.get('oldest_term_arrears_pct')}% of unpaid fees are in the oldest term",
             'current_value': kpis.get('oldest_term_arrears_pct'),
             'status': (
                 'on_track'
@@ -832,12 +1018,12 @@ def _pilot_kpi_strip(
                 <= PILOT_OLDEST_TERM_SHARE_MAX_PCT
                 else 'watch'
             ),
-            'note': 'Aging balance signals urgency for fee support.',
+            'note': 'A high share of old unpaid terms means debt is stacking up.',
         },
         {
             'id': 'settlement_friction',
-            'label': 'Blocked settlement friction',
-            'target': f'≤ {PILOT_REJECT_7D_MAX} blocked pays / 7 days',
+            'label': 'Blocked gift attempts',
+            'target': f'At most {PILOT_REJECT_7D_MAX} blocked attempts in 7 days',
             'current': str(kpis.get('rejected_settlements_7d', 0)),
             'current_value': kpis.get('rejected_settlements_7d', 0),
             'status': (
@@ -845,20 +1031,20 @@ def _pilot_kpi_strip(
                 if (kpis.get('rejected_settlements_7d') or 0) <= PILOT_REJECT_7D_MAX
                 else 'watch'
             ),
-            'note': 'Stale/overpay rejects → UX or sync issues.',
+            'note': 'Blocked gifts usually mean balances changed or the amount was too high.',
         },
         {
             'id': 'outcome_loop',
-            'label': 'Next-term retention outcome',
-            'target': 'Measure retained vs dropped for helped vs matched peers',
+            'label': 'Did helped students stay in school?',
+            'target': 'Compare stay-in-school rates for helped students vs similar peers',
             'current': (
-                f"Illustrative gap {impact.get('fee_support_retention_gap_pp')} pp"
+                f"Difference {impact.get('fee_support_retention_gap_pp')} points"
                 if impact.get('fee_support_retention_gap_pp') is not None
-                else 'Not measured in live pilot'
+                else 'Awaiting next-term outcomes'
             ),
             'current_value': impact.get('fee_support_retention_gap_pp'),
             'status': 'n_a',
-            'note': 'Requires post-term outcome collection — PoC shows method only.',
+            'note': 'Track after the next school term whether helped students stay enrolled.',
         },
     ]
     return items
@@ -884,13 +1070,13 @@ def _issues(
         issues.append({
             'severity': 'high',
             'code': 'portal_missing_risk',
-            'title': 'Portal candidates missing risk scores',
+            'title': 'Some students are missing risk information',
             'detail': (
-                f'{missing_risk} fee-arrears students have NULL risk/persona on the portal feed. '
-                'Usually means the view joined a payment refresh run instead of the latest scoring run.'
+                f'{missing_risk} students with unpaid fees appear in the helper list '
+                'without a risk score. Recommendations may be incomplete.'
             ),
             'count': missing_risk,
-            'action': 'Confirm scoring join uses MAX(refresh_run_id) from student_risk_snapshots.',
+            'action': 'Refresh student risk scores, then reload this monitor.',
         })
 
     fee_no_gift = 0
@@ -912,13 +1098,13 @@ def _issues(
         issues.append({
             'severity': 'medium',
             'code': 'fee_queue_untouched',
-            'title': 'Fee-support queue with no sponsor gift yet',
+            'title': 'Students recommended for fee help have not received a gift yet',
             'detail': (
-                f'{fee_no_gift} students flagged for school fee support still have arrears '
-                'and zero completed gifts.'
+                f'{fee_no_gift} students are recommended for school fee support, '
+                'still owe fees, and have not received a gift.'
             ),
             'count': fee_no_gift,
-            'action': 'Prioritize in sponsor portal outreach / school follow-up.',
+            'action': 'Open the helper portal and give toward one of these students.',
         })
 
     urgent = []
@@ -947,13 +1133,13 @@ def _issues(
         issues.append({
             'severity': 'high',
             'code': 'high_risk_large_arrears',
-            'title': 'High dropout risk + large arrears',
+            'title': 'Students with high dropout risk and large unpaid fees',
             'detail': (
-                f'{len(urgent)} students (showing top list) with risk ≥ {HIGH_RISK:.0%} '
-                f'and arrears ≥ {LARGE_ARREARS_KES:,} KES.'
+                f'{len(urgent)} students (top list shown) have risk at or above {HIGH_RISK:.0%} '
+                f'and unpaid fees of at least {LARGE_ARREARS_KES:,} KES.'
             ),
             'count': len(urgent),
-            'action': 'Case review: fee support + school outreach.',
+            'action': 'Review these cases first and open the helper portal for fee support.',
             'sample': urgent,
         })
 
@@ -961,13 +1147,13 @@ def _issues(
         issues.append({
             'severity': 'medium',
             'code': 'stuck_partial_pay',
-            'title': 'Partial gifts still leaving large arrears',
+            'title': 'Students who still need substantial support after a gift',
             'detail': (
-                f"{stuck['count']} students received ≥1 gift but still owe "
-                f"≥ {STUCK_REMAINING_KES:,} KES."
+                f"{stuck['count']} students already received one or more gifts "
+                f"but still owe at least {STUCK_REMAINING_KES:,} KES."
             ),
             'count': stuck['count'],
-            'action': 'Follow up for second gift or school payment plan.',
+            'action': 'Consider another gift or ask the school about a payment plan.',
             'sample': [
                 {
                     'display_name': s['display_name'],
@@ -983,27 +1169,28 @@ def _issues(
         issues.append({
             'severity': 'medium',
             'code': 'school_gift_concentration',
-            'title': 'Gift concentration in one school',
+            'title': 'Most gifts are going to one school',
             'detail': (
                 f"{schools.get('top_gift_school')} received "
-                f"{schools.get('top_gift_share_pct')}% of gift KES "
-                f"(warn ≥ {int(SCHOOL_GIFT_SHARE_WARN * 100)}%)."
+                f"{schools.get('top_gift_share_pct')}% of gift money "
+                f"(warning starts at {int(SCHOOL_GIFT_SHARE_WARN * 100)}%)."
             ),
             'count': schools.get('top_gift_share_pct') or 0,
-            'action': 'Check geographic / school equity in sponsor routing.',
+            'action': 'Encourage helpers to support students across more schools and counties.',
         })
 
     if rejections.get('last_7d', 0) >= 3:
         issues.append({
             'severity': 'medium',
             'code': 'settlement_friction',
-            'title': 'Repeated blocked settlements (7d)',
+            'title': 'Several gift attempts were blocked recently',
             'detail': (
-                f"{rejections['last_7d']} blocked pay attempts in the last 7 days "
-                f"(stale balance / overpayment). Total logged: {rejections.get('total', 0)}."
+                f"{rejections['last_7d']} gift attempts were blocked in the last 7 days "
+                f"(usually because balances changed or the amount was too high). "
+                f"Total blocked attempts logged: {rejections.get('total', 0)}."
             ),
             'count': rejections['last_7d'],
-            'action': 'Review portal UX timing and balance refresh hints.',
+            'action': 'Check that fee balances are current before the next gift drive.',
         })
 
     score_age = kpis.get('score_age_days')
@@ -1011,13 +1198,13 @@ def _issues(
         issues.append({
             'severity': 'medium',
             'code': 'stale_scores',
-            'title': 'Scoring SLA breached',
+            'title': 'Risk scores need updating',
             'detail': (
-                f"Last scored_at was {kpis.get('last_scored_at')} "
-                f"({score_age} days ago; SLA = {SCORE_SLA_DAYS} days)."
+                f"Risk scores were last updated on {kpis.get('last_scored_at')} "
+                f"({score_age} days ago). The target is every {SCORE_SLA_DAYS} days."
             ),
             'count': score_age,
-            'action': 'Schedule termly full_rescore / model refresh.',
+            'action': 'Run an updated risk score pass for the next school term.',
         })
 
     unallocated = conn.execute(
@@ -1033,20 +1220,22 @@ def _issues(
         issues.append({
             'severity': 'high',
             'code': 'payment_no_allocation',
-            'title': 'Completed payments with no fee allocation',
-            'detail': f'{unallocated} completed payment(s) have zero rows in payment_allocations.',
+            'title': 'Some gifts were not applied to fee terms',
+            'detail': (
+                f'{unallocated} completed gift(s) are not linked to any school fee term yet.'
+            ),
             'count': unallocated,
-            'action': 'Investigate ledger integrity before next sponsor settlement.',
+            'action': 'Fix gift-to-fee matching before more helpers give.',
         })
 
     if not issues:
         issues.append({
             'severity': 'info',
             'code': 'all_clear',
-            'title': 'No automated flags right now',
-            'detail': 'Ledger checks and priority queues look healthy for the PoC thresholds.',
+            'title': 'Nothing urgent right now',
+            'detail': 'Current checks look healthy against the active thresholds.',
             'count': 0,
-            'action': 'Keep monitoring gifts and termly rescoring.',
+            'action': 'Keep watching gifts and update risk scores each term.',
         })
 
     severity_rank = {'high': 0, 'medium': 1, 'low': 2, 'info': 3}

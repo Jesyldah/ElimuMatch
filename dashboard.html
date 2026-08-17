@@ -4,9 +4,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>ElimuMatch | Retention Analytics</title>
-    <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
   <link rel="apple-touch-icon" href="favicon.svg" />
-<style>
+  <style>
     :root {
       --bg: #0f1419;
       --surface: #1a2332;
@@ -248,10 +248,10 @@
         health, digital access, enrichment) and rolls up to schools for foundation targeting.
         Synthetic cohort (n=1,000) · documented pipeline · equity-aware evaluation.
       </p>
-      <p class="meta">Generated July 30, 2026 · Data: elimu_match_data_v4.csv</p>
+      <p class="meta">Generated August 17, 2026 · Data: elimu_match_data_v4.csv</p>
       <div class="hero-actions">
         <a class="primary" href="index.html">← Project home</a>
-        <a href="ops_dashboard.html">Ops monitor</a>
+        <a href="ops_dashboard.html">Support Hub</a>
         <a href="sponsor_portal.html">Helper portal</a>
         <a href="db/schema_dashboard.html">Schema docs</a>
       </div>
@@ -333,7 +333,7 @@
           Predict dropout risk → explain drivers → assign a primary channel
           (fees · tutoring · health · digital · enrichment) → match helpers to students
           and surface school-level need for foundations. The helper portal deepens the fee channel;
-          ops monitors every channel and school resource targets.
+          the Support Hub tracks every channel and school support needs.
         </div>
         <div class="callout">
           <strong>Data note:</strong> Documented synthetic cohort for proof-of-concept demonstration.
@@ -341,10 +341,10 @@
         </div>
         
         <h3 style="font-size:0.85rem;color:var(--muted);margin:1.25rem 0 0.5rem;">DATA FRESHNESS &amp; COVERAGE</h3>
-        <p style="color:var(--muted);font-size:0.9rem;margin-bottom:0.75rem;">Current situation in the demo means current fee balances and the last scoring run within the synthetic pilot cohort.</p>
+        <p style="color:var(--muted);font-size:0.9rem;margin-bottom:0.75rem;">Fee balances: Gifts update the ledger live. School sync is periodic. Risk scores are periodic. The cohort is a synthetic PoC pilot.</p>
         <table>
           <thead><tr><th>Layer</th><th>Mode</th><th>Cadence</th><th>Last updated</th></tr></thead>
-          <tbody><tr><td>Fee balances</td><td>Live (event-driven)</td><td>On each sponsor payment + termly school sync</td><td>2026-07-27 20:05:40</td></tr><tr><td>Risk scores / personas</td><td>Periodic</td><td>Termly (or after each scoring run)</td><td>2026-07-13 14:06:58</td></tr><tr><td>Model retrain</td><td>Periodic</td><td>Each term / semester on new outcomes</td><td>2026-07-13 14:06:58</td></tr><tr><td>Student cohort</td><td>Illustrative (synthetic)</td><td>Regenerated for PoC builds. not a live MoE feed</td><td>2026-07-13 14:06:58</td></tr></tbody>
+          <tbody><tr><td>Fee balances</td><td>Gifts live · School sync periodic</td><td>Ledger updates on each gift. School books on extract cadence</td><td>2026-07-30 19:04:24</td></tr><tr><td>Risk scores / personas</td><td>Periodic</td><td>Termly (or after each scoring run)</td><td>2026-07-13 14:06:58</td></tr><tr><td>Model retrain</td><td>Periodic</td><td>Each term / semester on new outcomes</td><td>2026-07-13 14:06:58</td></tr><tr><td>Student cohort</td><td>Illustrative (synthetic)</td><td>Regenerated for PoC builds. Not a live MoE feed</td><td>2026-07-13 14:06:58</td></tr></tbody>
         </table>
         <p style="color:var(--muted);font-size:0.85rem;margin-top:0.75rem;">
           Coverage: 1,000 students · 47 schools ·

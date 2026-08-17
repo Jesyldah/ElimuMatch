@@ -508,7 +508,7 @@ def build_html(metrics: dict) -> str:
       <p class="meta">Generated {generated} · Data: elimu_match_data_v4.csv</p>
       <div class="hero-actions">
         <a class="primary" href="index.html">← Project home</a>
-        <a href="ops_dashboard.html">Ops monitor</a>
+        <a href="ops_dashboard.html">Support Hub</a>
         <a href="sponsor_portal.html">Helper portal</a>
         <a href="db/schema_dashboard.html">Schema docs</a>
       </div>
@@ -555,7 +555,7 @@ def build_html(metrics: dict) -> str:
           Predict dropout risk → explain drivers → assign a primary channel
           (fees · tutoring · health · digital · enrichment) → match helpers to students
           and surface school-level need for foundations. The helper portal deepens the fee channel;
-          ops monitors every channel and school resource targets.
+          the Support Hub tracks every channel and school support needs.
         </div>
         <div class="callout">
           <strong>Data note:</strong> Documented synthetic cohort for proof-of-concept demonstration.

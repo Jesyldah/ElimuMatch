@@ -1,4 +1,4 @@
-"""Ops monitor: KPIs, pilot criteria, investigation queue."""
+"""ElimuMatch Support Hub: delivery status, cases, and school support needs."""
 
 from __future__ import annotations
 
@@ -13,16 +13,16 @@ ensure_paths()
 from ops_metrics import ops_snapshot  # noqa: E402
 
 
-@st.cache_data(ttl=15, show_spinner="Refreshing ops snapshot…")
+@st.cache_data(ttl=15, show_spinner="Refreshing Support Hub…")
 def _cached_ops() -> dict:
     return ops_snapshot()
 
 
 def render() -> None:
     theme.page_header(
-        "Organization",
-        "Ops monitor",
-        "KPIs, pilot criteria, settlement health, and school resource targets.",
+        "ElimuMatch",
+        "Support Hub",
+        "See whether fee help is reaching students and where schools need support.",
     )
 
     if st.button("Refresh now", key="ops_refresh"):
@@ -135,7 +135,41 @@ def render() -> None:
             else:
                 st.json(stuck)
 
-    st.markdown("### School resource targets")
+    st.markdown("### Support channels")
+    lanes = data.get("support_lanes") or {}
+    if lanes:
+        note = lanes.get("note") or ""
+        if note:
+            st.caption(note)
+        fee = lanes.get("fee_channel") or {}
+        if fee:
+            st.info(
+                f"**{fee.get('label', 'School fee support')}** · "
+                f"{fee.get('students', 0)} students · "
+                f"{fee.get('handoff_label', 'Helper portal')} · "
+                f"Owner: {fee.get('owner', 'Helpers')}. "
+                f"{fee.get('action', '')}"
+            )
+        other = lanes.get("other_lanes") or []
+        if other:
+            rows = []
+            for l in other:
+                tops = l.get("top_schools") or []
+                top_txt = "; ".join(
+                    f"{s.get('school_name')} ({s.get('students')})" for s in tops[:3]
+                )
+                rows.append({
+                    "Lane": l.get("label"),
+                    "Students": l.get("students"),
+                    "High risk": l.get("high_risk"),
+                    "Owner": l.get("owner"),
+                    "Handoff": l.get("handoff_label"),
+                    "Next step": l.get("action"),
+                    "Top schools": top_txt,
+                })
+            st.dataframe(pd.DataFrame(rows), hide_index=True, use_container_width=True)
+
+    st.markdown("### School support needs (handoff worklist)")
     targets = data.get("school_resource_targets") or []
     if targets:
         st.dataframe(pd.DataFrame(targets), hide_index=True, use_container_width=True)

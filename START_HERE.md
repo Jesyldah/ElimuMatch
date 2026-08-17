@@ -12,7 +12,7 @@ Open: **https://jesyldah.github.io/ElimuMatch/**
 
 Then click:
 - **Helper portal** — fee sponsorship flow  
-- **Ops monitor** — organization KPIs & school resource targets  
+- **ElimuMatch Support Hub** — whether fee help is reaching students & school support needs  
 - **Retention analytics** — model / SHAP / personas  
 
 Gifts on the hosted site use **offline demo mode** (browser localStorage) — not live M-Pesa and not a permanent shared cloud ledger.  
