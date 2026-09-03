@@ -17,23 +17,23 @@ import numpy as np
 OUT = Path(__file__).resolve().parent / "report_figures"
 OUT.mkdir(exist_ok=True)
 
-# Original palette
-CREAM = "#F5F5F2"
-INK = "#1a1a1a"
-MUTED = "#666666"
-GREEN = "#2d5a3d"
-TEAL = "#3d7a6a"
-SLATE = "#3d4f5f"
-NAVY = "#243b48"
-ORANGE = "#b86b3c"
-BLUE = "#3a5a6a"
+# Portal brand (sponsor portal / Streamlit theme)
+CREAM = "#f7f1e8"
+INK = "#14213d"
+MUTED = "#5c6b73"
+GREEN = "#1b7a5a"
+TEAL = "#0f5c42"
+SLATE = "#14213d"
+NAVY = "#14213d"
+ORANGE = "#f4b942"
+BLUE = "#1b7a5a"
 
 
 def _style() -> None:
     plt.rcParams.update(
         {
             "font.family": "DejaVu Sans",
-            "font.size": 10,
+            "font.size": 12,
             "text.color": INK,
             "figure.facecolor": CREAM,
             "savefig.facecolor": CREAM,
@@ -43,7 +43,7 @@ def _style() -> None:
 
 def _save(fig: plt.Figure, name: str) -> None:
     path = OUT / name
-    fig.savefig(path, dpi=160, bbox_inches="tight", facecolor=CREAM, edgecolor="none")
+    fig.savefig(path, dpi=200, bbox_inches="tight", facecolor=CREAM, edgecolor="none")
     plt.close(fig)
     print(f"  wrote {path.name}")
 
@@ -63,24 +63,24 @@ def fig_product_layers() -> None:
 
     layers = [
         (0.4, 3.85, 9.2, 1.55, GREEN,
-         "Helpers",
-         "Place → anonymized student → term fee gift → receipt",
-         "Simple path. No SHAP, no model jargon."),
+         "Donors",
+         "Pick a place  >  see a student  >  pay school fees  >  get a receipt",
+         "A simple path. No model detail on this screen."),
         (0.4, 2.15, 9.2, 1.45, TEAL,
          "Operations",
-         "Queues, settlement integrity, concentration, fairness cadence, data freshness",
-         "Trust and pilot KPIs."),
+         "Who is waiting, where gifts land, payment errors, and data freshness",
+         "Keeps the pilot honest and auditable."),
         (0.4, 0.45, 9.2, 1.45, SLATE,
          "Analytics",
-         "Retention model, SHAP, personas, intervention matrix",
-         "Why a student is priority — for staff, not the public gift screen."),
+         "Who is at risk of leaving, and why",
+         "For school staff only, not for public donor screens."),
     ]
     for x, y, w, h, c, title, body, note in layers:
         ax.add_patch(FancyBboxPatch((x, y), w, h, boxstyle="round,pad=0.02,rounding_size=0.15",
                                     facecolor=c, edgecolor="none", zorder=2))
-        ax.text(x + 0.35, y + h - 0.38, title, fontsize=12, fontweight="bold", color="white", va="top", zorder=3)
-        ax.text(x + 0.35, y + h * 0.48, body, fontsize=10, color="white", va="center", zorder=3)
-        ax.text(x + 0.35, y + 0.22, note, fontsize=9, color="#d0e0d8", style="italic", va="bottom", zorder=3)
+        ax.text(x + 0.35, y + h - 0.38, title, fontsize=15, fontweight="bold", color="white", va="top", zorder=3)
+        ax.text(x + 0.35, y + h * 0.48, body, fontsize=12, color="white", va="center", zorder=3)
+        ax.text(x + 0.35, y + 0.22, note, fontsize=11, color="#d0e0d8", style="italic", va="bottom", zorder=3)
 
     _save(fig, "01_product_layers.png")
 
@@ -246,17 +246,18 @@ def fig_year1_economics() -> None:
     fig.patch.set_facecolor(CREAM)
     ax.set_facecolor(CREAM)
 
-    labels = ["Year-1 platform cost", "Base quantified benefits"]
+    labels = ["What the platform costs", "Estimated Year-1 benefits"]
     values = [2.0, 5.15]
     colors = [NAVY, GREEN]
     bars = ax.bar(labels, values, width=0.55, color=colors, edgecolor="none", zorder=3)
     for bar, lab in zip(bars, ["KES 2.0M", "KES 5.2M"]):
         ax.text(bar.get_x() + bar.get_width() / 2, bar.get_height() + 0.15, lab,
-                ha="center", va="bottom", fontsize=12, fontweight="bold", color=INK)
+                ha="center", va="bottom", fontsize=14, fontweight="bold", color=INK)
 
     ax.set_ylim(0, 6.2)
-    ax.set_ylabel("KES millions (illustrative)", color=MUTED)
-    ax.set_title("Year-1 pilot economics (illustrative)", fontsize=13, fontweight="bold", color=INK, loc="left", pad=10)
+    ax.set_ylabel("KES millions (illustrative)", color=MUTED, fontsize=12)
+    ax.set_title("Year-1 pilot: spend vs estimated benefit", fontsize=15, fontweight="bold", color=INK, loc="left", pad=10)
+    ax.tick_params(axis="x", labelsize=12)
     for spine in ("top", "right"):
         ax.spines[spine].set_visible(False)
     ax.spines["left"].set_color("#cccccc")
@@ -264,8 +265,8 @@ def fig_year1_economics() -> None:
     ax.tick_params(colors=MUTED)
     ax.text(
         0.5, -0.14,
-        "Bursaries pass through to school fees (excluded from platform cost). Full assumptions: COST_BENEFIT_ANALYSIS.md",
-        transform=ax.transAxes, ha="center", fontsize=8, color=MUTED, style="italic",
+        "Donor gifts go to school fee accounts and are not counted as platform cost.",
+        transform=ax.transAxes, ha="center", fontsize=11, color=MUTED, style="italic",
     )
     fig.tight_layout()
     _save(fig, "06_year1_economics.png")
@@ -321,19 +322,19 @@ def fig_selection_rule() -> None:
     ax.set_facecolor(CREAM)
 
     models = [
-        ("Majority baseline", 0.50, 0.0, NAVY, 70, False),
-        ("Random Forest", 0.74, 0.08, NAVY, 80, False),
-        ("Hist. Grad. Boosting", 0.75, 0.33, NAVY, 90, False),
-        ("Logistic Regression\n(selected)", 0.753, 0.667, GREEN, 180, True),
+        ("Majority baseline", 0.50, 0.0, NAVY, 90, False),
+        ("Random Forest", 0.74, 0.08, NAVY, 100, False),
+        ("Gradient Boosting", 0.75, 0.33, NAVY, 110, False),
+        ("Logistic Regression\n(selected)", 0.753, 0.667, GREEN, 220, True),
     ]
     for name, auc, rec, c, s, bold in models:
         ax.scatter(auc, rec, s=s, c=c, zorder=5, edgecolors="white", linewidths=1.0)
         ax.annotate(
             name,
             xy=(auc, rec),
-            xytext=(8 if bold else 6, 6),
+            xytext=(10 if bold else 8, 8),
             textcoords="offset points",
-            fontsize=9 if bold else 8.5,
+            fontsize=12 if bold else 11,
             fontweight="bold" if bold else "normal",
             color=GREEN if bold else MUTED,
             ha="left",
@@ -342,9 +343,9 @@ def fig_selection_rule() -> None:
 
     ax.set_xlim(0.45, 0.82)
     ax.set_ylim(-0.05, 0.85)
-    ax.set_xlabel("Test AUC (rank quality)", color=MUTED)
-    ax.set_ylabel("Dropout recall (catch students who leave)", color=MUTED)
-    ax.set_title("Business selection: recall over vanity AUC", fontsize=13, fontweight="bold",
+    ax.set_xlabel("How well students are ranked  (0.50 = chance)", color=MUTED, fontsize=12)
+    ax.set_ylabel("Share of dropouts found", color=MUTED, fontsize=12)
+    ax.set_title("We chose the model that finds more students who would leave", fontsize=14, fontweight="bold",
                  color=INK, loc="left", pad=10)
     for spine in ("top", "right"):
         ax.spines[spine].set_visible(False)
@@ -353,8 +354,8 @@ def fig_selection_rule() -> None:
     ax.tick_params(colors=MUTED)
     ax.text(
         0.0, -0.12,
-        "Holdout metrics from modeling_outputs/MODELING_REPORT.md (seeded synthetic cohort).",
-        transform=ax.transAxes, ha="left", fontsize=8, color=MUTED, style="italic",
+        "Proof-of-concept results on 1,000 students. Higher on this chart is better.",
+        transform=ax.transAxes, ha="left", fontsize=11, color=MUTED, style="italic",
     )
     fig.tight_layout()
     _save(fig, "08_selection_rule.png")
@@ -382,40 +383,39 @@ def fig_perceptual_map() -> None:
     ax.set_yticks([])
 
     ax.set_title(
-        "Perceptual map — where ElimuMatch sits among substitutes.",
-        fontsize=13, fontweight="bold", color=INK, loc="left", pad=14,
+        "Where ElimuMatch sits among other ways people give",
+        fontsize=15, fontweight="bold", color=INK, loc="left", pad=14,
     )
     ax.text(
         0.0, 1.08,
-        "Illustrative positioning for funder decision-making (not market-share claims).\n"
-        "ElimuMatch complements seasonal bursaries; it does not replace them.",
-        transform=ax.transAxes, fontsize=8.5, color=MUTED, va="bottom",
+        "Illustrative map for funders. ElimuMatch works alongside bursaries; it does not replace them.",
+        transform=ax.transAxes, fontsize=11, color=MUTED, va="bottom",
     )
 
-    ax.text(1.1, -0.08, "Fast / clear path →", ha="right", va="top", fontsize=8.5, color=MUTED)
-    ax.text(-1.1, -0.08, "← Hard / opaque path", ha="left", va="top", fontsize=8.5, color=MUTED)
-    ax.text(-0.04, 1.08, "High risk-typed targeting ↑", ha="right", va="top", fontsize=8.5, color=MUTED)
-    ax.text(-0.04, -1.08, "Low systematic targeting ↓", ha="right", va="bottom", fontsize=8.5, color=MUTED)
-    ax.text(0.55, 0.88, "Target zone for CSR capital", ha="center", fontsize=9, fontweight="bold", color=GREEN)
+    ax.text(1.1, -0.08, "Easy for donors  →", ha="right", va="top", fontsize=11, color=MUTED)
+    ax.text(-1.1, -0.08, "←  Hard for donors", ha="left", va="top", fontsize=11, color=MUTED)
+    ax.text(-0.04, 1.08, "Finds the right students  ↑", ha="right", va="top", fontsize=11, color=MUTED)
+    ax.text(-0.04, -1.08, "Guesswork  ↓", ha="right", va="bottom", fontsize=11, color=MUTED)
+    ax.text(0.55, 0.88, "Where funders should sit", ha="center", fontsize=12, fontweight="bold", color=GREEN)
 
     points = [
-        (0.72, 0.78, "ElimuMatch\n(MVP fee lane)", GREEN, 220, True),
-        (-0.72, 0.62, "Annual bursary\ncontests", NAVY, 80, False),
+        (0.72, 0.78, "ElimuMatch\n(fee support)", GREEN, 220, True),
+        (-0.72, 0.62, "Yearly bursary\ncontests", NAVY, 80, False),
         (-0.35, 0.05, "Church / alumni\nlists", NAVY, 70, False),
-        (-0.15, -0.18, "Direct school gifts\n(ad hoc)", NAVY, 70, False),
-        (0.45, -0.55, "Personal /\nnetwork giving", ORANGE, 80, False),
-        (0.78, -0.78, "Visibility-based\ncampaigns", ORANGE, 80, False),
+        (-0.15, -0.18, "One-off gifts\nto a school", NAVY, 70, False),
+        (0.45, -0.55, "Giving through\nfriends", ORANGE, 80, False),
+        (0.78, -0.78, "Public campaigns\n(most visible cases)", ORANGE, 80, False),
     ]
     for x, y, lab, c, s, bold in points:
         ax.scatter(x, y, s=s, c=c, zorder=5, edgecolors="white", linewidths=1.0)
         ax.text(
             x, y - 0.14, lab, ha="center", va="top",
-            fontsize=9 if bold else 8, fontweight="bold" if bold else "normal",
+            fontsize=11 if bold else 10, fontweight="bold" if bold else "normal",
             color=INK if bold else MUTED, linespacing=1.15, zorder=6,
         )
 
-    ax.set_xlabel("Helper friction  (simple place-to-gift path)", fontsize=9, color=MUTED, labelpad=8)
-    ax.set_ylabel("Targeting quality  (risk-ranked + explained need)", fontsize=9, color=MUTED, labelpad=8)
+    ax.set_xlabel("How easy it is for a donor to complete a gift", fontsize=12, color=MUTED, labelpad=8)
+    ax.set_ylabel("How well support is aimed at students who may leave", fontsize=12, color=MUTED, labelpad=8)
     fig.tight_layout()
     _save(fig, "09_perceptual_map.png")
 
@@ -431,17 +431,17 @@ def fig_gift_journey() -> None:
     fig.patch.set_facecolor(CREAM)
     ax.set_facecolor(CREAM)
 
-    ax.text(0.3, 4.15, "From place to gift — one lunch break.", fontsize=13, fontweight="bold", color=INK, va="top")
+    ax.text(0.3, 4.15, "From place to gift in four steps.", fontsize=15, fontweight="bold", color=INK, va="top")
 
     stages = [
-        (GREEN, "1 · Choose place", ["Pick a county", "Day or Boarding", "Open the school"]),
-        (TEAL, "2 · See a student", ["Identity protected", "Fee balance shown", "Already on the list"]),
-        (ORANGE, "3 · Give", ["Pay part or all", "Oldest term first", "Get a receipt"]),
-        (NAVY, "4 · Confirm", ["Money reaches school", "Team sees it landed", "Help is tracked"]),
+        (GREEN, "1  Choose place", ["Pick a county", "Day or boarding", "Open the school"], "white"),
+        (TEAL, "2  See a student", ["Name is hidden", "Fee balance shown", "Already on the list"], "white"),
+        (ORANGE, "3  Give", ["Pay part or all", "Oldest term first", "Get a receipt"], INK),
+        (NAVY, "4  Confirm", ["Money reaches school", "Team sees it landed", "Help is tracked"], "white"),
     ]
     xs = [0.45, 3.4, 6.35, 9.3]
     w, h, y = 2.55, 2.85, 0.55
-    for i, (x, (c, title, items)) in enumerate(zip(xs, stages)):
+    for i, (x, (c, title, items, fg)) in enumerate(zip(xs, stages)):
         ax.add_patch(
             FancyBboxPatch(
                 (x, y),
@@ -459,9 +459,9 @@ def fig_gift_journey() -> None:
             title,
             ha="center",
             va="top",
-            fontsize=11,
+            fontsize=13,
             fontweight="bold",
-            color="white",
+            color=fg,
             zorder=3,
         )
         for j, it in enumerate(items):
@@ -471,8 +471,8 @@ def fig_gift_journey() -> None:
                 it,
                 ha="center",
                 va="top",
-                fontsize=9.5,
-                color="white",
+                fontsize=12,
+                color=fg,
                 zorder=3,
             )
         if i < 3:
@@ -485,6 +485,55 @@ def fig_gift_journey() -> None:
             )
 
     _save(fig, "10_gift_journey.png")
+
+
+def fig_kenya_completion() -> None:
+    fig, ax = plt.subplots(figsize=(8.6, 4.8))
+    fig.patch.set_facecolor(CREAM)
+    ax.set_facecolor(CREAM)
+    labels = ["Primary", "Lower secondary", "Upper secondary"]
+    values = [98, 85, 46]
+    colors = [TEAL, GREEN, ORANGE]
+    bars = ax.barh(labels[::-1], values[::-1], color=colors[::-1], height=0.55, edgecolor="none")
+    for bar, val in zip(bars, values[::-1]):
+        ax.text(val + 1.5, bar.get_y() + bar.get_height() / 2, f"{val}%",
+                va="center", fontsize=14, fontweight="bold", color=INK)
+    ax.set_xlim(0, 110)
+    ax.axvline(50, color="#c8c4b8", ls="--", lw=1)
+    ax.set_xlabel("Share who complete that level", fontsize=12, color=MUTED)
+    ax.set_title("Nearly all finish primary. Fewer than half finish secondary.",
+                 fontsize=14, fontweight="bold", color=INK, loc="left", pad=10)
+    ax.tick_params(colors=INK, labelsize=12)
+    for spine in ("top", "right"):
+        ax.spines[spine].set_visible(False)
+    ax.spines["left"].set_color("#cccccc")
+    ax.spines["bottom"].set_color("#cccccc")
+    fig.tight_layout()
+    _save(fig, "ext_02_kenya_completion_funnel.png")
+
+
+def fig_kenya_enrolment() -> None:
+    fig, ax = plt.subplots(figsize=(8.6, 4.8))
+    fig.patch.set_facecolor(CREAM)
+    ax.set_facecolor(CREAM)
+    years = [2020, 2021, 2022, 2023, 2024]
+    values = [3.52, 3.69, 3.92, 4.11, 4.32]
+    ax.fill_between(years, values, color=TEAL, alpha=0.18)
+    ax.plot(years, values, color=TEAL, lw=2.6, marker="o", ms=8)
+    for x, y in zip(years, values):
+        ax.text(x, y + 0.08, f"{y:.2f}M", ha="center", va="bottom", fontsize=12, fontweight="bold", color=INK)
+    ax.set_ylim(3.2, 4.7)
+    ax.set_xticks(years)
+    ax.set_ylabel("Secondary enrolment (millions)", fontsize=12, color=MUTED)
+    ax.set_title("More students are in secondary school, so more can still leave mid-course",
+                 fontsize=13, fontweight="bold", color=INK, loc="left", pad=10)
+    ax.tick_params(colors=INK, labelsize=12)
+    for spine in ("top", "right"):
+        ax.spines[spine].set_visible(False)
+    ax.spines["left"].set_color("#cccccc")
+    ax.spines["bottom"].set_color("#cccccc")
+    fig.tight_layout()
+    _save(fig, "ext_03_kenya_access_progress.png")
 
 
 def main() -> None:
@@ -500,6 +549,8 @@ def main() -> None:
     fig_pilot_roadmap()
     fig_selection_rule()
     fig_perceptual_map()
+    fig_kenya_completion()
+    fig_kenya_enrolment()
     print("Done.")
 
 
