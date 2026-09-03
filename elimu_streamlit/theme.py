@@ -335,7 +335,7 @@ def apply() -> None:
     st.markdown(f"<style>{CSS}</style>", unsafe_allow_html=True)
 
 
-def hero(brand: str, headline: str, sub: str, eyebrow: str = "Quantic MSBA Capstone · Proof of Concept") -> None:
+def hero(brand: str, headline: str, sub: str, eyebrow: str = "Predicting secondary school dropout risk") -> None:
     st.markdown(
         f"""
         <div class="em-hero">

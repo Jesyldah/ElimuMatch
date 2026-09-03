@@ -25,7 +25,7 @@ These are clarifications and framing points from the project build — **add the
 - Documented synthetic cohort, calibrated to known Kenya secondary patterns (fees/indirect costs, SES gradients, attendance–health links)
 - Risk model + explanations + intervention routing
 - Fee helper channel end to end (portal + term ledger)
-- **Streamlit** demo (Helper + Ops + Analytics) for one-click review; HTML dashboards remain as offline backup (**instructor-confirmed OK**; Tableau optional)
+- **Streamlit** demo (Helper + Support Hub + Analytics) for one-click review; HTML dashboards remain as offline backup (**instructor-confirmed OK**; Tableau optional)
 - Illustrative cost–benefit + data-availability plan (have / messy / collect later)
 
 ### Explicitly out of Capstone scope
@@ -35,7 +35,7 @@ These are clarifications and framing points from the project build — **add the
 - Measured live retention lift (method shown; results wait for a real pilot)
 
 **Paste-ready (scope):**  
-> ElimuMatch’s product vision is ambitious by design. For the Capstone we deliberately scope an MVP: predictive retention analytics, multi-channel routing design, a working fee-support helper path with settlement integrity, and operations visibility. We are not claiming to deliver the full multi-channel marketplace in this submission.
+> ElimuMatch’s product vision is ambitious by design. For the Capstone we deliberately scope an MVP: predictive retention analytics, multi-channel routing design, a working fee-support helper path with settlement integrity, and the ElimuMatch Support Hub. We are not claiming to deliver the full multi-channel marketplace in this submission.
 
 ### Include
 - Data is a **documented synthetic cohort** (`synthetic_data_v2.py`, seed 2026) because partner student records were unavailable (privacy, MOUs, timelines).
@@ -58,21 +58,21 @@ These are clarifications and framing points from the project build — **add the
 | Audience | What they see | Artifact |
 |---|---|---|
 | **Sponsors** | County → Day/Boarding → School → Student → Pay | `sponsor_portal.html` |
-| **Elimu Match ops / schools** | KPIs, investigation queue, fee-support progress, freshness | `ops_dashboard.html` |
+| **ElimuMatch Support Hub / schools** | KPIs, investigation queue, fee-support progress, freshness | `ops_dashboard.html` |
 | **Analysts / report appendix** | EDA, model, SHAP, personas, intervention matrix | `dashboard.html` |
 
 Sponsors should **not** see models, SHAP, 37 features, or personas.  
-Ops monitor day-to-day delivery; analytics explain *why* the routing works.
+ElimuMatch Support Hub tracks day-to-day delivery; analytics explain *why* the routing works.
 
 **Demo (preferred):** Streamlit — `python -m streamlit run streamlit_app.py` (or the deployed Cloud URL).  
 **Demo (offline HTML):** double-click `OPEN_DEMO.bat` (or `python db/portal_server.py --open`) → http://127.0.0.1:8765/  
 HTML files also open offline via relative links; live gifts/ops refresh need the server.  
 **API:** `GET /api/ops`  
 
-**Ops panels (beyond KPIs):** term aging · stuck partial pays · school concentration · rejected settlements (`settlement_attempts`) · scoring SLA (14d) · non–fee-support backlog · fee-queue gender/SES mix · **pilot success criteria** · **illustrative impact** (retained × gift; not causal).
+**Support Hub panels (beyond KPIs):** term aging · stuck partial pays · school concentration · rejected settlements (`settlement_attempts`) · scoring freshness · non–fee support channels · fee-queue gender/SES mix · **pilot success criteria** · **illustrative impact** (retained × gift; not causal).
 
 ### Pilot success criteria (paste-ready)
-> A live Elimu Match pilot should be judged on: (1) fee-support queue coverage (share receiving ≥1 gift), (2) scoring + SES/gender fairness checks on a fixed cadence, (3) settlement integrity (no unallocated gifts; overpayments blocked), (4) reduction of aged Term-1 arrears pressure, and (5) **next-term retention** for helped vs matched peers. The PoC ops monitor tracks (1)–(4) live and shows (5) only as an illustrative method demo on synthetic labels.
+> A live Elimu Match pilot should be judged on: (1) fee-support queue coverage (share receiving ≥1 gift), (2) scoring + SES/gender fairness checks on a fixed cadence, (3) settlement integrity (no unallocated gifts; overpayments blocked), (4) reduction of aged Term-1 arrears pressure, and (5) **next-term retention** for helped vs matched peers. The PoC Support Hub tracks (1)–(4) live and shows (5) only as an illustrative method demo on synthetic labels.
 
 ---
 
@@ -107,7 +107,7 @@ HTML files also open offline via relative links; live gifts/ops refresh need the
 | Model retrain | **Periodic** | Each term on new outcomes |
 | Cohort | **Illustrative** | Synthetic PoC — not a live MoE feed |
 
-**Demo:** Portal home → **Data freshness** (or `GET /api/freshness`). Ops dashboard Key Insights has the same table.  
+**Demo:** Portal home → **Data freshness** (or `GET /api/freshness`). Support Hub activity / freshness has the same table.  
 **Coverage:** 1,000 students · 47 counties (sample school each) — national *design*, not national *volume*.
 
 **Paste-ready:**  
@@ -379,7 +379,7 @@ python db/record_payment.py --student-id 22 --show-only
 | `kenya_schools.py` | 47-county school catalog (shared) |
 | `sponsor_portal.html` | Sponsor PoC |
 | `dashboard.html` | Analytics gallery (EDA / model / SHAP) |
-| `ops_dashboard.html` | Org ops monitor (KPIs, issues, progress) |
+| `ops_dashboard.html` | ElimuMatch Support Hub (KPIs, cases, channels, progress) |
 | `db/` (`schema.py`, `ddl.sql`, `init_db.py`, `record_payment.py`) | Fees / partial pay / term arrears |
 | `db/SCHEMA_DOCUMENTATION.md` | ERD + data dictionary + relationships |
 | `DATA_AND_LIMITATIONS.md` | Full data write-up |

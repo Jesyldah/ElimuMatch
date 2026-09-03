@@ -118,14 +118,14 @@ def freshness_report() -> dict:
                 'mode': 'Periodic',
                 'cadence': 'Each term / semester on new outcomes',
                 'last_updated': (risk_run or fee_sync or {}).get('finished_at'),
-                'detail': 'PoC uses documented synthetic retrain workflow',
+                'detail': 'Documented synthetic retrain workflow',
                 'live_level': 'periodic',
             },
             {
                 'id': 'cohort',
                 'label': 'Student cohort',
                 'mode': 'Illustrative (synthetic)',
-                'cadence': 'Regenerated for PoC builds. Not a live MoE feed',
+                'cadence': 'Regenerated for demo builds. Not a live MoE feed',
                 'last_updated': (fee_sync or {}).get('finished_at'),
                 'detail': (
                     f'{n_students:,} Students · {n_schools} Schools · {n_counties} Counties'
@@ -144,11 +144,11 @@ def freshness_report() -> dict:
                 'counties': n_counties,
                 'payments': n_payments,
                 'geography': 'Sample school in each of Kenya’s 47 counties',
-                'population': 'Scaled PoC cohort. Not full national enrollment',
+                'population': 'Synthetic documented cohort. Not full national enrollment',
                 'time_window': 'Simulated academic terms (fee ledger)',
                 'honesty': (
                     'Fee balances: Gifts update the ledger live. School sync is periodic. '
-                    'Risk scores are periodic. The cohort is a synthetic PoC pilot.'
+                    'Risk scores are periodic. The cohort is synthetic and documented for development.'
                 ),
             },
             'recent_runs': [dict(r) for r in recent],

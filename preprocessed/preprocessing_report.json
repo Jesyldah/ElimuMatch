@@ -3,8 +3,8 @@
   "rows_total": 1000,
   "rows_train": 750,
   "rows_test": 250,
-  "target_train_positive_rate": 0.856,
-  "target_test_positive_rate": 0.856,
+  "target_train_positive_rate": 0.8613,
+  "target_test_positive_rate": 0.864,
   "dropped_columns": [
     "academic_catchup_status",
     "dropout_reason",
@@ -34,10 +34,10 @@
     "stem_resilience_flag"
   ],
   "missing_before_imputation": {
-    "cash_flow_volatility": 74,
-    "commute_barrier_score": 90,
-    "digital_equity_access_score": 70,
-    "psychosocial_support_access": 88
+    "cash_flow_volatility": 76,
+    "commute_barrier_score": 95,
+    "digital_equity_access_score": 64,
+    "psychosocial_support_access": 93
   },
   "missing_indicators_added": [
     "cash_flow_volatility_missing",

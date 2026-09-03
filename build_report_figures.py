@@ -420,11 +420,79 @@ def fig_perceptual_map() -> None:
     _save(fig, "09_perceptual_map.png")
 
 
+# ---------------------------------------------------------------------------
+# Day in the life of one gift (roadmap — plain language)
+# ---------------------------------------------------------------------------
+def fig_gift_journey() -> None:
+    fig, ax = plt.subplots(figsize=(11.5, 4.2))
+    ax.set_xlim(0, 12)
+    ax.set_ylim(0, 4.5)
+    ax.axis("off")
+    fig.patch.set_facecolor(CREAM)
+    ax.set_facecolor(CREAM)
+
+    ax.text(0.3, 4.15, "From place to gift — one lunch break.", fontsize=13, fontweight="bold", color=INK, va="top")
+
+    stages = [
+        (GREEN, "1 · Choose place", ["Pick a county", "Day or Boarding", "Open the school"]),
+        (TEAL, "2 · See a student", ["Identity protected", "Fee balance shown", "Already on the list"]),
+        (ORANGE, "3 · Give", ["Pay part or all", "Oldest term first", "Get a receipt"]),
+        (NAVY, "4 · Confirm", ["Money reaches school", "Team sees it landed", "Help is tracked"]),
+    ]
+    xs = [0.45, 3.4, 6.35, 9.3]
+    w, h, y = 2.55, 2.85, 0.55
+    for i, (x, (c, title, items)) in enumerate(zip(xs, stages)):
+        ax.add_patch(
+            FancyBboxPatch(
+                (x, y),
+                w,
+                h,
+                boxstyle="round,pad=0.02,rounding_size=0.12",
+                facecolor=c,
+                edgecolor="none",
+                zorder=2,
+            )
+        )
+        ax.text(
+            x + w / 2,
+            y + h - 0.45,
+            title,
+            ha="center",
+            va="top",
+            fontsize=11,
+            fontweight="bold",
+            color="white",
+            zorder=3,
+        )
+        for j, it in enumerate(items):
+            ax.text(
+                x + w / 2,
+                y + h - 1.15 - j * 0.45,
+                it,
+                ha="center",
+                va="top",
+                fontsize=9.5,
+                color="white",
+                zorder=3,
+            )
+        if i < 3:
+            ax.annotate(
+                "",
+                xy=(xs[i + 1] - 0.05, y + h / 2),
+                xytext=(x + w + 0.05, y + h / 2),
+                arrowprops=dict(arrowstyle="->", color=INK, lw=1.3),
+                zorder=1,
+            )
+
+    _save(fig, "10_gift_journey.png")
+
+
 def main() -> None:
     _style()
     print("Building original-style report figures...")
     fig_product_layers()
     fig_matching_loop()
+    fig_gift_journey()
     fig_who_sees()
     fig_data_layers()
     fig_three_buyers()

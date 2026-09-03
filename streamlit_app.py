@@ -1,5 +1,5 @@
 """
-ElimuMatch Capstone. Streamlit demo entry point.
+ElimuMatch Streamlit demo entry point.
 
 Local:
   python -m streamlit run streamlit_app.py
@@ -23,7 +23,7 @@ ensure_paths()
 _ICON = Path(__file__).resolve().parent / "favicon.svg"
 
 st.set_page_config(
-    page_title="ElimuMatch Capstone",
+    page_title="ElimuMatch",
     page_icon=str(_ICON) if _ICON.exists() else "🌿",
     layout="wide",
     initial_sidebar_state="expanded",
@@ -40,8 +40,9 @@ PAGES = [
 def _home() -> None:
     theme.hero(
         brand="ElimuMatch",
-        headline="Help a student stay in school, with risk scoring and ops behind the scenes.",
+        headline="Help a student stay in school.",
         sub="Retention analytics, helper matching, and a working fee ledger for Kenyan secondary schools.",
+        eyebrow="Predicting secondary school dropout risk",
     )
 
     c1, c2, c3 = st.columns(3)
@@ -75,7 +76,7 @@ def _home() -> None:
 
     theme.note(
         "<strong>Demo gifts</strong> are simulated settlements on a shared ledger, not live M-Pesa. "
-        "Synthetic cohort metrics are factually grounded PoC outputs, not field-validated results."
+        "Synthetic cohort metrics are documented for development, not field-validated results."
     )
     st.markdown(
         '<div class="em-footer">Repo: github.com/Jesyldah/ElimuMatch | '
@@ -89,7 +90,7 @@ def main() -> None:
 
     st.sidebar.markdown(
         '<div class="em-sidebar-brand">ElimuMatch</div>'
-        '<div class="em-sidebar-sub">MSBA Capstone PoC</div>',
+        '<div class="em-sidebar-sub">Kenyan secondary schools</div>',
         unsafe_allow_html=True,
     )
 

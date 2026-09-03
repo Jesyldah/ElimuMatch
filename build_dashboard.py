@@ -498,7 +498,7 @@ def build_html(metrics: dict) -> str:
 <body>
   <header class="hero">
     <div class="hero-inner">
-      <span class="badge">Quantic MSBA Capstone · EdTech Proof of Concept</span>
+      <span class="badge">Predicting secondary school dropout risk</span>
       <h1>ElimuMatch Retention Analytics</h1>
       <p class="subtitle">
         Dropout-risk scoring that routes students to the right help channel (fees, tutoring,
@@ -573,7 +573,7 @@ def build_html(metrics: dict) -> str:
   </div>
 
   <footer>
-    ElimuMatch | Quantic School of Business and Technology · MSBA Capstone BSAN 590
+    ElimuMatch · Retention analytics and intervention evidence
   </footer>
 </body>
 </html>"""

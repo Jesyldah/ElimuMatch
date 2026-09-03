@@ -138,7 +138,7 @@ Human review of a ranked queue vs ad-hoc lists: estimate **0.25 FTE saved** at s
 | Optimistic | 1.6M + 9.0M + 0.15M ≈ 10.8M | 2.0M | **+8.8M** | ~5.4× |
 
 **Reading for the report:**  
-The pilot is **not free-money guaranteed**. Under conservative outcome assumptions it is roughly break-even on platform cost alone; under base assumptions it clears a healthy surplus. That is why **measuring next-term retention for helped vs matched peers** is a pilot success criterion (ops dashboard).
+The pilot is **not free-money guaranteed**. Under conservative outcome assumptions it is roughly break-even on platform cost alone; under base assumptions it clears a healthy surplus. That is why **measuring next-term retention for helped vs matched peers** is a pilot success criterion (ElimuMatch Support Hub).
 
 ### Optional matched-bursary scenario
 

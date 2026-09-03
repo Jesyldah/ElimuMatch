@@ -25,9 +25,9 @@ The **product vision** can be wide (many help channels, foundations, banks/CSR).
 |---|---|
 | Documented synthetic cohort, factually grounded | Live partner student records |
 | Predictive risk model + explanations + personas | Full production MLOps / continuous retraining |
-| Intervention routing across channels (design + ops visibility) | Full helper marketplaces for tutoring / health / digital |
+| Intervention routing across channels (design + Support Hub visibility) | Full helper marketplaces for tutoring / health / digital |
 | **Fee helper channel end to end** (filters → pay → ledger) | M-Pesa / bank rails, auth, multi-tenant production |
-| Ops monitor + early **school resource targets** view (**HTML**) | National foundation portal / multi-org rollout |
+| ElimuMatch Support Hub + early **school resource targets** view (**HTML**) | National foundation portal / multi-org rollout |
 | Illustrative Year-1 cost–benefit | Live impact RCT / measured national retention lift |
 
 **Delivery format:** instructor confirmed **HTML dashboards and helper interfaces are fine** for Capstone (Tableau optional, not required).  
@@ -153,7 +153,7 @@ National design in the proof of concept; live rollout starts with a small partne
 A busy professional opens the site after work, picks a county and school they care about, supports a student in under a minute, and gets a clear receipt — without calling anyone. Behind that moment, the organization can show the student was priority and high-risk, the payment hit the correct term balance, and (after a real pilot) the student was still enrolled. For a foundation, “wow” is seeing which schools need health, digital, or tutoring capacity — and placing a program where the gap is greatest.
 
 **Near-term Capstone success**  
-A working MVP with clear scope: analytics engine + fee helper channel + ops views + cost–benefit — not the full multi-channel marketplace.
+A working MVP with clear scope: analytics engine + fee helper channel + Support Hub + cost–benefit — not the full multi-channel marketplace.
 
 **Longer-term product impact** (beyond Capstone)  
 Higher share of support reaching priority students · less admin friction · measured persistence · foundations using school-level need views  
@@ -174,7 +174,7 @@ Higher share of support reaching priority students · less admin friction · mea
 ## 5. Feasibility and responsibility
 
 **Capstone feasibility**  
-Python · lightweight database · **HTML** helper portal, ops monitor, and analytics dashboard (instructor-confirmed acceptable for Capstone). Live school feeds, authentication, and mobile-money payouts are explicitly **out of Capstone scope**.
+Python · lightweight database · **HTML** helper portal, ElimuMatch Support Hub, and analytics dashboard (instructor-confirmed acceptable for Capstone). Live school feeds, authentication, and mobile-money payouts are explicitly **out of Capstone scope**.
 
 **Ethics and explainability**  
 Anonymized helper-facing identities · honest limits on synthetic data · explanations for priority · fairness review · human approval before any live student list is published.
@@ -227,8 +227,8 @@ Aligned with instructor guidance:
 
 | | |
 |---|---|
-| Summary | Capstone MVP: predictive retention analytics that routes need by channel, with the **fee helper path and ledger proven end to end**, plus ops visibility (including school resource targets). Wider marketplaces and live partner data are roadmap. |
-| Solution type | Hybrid analytics PoC: predictive model, explanations, multi-channel routing design, fee marketplace + ledger (built), ops views |
+| Summary | Capstone MVP: predictive retention analytics that routes need by channel, with the **fee helper path and ledger proven end to end**, plus Support Hub visibility (including school resource targets). Wider marketplaces and live partner data are roadmap. |
+| Solution type | Hybrid analytics PoC: predictive model, explanations, multi-channel routing design, fee marketplace + ledger (built), Support Hub |
 
 ## Strategic analysis
 
@@ -272,7 +272,7 @@ Aligned with instructor guidance:
 
 | Scope | Contents |
 |---|---|
-| **Capstone MVP (this submission)** | Risk analytics · explanations · personas and multi-intervention routing · **fee** helper channel · fee ledger · ops dashboards (incl. other channels + school resource targets) · cost–benefit draft · data availability plan |
+| **Capstone MVP (this submission)** | Risk analytics · explanations · personas and multi-intervention routing · **fee** helper channel · fee ledger · ElimuMatch Support Hub (incl. other channels + school resource targets) · cost–benefit draft · data availability plan |
 | Lean next (post-Capstone) | Partner school ingest under MOU · human review · pilot one additional helper channel |
 | Ambitious later (product vision) | Mobile money · multi-school pilot · full helper marketplaces · expanded foundation school-targeting · outcome evaluation |
 
@@ -293,4 +293,4 @@ Make effortless help normal for individuals; ranked shortlists normal for banks 
 
 ## Closing line for discussion
 
-ElimuMatch’s vision is broad; the Capstone delivers a clear MVP: analytics that ranks and routes need, a working fee helper channel with ledger integrity, and ops views that already show other channels and school-level targets — with synthetic data factually grounded and live expansion left for after the Capstone.
+ElimuMatch’s vision is broad; the Capstone delivers a clear MVP: analytics that ranks and routes need, a working fee helper channel with ledger integrity, and a Support Hub that already shows other channels and school-level targets — with synthetic data factually grounded and live expansion left for after the Capstone.

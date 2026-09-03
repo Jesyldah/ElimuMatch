@@ -28,6 +28,7 @@ For a local live SQLite ledger, use Option C below.
 | `DATA_AND_LIMITATIONS.md` | Synthetic data — factual grounding + limits |
 | `COST_BENEFIT_ANALYSIS.md` | Illustrative Year-1 cost–benefit |
 | `README.md` | Full reproduce steps (for technical reviewers) |
+| `ElimuMatch_Analysis.ipynb` | Narrative notebook: *Secondary School Retention Risk Analytics* (problem → decision) |
 
 ---
 
@@ -57,7 +58,7 @@ HTML via GitHub Pages is the preferred share link.
 
 ## What is in Capstone scope vs not
 
-**In MVP:** risk analytics, fee helper channel + ledger, HTML dashboards (Pages + offline), ops views, CBA.  
+**In MVP:** risk analytics, fee helper channel + ledger, HTML dashboards (Pages + offline), ElimuMatch Support Hub, CBA.  
 **Not required:** live school data, M-Pesa, full tutoring/health marketplaces.
 
 Synthetic cohort is **factually grounded** and documented — not live student records.

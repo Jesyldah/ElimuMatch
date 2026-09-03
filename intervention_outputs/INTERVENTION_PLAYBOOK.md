@@ -3,7 +3,7 @@
 ## Purpose
 Translate analytics (risk personas + signals) into **sponsor/school actions**.
 Sponsors should not see the matrix — they see a simple pay flow.
-Ops / schools use this matrix to decide *what* to offer each student.
+The Support Hub / schools use this matrix to decide *what* to offer each student.
 
 ## Priority scale
 | Score | Meaning |

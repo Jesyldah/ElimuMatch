@@ -13,6 +13,7 @@
       --muted: #5b6b73;
       --line: #d7e0e4;
       --teal: #1f7a6c;
+      --sun: #f4b942;
       --navy: #243b48;
       --surface: #ffffff;
     }
@@ -39,7 +40,13 @@
       opacity: 0.8; margin-bottom: 0.4rem;
     }
     h1 { font-size: 1.85rem; font-weight: 700; margin-bottom: 0.4rem; }
-    .sub { opacity: 0.9; max-width: 36rem; font-size: 1rem; }
+    .tagline {
+      color: var(--sun);
+      font-size: 1.12rem;
+      font-weight: 600;
+      max-width: 36rem;
+      letter-spacing: 0.01em;
+    }
     .grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -77,11 +84,9 @@
 <body>
   <header>
     <div class="wrap">
-      <div class="eyebrow">Quantic MSBA Capstone · Proof of Concept</div>
+      <div class="eyebrow">Predicting secondary school dropout risk</div>
       <h1>ElimuMatch</h1>
-      <p class="sub">
-        Retention risk scoring, helper matching, and Support Hub delivery for Kenyan secondary schools.
-      </p>
+      <p class="tagline">Help a student stay in school.</p>
     </div>
   </header>
 

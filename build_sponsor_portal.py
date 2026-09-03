@@ -524,23 +524,6 @@ def build_html(payload: dict) -> str:
       margin-top: 0.25rem;
       color: var(--leaf-deep);
     }}
-    .mode-banner {{
-      display: none;
-      margin: 0 0 1rem;
-      padding: 0.55rem 0.75rem;
-      border-radius: 10px;
-      font-size: 0.82rem;
-      line-height: 1.4;
-      color: var(--muted);
-      background: rgba(20, 33, 61, 0.05);
-      border: 1px solid #e0d8cc;
-    }}
-    .mode-banner.show {{ display: block; }}
-    .mode-banner.live {{
-      color: var(--leaf-deep);
-      background: rgba(31, 122, 108, 0.08);
-      border-color: rgba(31, 122, 108, 0.22);
-    }}
     .student .amount {{
       font-family: 'Fraunces', serif;
       font-size: 1.35rem;
@@ -840,7 +823,6 @@ def build_html(payload: dict) -> str:
       <button type="button" class="back-btn" id="backFromSponsor">← Home</button>
       <div class="brand-mini">ElimuMatch</div>
     </div>
-    <div class="mode-banner" id="modeBanner" role="status"></div>
     <div class="step-label">Find a student</div>
     <h2 class="section-title">Where do you want to keep a student in school?</h2>
 
@@ -914,7 +896,7 @@ def build_html(payload: dict) -> str:
     <h2 class="section-title">How live is this data?</h2>
     <p class="muted" id="freshHonesty" style="margin-bottom:1.25rem"></p>
     <div id="freshLayers"></div>
-    <h3 style="font-family:'Fraunces',serif;font-size:1.25rem;margin:1.5rem 0 0.5rem">What this PoC represents</h3>
+    <h3 style="font-family:'Fraunces',serif;font-size:1.25rem;margin:1.5rem 0 0.5rem">What this demo covers</h3>
     <div class="layer" id="freshCoverage"></div>
     <h3 style="font-family:'Fraunces',serif;font-size:1.25rem;margin:1.5rem 0 0.5rem">Recent refresh runs</h3>
     <p class="muted">Logged in <code>refresh_runs</code> (the audit trail for fee sync, scoring, and payments).</p>
@@ -958,7 +940,7 @@ def build_html(payload: dict) -> str:
 
   <footer class="note" id="siteFooter">
     <p class="footer-mode" id="footerMode">
-      Demo portal for Quantic MSBA Capstone · Run <code>python db/portal_server.py</code> so gifts write to SQLite · First-name display only (no surnames)
+      ElimuMatch Helper portal · Run <code>python db/portal_server.py</code> for a live local ledger · First-name display only (no surnames)
     </p>
   </footer>
 
@@ -1042,21 +1024,7 @@ def build_html(payload: dict) -> str:
           ? 'Connected to the fee ledger · Gifts update ledger balances · First-name display only'
           : 'Offline demo mode (browser only). For ledger writes run <code>python db/portal_server.py</code> then open the localhost URL.';
       }}
-      updateModeBanner();
       return apiOnline;
-    }}
-
-    function updateModeBanner() {{
-      const banner = document.getElementById('modeBanner');
-      if (!banner) return;
-      banner.classList.add('show');
-      if (apiOnline) {{
-        banner.classList.add('live');
-        banner.innerHTML = 'Connected to the fee ledger. Gifts write to balances.';
-      }} else {{
-        banner.classList.remove('live');
-        banner.innerHTML = 'Demo mode. Gifts save in this browser only. Run <code>python db/portal_server.py</code> for ledger writes.';
-      }}
     }}
 
     function fmtWhen(iso) {{
@@ -1081,7 +1049,7 @@ def build_html(payload: dict) -> str:
 
       document.getElementById('freshHonesty').textContent =
         (report.coverage && report.coverage.honesty) ||
-        'Gifts update the fee ledger live. School sync is periodic. The cohort is a synthetic PoC.';
+        'Gifts update the fee ledger live. School sync is periodic. The cohort is synthetic and documented for development.';
 
       document.getElementById('freshLayers').innerHTML = layers.map(l => `
         <div class="layer">
