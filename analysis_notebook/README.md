@@ -1,10 +1,12 @@
 # ElimuMatch analysis notebook (portable bundle)
 
-Self-contained folder for **ElimuMatch_Analysis.ipynb**. You do not need the full Capstone repository.
+Self-contained folder for **ElimuMatch_Analysis.ipynb**. You do not need the full Capstone repository to reproduce the step-by-step analysis.
+
+**Reviewers:** start at the repo root [`START_HERE.md`](../START_HERE.md). Use this folder when you want to walk the analytics path yourself (data → model → explainability → interventions).
 
 ## Get this folder
 
-- **GitHub:** clone or download only the `analysis_notebook/` directory from the ElimuMatch repo, or
+- **GitHub:** open or download the `analysis_notebook/` directory from the ElimuMatch repo, or
 - **Zip:** unzip if your instructor shared `analysis_notebook.zip`.
 
 ## Run
@@ -21,7 +23,7 @@ In Cursor or VS Code, open this folder and open `ElimuMatch_Analysis.ipynb`. Use
 
 | File | Purpose |
 |------|---------|
-| `ElimuMatch_Analysis.ipynb` | End-to-end retention-risk analysis |
+| `ElimuMatch_Analysis.ipynb` | End-to-end retention-risk analysis (guided steps) |
 | `feature_engineering.py` | Shared feature logic |
 | `preprocess_data.py` | Train/test split and preprocessing |
 | `kenya_schools.py` | School catalog for synthetic data |

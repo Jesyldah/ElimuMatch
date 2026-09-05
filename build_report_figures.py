@@ -273,40 +273,47 @@ def fig_year1_economics() -> None:
 
 
 # ---------------------------------------------------------------------------
-# Pilot roadmap (original four stage boxes)
+# Pilot roadmap (six stages — matches executive pitch)
 # ---------------------------------------------------------------------------
 def fig_pilot_roadmap() -> None:
-    fig, ax = plt.subplots(figsize=(11.5, 4.2))
-    ax.set_xlim(0, 12)
-    ax.set_ylim(0, 4.5)
+    fig, ax = plt.subplots(figsize=(12.2, 4.4))
+    ax.set_xlim(0, 12.4)
+    ax.set_ylim(0, 4.6)
     ax.axis("off")
     fig.patch.set_facecolor(CREAM)
     ax.set_facecolor(CREAM)
 
-    ax.text(0.3, 4.15, "From proof of concept to pilot.", fontsize=13, fontweight="bold", color=INK, va="top")
+    ax.text(0.25, 4.3, "From proof of concept to pilot (six earned stages).", fontsize=12.5,
+            fontweight="bold", color=INK, va="top")
 
     stages = [
-        (SLATE, "Now", ["Synthetic PoC", "HTML demos", "Fee ledger"]),
-        (ORANGE, "Gate 1", ["School MOUs", "Tier-1 data", "Human review"]),
-        (GREEN, "Pilot", ["8 schools", "Live fee gifts", "KPI dashboard"]),
-        (NAVY, "Scale if earned", ["Extra channel", "payment rails", "foundations"]),
+        (INK, "1. Legal Gate", ["MOUs (8 schools)", "DP & safeguarding", "Months 0-4"]),
+        (ORANGE, "2. Partner Data", ["Extracts under MOU", "Quality + validate", "Months 1-4"]),
+        (TEAL, "3. Soft Pilot", ["Rank on real data", "Human review", "Term 1"]),
+        (GREEN, "4. Live Giving", ["Fee gifts live", "Settle to schools", "Terms 1-2"]),
+        (MUTED, "5. Measure", ["Section 9 KPIs", "Fairness pack", "Each term"]),
+        (INK, "6. Scale Decision", ["More schools /", "one new channel", "End of Year 1"]),
     ]
-    xs = [0.45, 3.4, 6.35, 9.3]
-    w, h, y = 2.55, 2.85, 0.55
+
+    n = len(stages)
+    gap = 0.12
+    w = (11.8 - (n - 1) * gap) / n
+    y, h = 0.45, 3.35
+    xs = [0.3 + i * (w + gap) for i in range(n)]
     for i, (x, (c, title, items)) in enumerate(zip(xs, stages)):
-        ax.add_patch(FancyBboxPatch((x, y), w, h, boxstyle="round,pad=0.02,rounding_size=0.12",
+        ax.add_patch(FancyBboxPatch((x, y), w, h, boxstyle="round,pad=0.02,rounding_size=0.08",
                                     facecolor=c, edgecolor="none", zorder=2))
-        ax.text(x + w / 2, y + h - 0.45, title, ha="center", va="top", fontsize=12,
+        ax.text(x + w / 2, y + h - 0.35, title, ha="center", va="top", fontsize=9.5,
                 fontweight="bold", color="white", zorder=3)
         for j, it in enumerate(items):
-            ax.text(x + w / 2, y + h - 1.15 - j * 0.45, it, ha="center", va="top",
-                    fontsize=9.5, color="white", zorder=3)
-        if i < 3:
+            ax.text(x + w / 2, y + h - 1.05 - j * 0.55, it, ha="center", va="top",
+                    fontsize=8.5, color="white", zorder=3)
+        if i < n - 1:
             ax.annotate(
                 "",
-                xy=(xs[i + 1] - 0.05, y + h / 2),
-                xytext=(x + w + 0.05, y + h / 2),
-                arrowprops=dict(arrowstyle="->", color=INK, lw=1.3),
+                xy=(xs[i + 1] - 0.02, y + h / 2),
+                xytext=(x + w + 0.02, y + h / 2),
+                arrowprops=dict(arrowstyle="->", color=INK, lw=1.1),
                 zorder=1,
             )
 

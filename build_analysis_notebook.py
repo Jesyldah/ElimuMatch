@@ -43,7 +43,7 @@ cells.append(
         """# Secondary School Retention Risk Analytics
 ## Prioritizing fee support before students leave school
 
-**Analyst:** Jesyldah  
+**Analyst:** Jesyldah Mwanyamba  
 **Organization:** ElimuMatch (Kenya secondary education)  
 **Dataset:** Synthetic student cohort, n = 1,000 (seed 2026)
 

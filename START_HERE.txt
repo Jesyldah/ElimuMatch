@@ -10,18 +10,32 @@ Then use the three cards: Helper portal | ElimuMatch Support Hub | Analytics
 
 Gifts on Pages = offline demo mode (not live M-Pesa).
 
-OFFLINE / LOCAL LIVE LEDGER
----------------------------
-1. Open:  index.html   (or 03_Demos\index.html from a Drive zip)
-2. Optional live gifts (needs Python):
-   Double-click  OPEN_DEMO.bat
-
-READ FIRST (optional)
----------------------
-CONCEPT_EXPLORATION_ANSWERS.md
+READ THE BRIEF (optional)
+-------------------------
+ElimuMatch_Investor_Brief.docx
+ElimuMatch_Executive_Pitch.pptx
+ElimuMatch_Proposal_Articulation_Concept_Exploration.md
 DATA_AND_LIMITATIONS.md
 COST_BENEFIT_ANALYSIS.md
 
+STEP-BY-STEP ANALYSIS NOTEBOOK
+------------------------------
+To reproduce the retention-risk analysis cell by cell:
+
+  cd analysis_notebook
+  pip install -r requirements.txt
+  jupyter notebook ElimuMatch_Analysis.ipynb
+
+Details: analysis_notebook\README.md
+(The folder is self-contained; you do not need the rest of the repo.)
+
+OFFLINE / LOCAL LIVE LEDGER
+---------------------------
+1. Open:  index.html
+2. Optional live gifts (needs Python):
+   Double-click  OPEN_DEMO.bat
+
 Full technical reproduce steps: README.md
+More detail: START_HERE.md
 
 Capstone = MVP only. Synthetic data is factually grounded.

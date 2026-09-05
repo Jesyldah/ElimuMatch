@@ -2,7 +2,7 @@
 
 **→ Reviewers: open [`START_HERE.md`](START_HERE.md) first** (or `START_HERE.txt`).
 
-EdTech proof of concept: **dropout-risk analytics**, multi-channel intervention routing, a working **fee helper portal** with term ledger, and **Streamlit + HTML** ops / analytics demos.
+EdTech proof of concept: **dropout-risk analytics**, multi-channel intervention routing, a working **fee helper portal** with term ledger, and **HTML** ops / analytics demos (GitHub Pages).
 
 **Capstone scope = MVP only.** Full multi-channel marketplaces, live school feeds, and M-Pesa are roadmap — not required for this submission.
 
@@ -28,28 +28,32 @@ Hosted gifts use offline demo mode (not a live shared ledger).
 
 Offline: open `index.html` (relative links work). Live gifts / ops API need the local server.
 
-### Optional — Streamlit (experimental)
+### Step-by-step analysis notebook
+To reproduce the analytics narrative cell by cell:
+
 ```bash
+cd analysis_notebook
 pip install -r requirements.txt
-python -m streamlit run streamlit_app.py
+jupyter notebook ElimuMatch_Analysis.ipynb
 ```
-HTML via GitHub Pages is the preferred instructor link.
+
+See [`analysis_notebook/README.md`](analysis_notebook/README.md). The folder is self-contained.
 
 ---
 
 ## How we share artefacts (reproducible)
 
-### Recommended: private GitHub repo
+### GitHub repo (review package)
 
 | Audience | What they get |
 |---|---|
-| Instructor / reviewers | Clone → install → regenerate or open HTML demos |
+| Instructor / reviewers | Clone → open Pages demos, brief, pitch, and/or analysis notebook |
 | You | Version history + clear README |
 
 **Steps**
-1. Create a **private** GitHub repository (do not make public — Capstone / Quantic materials).
-2. Push this project (see `.gitignore` — handbook PDF and caches stay local).
-3. Share the private repo invite link with the instructor (or a release ZIP from GitHub).
+1. Clone this repository.
+2. Follow `START_HERE.md` (Pages first; notebook if you want to reproduce analysis steps).
+3. Optional: install `requirements.txt` and rebuild from source (below).
 
 ### Fallback: Google Drive folder
 
@@ -125,7 +129,7 @@ Committed / shared HTML files already embed charts where needed, so reviewers ca
 | `dashboard.html` | Analytics gallery (EDA / model / SHAP) |
 | `index.html` | Project home |
 | `db/` | SQLite schema, ledger, `portal_server.py` |
-| `CONCEPT_EXPLORATION_ANSWERS.md` | Concept / MVP scope brief |
+| `ElimuMatch_Proposal_Articulation_Concept_Exploration.md` | Proposal articulation + concept exploration (MVP vs vision) |
 | `DATA_AND_LIMITATIONS.md` | Synthetic data integrity |
 | `COST_BENEFIT_ANALYSIS.md` | Illustrative Year-1 CBA |
 | `REPORT_NOTES.md` | Report paste-ready notes |

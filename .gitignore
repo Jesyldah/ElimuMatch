@@ -13,22 +13,53 @@ Thumbs.db
 *.swp
 .idea/
 .vscode/
+~$*
+*_conflict_*
 
-# Local caches / notebooks checkpoints
+# Local caches / notebook checkpoints
 .ipynb_checkpoints/
 .pytest_cache/
 .mypy_cache/
 
-# Regenerable / heavy local artefacts (keep HTML demos in repo)
-# Uncomment if GitHub rejects large pushes:
+# --- Local working only (not the public review package) ---
+
+# Streamlit (local UX experiments; public demos are GitHub Pages HTML)
+streamlit_app.py
+elimu_streamlit/
+.streamlit/
+
+# Course / Quantic materials (copyright / internal)
+Capstone Handbook.pdf
+Copy of MSBA Capstone Written Report Template.pdf
+ppt guidelines.docx
+Capstone Project Proposal.docx
+MSBA Proposal Articulation Worksheet.docx
+concept exploration tool/
+Previous project feedback.docx
+
+# Drafts / process notes (Investor Brief is the public written deliverable)
+REPORT_DRAFT.md
+REPORT_NOTES.md
+CONCEPT_EXPLORATION_ANSWERS.md
+Concept_Exploration_Answers_ElimuMatch.docx
+ElimuMatch_Capstone_Report.docx
+ElimuMatch_Report.docx
+ElimuMatch_Executive_Pitch_READY.pptx
+
+# Research scratch / source notes
+Research.docx
+Other relevant info.docx
+Data dic.docx
+
+# Old data / code versions (v4 + synthetic_data_v2 are canonical)
+elimu_match_data_v0.csv
+elimu_match_data_v1.csv
+elimu_match_data_v2.csv
+elimu_match_data_v3.csv
+synthetic_data_v0.py
+synthetic_data_v1.py
+ElimuMatch_Analysis.ipynb
+
+# Optional: regenerable heavy artefacts (uncomment if pushes get large)
 # visualizations/*.png
 # modeling_gallery.html
-
-# Quantic / course materials — keep local (copyright)
-Capstone Handbook.pdf
-concept exploration tool/
-concept exploration tool
-
-# Optional: local OneDrive conflict copies
-*_conflict_*
-~$*

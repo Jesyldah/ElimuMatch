@@ -139,7 +139,7 @@ add_text(s, Inches(1.5), Inches(4.8), Inches(10), Inches(0.4),
          "Prepared for Impact Investors, CSR Partners, and Education Foundations",
          size=14, color=LGRAY, align=PP_ALIGN.CENTER)
 add_text(s, Inches(1.5), Inches(5.4), Inches(10), Inches(0.4),
-         "Jesyldah  |  Founder  |  August 2026",
+         "Jesyldah Mwanyamba  |  Founder  |  August 2026",
          size=14, color=LGRAY, align=PP_ALIGN.CENTER)
 add_text(s, Inches(1.5), Inches(6.2), Inches(10), Inches(0.4),
          "jesyldah.github.io/ElimuMatch", size=13,
@@ -152,7 +152,7 @@ add_text(s, Inches(1.5), Inches(6.2), Inches(10), Inches(0.4),
 # ============================================================
 s = add_blank()
 fill_bg(s, SAND)
-stripe(s, "CONTEXT AND PROBLEM")
+stripe(s, "PROBLEM")
 
 headline(s, "Kenya expanded access, but nearly half of students still do not finish secondary school")
 
@@ -176,7 +176,7 @@ footnote(s, "Sources: UNESCO IICBA (2025) completion estimates; KNBS Economic Su
 # ============================================================
 s = add_blank()
 fill_bg(s, SAND)
-stripe(s, "EVIDENCE OF THE OPPORTUNITY")
+stripe(s, "OPPORTUNITY")
 
 headline(s, "NGO help often focuses on ASAL, while students elsewhere also face fee pressure and dropout risk")
 
@@ -315,37 +315,40 @@ headline(s, "We scale only if the pilot clears three decision gates")
 
 phases = [
     ("1. Legal Gate",
-     "Sign agreements with\n8 partner schools.\nSet up data protection\nand child safeguarding.",
-     "Months 0-2", INK, WHITE),
-    ("2. Soft Pilot",
-     "Rank students internally.\nReview every list before\nanything is made public.",
-     "Term 1", LEAF, WHITE),
-    ("3. Live Giving",
-     "Donors give through\nthe platform. Money\ngoes directly to\nschool fee accounts.",
-     "Terms 1-2", LEAF_DEEP, WHITE),
-    ("4. Measure",
-     "Track whether helped\nstudents stay in school.\nCheck payment accuracy\nand fairness each term.",
+     "Sign agreements with\n8 partner schools.\nData protection and\nchild safeguarding.",
+     "Months 0-4", INK, WHITE),
+    ("2. Partner Data",
+     "Collect school records\nunder the signed\nagreements. Check quality,\nvalidate on real extracts,\nand set a termly refresh.",
+     "Months 1-4", LEAF, WHITE),
+    ("3. Soft Pilot",
+     "Rank students on real\ndata. Review every list\nbefore anything is\nmade public.",
+     "Term 1", LEAF_DEEP, WHITE),
+    ("4. Live Giving",
+     "Donors give through\nthe platform. Money\ngoes to school fee\naccounts.",
+     "Terms 1-2", LEAF, WHITE),
+    ("5. Measure",
+     "Track whether helped\nstudents stay enrolled.\nCheck payments and\nfairness each term.",
      "Each term", SUN, INK),
-    ("5. Scale Decision",
-     "Add more schools or\nnew types of support\nonly if the pilot\nresults justify it.",
+    ("6. Scale Decision",
+     "Add schools or new\nsupport types only if\npilot results justify it.",
      "End of Year 1", INK, WHITE),
 ]
-box_w = 2.3; gap = 0.22; x_start = 0.7; y_top = 1.8
+box_w = 1.95; gap = 0.14; x_start = 0.45; y_top = 1.8
 for i, (title, desc, timing, color, fg) in enumerate(phases):
     x = Inches(x_start + i * (box_w + gap))
     add_rect(s, x, Inches(y_top), Inches(box_w), Inches(3.45), color)
-    add_text(s, x + Inches(0.15), Inches(y_top + 0.15), Inches(box_w - 0.3), Inches(0.4),
-             title, size=15, color=fg, bold=True)
-    add_text(s, x + Inches(0.15), Inches(y_top + 0.7), Inches(box_w - 0.3), Inches(2.2),
-             desc, size=13, color=fg)
-    add_text(s, x + Inches(0.15), Inches(y_top + 2.9), Inches(box_w - 0.3), Inches(0.4),
-             timing, size=12, color=fg, bold=True)
+    add_text(s, x + Inches(0.1), Inches(y_top + 0.12), Inches(box_w - 0.2), Inches(0.45),
+             title, size=13, color=fg, bold=True)
+    add_text(s, x + Inches(0.1), Inches(y_top + 0.65), Inches(box_w - 0.2), Inches(2.25),
+             desc, size=12, color=fg)
+    add_text(s, x + Inches(0.1), Inches(y_top + 2.95), Inches(box_w - 0.2), Inches(0.35),
+             timing, size=11, color=fg, bold=True)
 
 # Arrows between boxes
-for i in range(4):
+for i in range(5):
     x_from = Inches(x_start + i * (box_w + gap) + box_w)
-    add_text(s, x_from + Inches(0.02), Inches(y_top + 1.6), Inches(0.2), Inches(0.4),
-             "\u25B6", size=14, color=TEAL, align=PP_ALIGN.CENTER)
+    add_text(s, x_from - Inches(0.02), Inches(y_top + 1.6), Inches(0.18), Inches(0.4),
+             "\u25B6", size=11, color=TEAL, align=PP_ALIGN.CENTER)
 
 add_rect(s, Inches(0.7), Inches(5.45), Inches(12.0), Inches(0.42), NAVY)
 add_text(s, Inches(0.9), Inches(5.5), Inches(11.5), Inches(0.25),
@@ -452,9 +455,6 @@ add_para(tf2, "Slide 4: Product layer diagram (author)", size=11, color=INK)
 add_para(tf2, "Slide 5: Gift journey and operations flow (author)", size=11, color=INK)
 add_para(tf2, "Slide 6: Model comparison from project pipeline on test data", size=11, color=INK)
 add_para(tf2, "Slide 7: Year-1 economics chart (illustrative, author)", size=11, color=INK)
-add_para(tf2, "", size=8)
-add_para(tf2, "AI-assisted drafting:", size=12, bold=True, color=NAVY)
-add_para(tf2, "Report drafting supported by Cursor Auto (Composer) (Cursor, 2026). All decisions and claims are the author's.", size=11, color=INK)
 add_para(tf2, "", size=8)
 add_para(tf2, "All results are from proof-of-concept data (1,000 students). Not yet validated on live school records.", size=11, color=DGRAY, bold=True)
 

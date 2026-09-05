@@ -118,21 +118,63 @@ def add_inline(paragraph, text: str, size=11, color=BODY) -> None:
 
 
 def add_heading(doc, text: str, level: int) -> None:
+    """Use real Word Heading styles so Insert/Update TOC works."""
     text = text.strip()
-    p = doc.add_paragraph()
+    p = doc.add_heading(text, level=level)
     p.paragraph_format.keep_with_next = True
     if level == 1:
         set_paragraph_spacing(p, before=18, after=10, line=1.15)
-        run = p.add_run(text)
-        set_run_font(run, size=18, bold=True, color=NAVY)
+        size = 18
     elif level == 2:
         set_paragraph_spacing(p, before=14, after=6, line=1.15)
-        run = p.add_run(text)
-        set_run_font(run, size=14, bold=True, color=NAVY)
+        size = 14
     else:
         set_paragraph_spacing(p, before=10, after=4, line=1.15)
-        run = p.add_run(text)
-        set_run_font(run, size=12, bold=True, color=NAVY)
+        size = 12
+    for run in p.runs:
+        set_run_font(run, size=size, bold=True, color=NAVY)
+
+
+def add_toc_page(doc) -> None:
+    """Insert a Word TOC field after the cover (user updates fields once in Word)."""
+    title = doc.add_paragraph()
+    title.alignment = WD_ALIGN_PARAGRAPH.CENTER
+    set_paragraph_spacing(title, before=12, after=18)
+    run = title.add_run("Table of Contents")
+    set_run_font(run, size=18, bold=True, color=NAVY)
+
+    paragraph = doc.add_paragraph()
+    set_paragraph_spacing(paragraph, before=0, after=6)
+
+    run = paragraph.add_run()
+    fld_begin = OxmlElement("w:fldChar")
+    fld_begin.set(qn("w:fldCharType"), "begin")
+    run._r.append(fld_begin)
+
+    run = paragraph.add_run()
+    instr = OxmlElement("w:instrText")
+    instr.set(qn("xml:space"), "preserve")
+    instr.text = ' TOC \\o "1-2" \\h \\z \\u '
+    run._r.append(instr)
+
+    run = paragraph.add_run()
+    fld_sep = OxmlElement("w:fldChar")
+    fld_sep.set(qn("w:fldCharType"), "separate")
+    run._r.append(fld_sep)
+
+    run = paragraph.add_run(
+        "Open in Word, then right-click this area → Update Field → Update entire table."
+    )
+    set_run_font(run, size=10, italic=True, color=MUTED)
+
+    run = paragraph.add_run()
+    fld_end = OxmlElement("w:fldChar")
+    fld_end.set(qn("w:fldCharType"), "end")
+    run._r.append(fld_end)
+
+    p = doc.add_paragraph()
+    br = p.add_run()
+    br.add_break(WD_BREAK.PAGE)
 
 
 def add_body(doc, text: str) -> None:
@@ -303,6 +345,7 @@ def convert() -> Path:
     add_page_number(section)
 
     i = add_cover(doc, lines)
+    add_toc_page(doc)
     in_code = False
     code_buf: list[str] = []
     numbered = 0

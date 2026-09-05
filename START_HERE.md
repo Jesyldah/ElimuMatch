@@ -20,46 +20,53 @@ For a local live SQLite ledger, use Option C below.
 
 ---
 
-## Option B — Read the concept first
+## Option B — Read the brief and limits
 
 | File | What it is |
 |---|---|
-| `CONCEPT_EXPLORATION_ANSWERS.md` (or `.docx` in Drive `01_Docs`) | MVP scope, problem, analytics story |
+| `ElimuMatch_Investor_Brief.docx` | Full investor / partner brief |
+| `ElimuMatch_Executive_Pitch.pptx` | 10-minute executive pitch deck |
+| `ElimuMatch_Proposal_Articulation_Concept_Exploration.md` | Proposal articulation + concept exploration (MVP vs vision) |
 | `DATA_AND_LIMITATIONS.md` | Synthetic data — factual grounding + limits |
 | `COST_BENEFIT_ANALYSIS.md` | Illustrative Year-1 cost–benefit |
-| `README.md` | Full reproduce steps (for technical reviewers) |
-| `ElimuMatch_Analysis.ipynb` | Narrative notebook: *Secondary School Retention Risk Analytics* (problem → decision) |
+| `README.md` | Full repo map and reproduce-from-source steps |
 
 ---
 
-## Option C — Offline HTML / live local ledger
+## Option C — Step-by-step analysis notebook (reproduce the analytics)
 
-### Google Drive zip
-1. Unzip the folder.
-2. Open **`03_Demos/index.html`**.
-3. Optional live gifts: double-click `OPEN_DEMO.bat` (needs Python).
+To walk the retention-risk analysis yourself (data → model → SHAP → interventions), open the portable notebook bundle:
+
+1. Go to **`analysis_notebook/`**
+2. Read **`analysis_notebook/README.md`**
+3. Install and launch:
+
+```bash
+cd analysis_notebook
+pip install -r requirements.txt
+jupyter notebook ElimuMatch_Analysis.ipynb
+```
+
+Or open `analysis_notebook/ElimuMatch_Analysis.ipynb` in Cursor / VS Code with a Python kernel.
+
+That notebook is the guided, cell-by-cell path. You do **not** need the rest of the repo for those steps (the folder is self-contained).
+
+---
+
+## Option D — Offline HTML / live local ledger
 
 ### Cloned GitHub repo
 1. Open **`index.html`** or run **`OPEN_DEMO.bat`**.
-2. Same three demos from the home page.
+2. Use **Helper portal**, **ElimuMatch Support Hub**, and **Analytics** from the home page.
 
----
-
-## Optional — Streamlit (experimental)
-
-```bash
-pip install -r requirements.txt
-python -m streamlit run streamlit_app.py
-```
-
-HTML via GitHub Pages is the preferred share link.
+Live gifts / ops API need the local server (`OPEN_DEMO.bat` or `python db/portal_server.py --open`).
 
 ---
 
 ## What is in Capstone scope vs not
 
-**In MVP:** risk analytics, fee helper channel + ledger, HTML dashboards (Pages + offline), ElimuMatch Support Hub, CBA.  
-**Not required:** live school data, M-Pesa, full tutoring/health marketplaces.
+**In MVP:** risk analytics, fee helper channel + ledger, HTML dashboards (Pages + offline), ElimuMatch Support Hub, CBA, analysis notebook.  
+**Not required for review:** live school data, M-Pesa, full tutoring/health marketplaces.
 
 Synthetic cohort is **factually grounded** and documented — not live student records.
 
@@ -72,4 +79,5 @@ Synthetic cohort is **factually grounded** and documented — not live student r
 | Pages link 404 / old content | Wait 1–2 minutes after a push; hard-refresh the browser |
 | Gift not shared across reviewers | Expected on Pages — offline/local demo mode |
 | Want live local ledger | Run `OPEN_DEMO.bat` / `python db/portal_server.py --open` |
+| Want step-by-step analytics | Use Option C → `analysis_notebook/` |
 | Want to rebuild everything | See `README.md` → “Reproduce from source” |
