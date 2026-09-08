@@ -261,8 +261,8 @@ def build_html(metrics: dict) -> str:
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>ElimuMatch | Retention Analytics</title>
-  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
-  <link rel="apple-touch-icon" href="favicon.svg" />
+  <link rel="icon" type="image/png" href="brand-mark.png" />
+  <link rel="apple-touch-icon" href="brand-mark.png" />
   <style>
     :root {{
       --bg: #0f1419;

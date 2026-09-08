@@ -12,6 +12,8 @@ from docx.shared import Inches, Pt, RGBColor, Cm, Emu
 
 ROOT = Path(__file__).resolve().parent
 SOURCE = ROOT / "REPORT_DRAFT.md"
+# Regenerated draft only — do NOT overwrite ElimuMatch_Investor_Brief.docx
+# (hand-finished cover + TOC). See .cursor/rules/investor-brief.mdc
 OUTPUT = ROOT / "ElimuMatch_Capstone_Report.docx"
 OUTPUT_COPY = ROOT / "ElimuMatch_Report.docx"
 
@@ -201,7 +203,7 @@ def add_image(doc, rel_path: str, caption: str | None = None) -> None:
     set_paragraph_spacing(p, before=8, after=4)
     if path.exists():
         run = p.add_run()
-        run.add_picture(str(path), width=Inches(6.3))
+        run.add_picture(str(path), width=Inches(5.4))
     else:
         run = p.add_run(f"[Figure file not found: {rel_path}]")
         set_run_font(run, size=10, italic=True, color=MUTED)
@@ -424,27 +426,30 @@ def convert() -> Path:
     try:
         doc.save(OUTPUT)
         primary = OUTPUT
-    except OSError:
-        primary = ROOT / "ElimuMatch_Investor_Brief.docx"
-        doc.save(primary)
-        print(f"Note: {OUTPUT.name} is locked; wrote {primary.name} instead.")
+    except OSError as exc:
+        raise SystemExit(
+            f"Could not write {OUTPUT.name}: {exc}. "
+            "Close that file if open. Never overwrite ElimuMatch_Investor_Brief.docx from this script."
+        ) from exc
 
-    for dest in (OUTPUT_COPY, ROOT / "ElimuMatch_Investor_Brief.docx"):
-        if dest.resolve() == primary.resolve():
-            continue
-        try:
-            import shutil
+    try:
+        import shutil
 
-            shutil.copy2(primary, dest)
-        except OSError as exc:
-            print(f"Warning: could not copy to {dest.name}: {exc}")
+        shutil.copy2(primary, OUTPUT_COPY)
+    except OSError as exc:
+        print(f"Warning: could not copy to {OUTPUT_COPY.name}: {exc}")
+
+    print(
+        "Note: ElimuMatch_Investor_Brief.docx was not modified "
+        "(hand-finished cover + TOC). Sync body surgically if needed."
+    )
     return primary
 
 
 if __name__ == "__main__":
     out = convert()
     print(f"Wrote {out.name} ({out.stat().st_size / 1024:.0f} KB)")
-    for name in ("ElimuMatch_Report.docx", "ElimuMatch_Investor_Brief.docx", "ElimuMatch_Capstone_Report.docx"):
+    for name in ("ElimuMatch_Report.docx", "ElimuMatch_Capstone_Report.docx"):
         p = ROOT / name
         if p.exists() and p.resolve() != out.resolve():
             print(f"Also available: {name}")

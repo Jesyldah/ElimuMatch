@@ -1,4 +1,11 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
-  <!-- Official ElimuMatch mark: same leaf used in Streamlit (herb emoji) -->
-  <text x="50" y="58" text-anchor="middle" dominant-baseline="central" font-size="78">🌿</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" role="img" aria-label="ElimuMatch">
+  <!-- Gold four-leaf clover mark (hope) -->
+  <g fill="#f4b942" transform="translate(50 44)">
+    <path d="M0,-8 C-14,-28 -32,-18 -28,0 C-32,18 -14,28 0,8 C14,28 32,18 28,0 C32,-18 14,-28 0,-8 Z" transform="translate(0 -16)"/>
+    <path d="M0,-8 C-14,-28 -32,-18 -28,0 C-32,18 -14,28 0,8 C14,28 32,18 28,0 C32,-18 14,-28 0,-8 Z" transform="rotate(90) translate(0 -16)"/>
+    <path d="M0,-8 C-14,-28 -32,-18 -28,0 C-32,18 -14,28 0,8 C14,28 32,18 28,0 C32,-18 14,-28 0,-8 Z" transform="rotate(180) translate(0 -16)"/>
+    <path d="M0,-8 C-14,-28 -32,-18 -28,0 C-32,18 -14,28 0,8 C14,28 32,18 28,0 C32,-18 14,-28 0,-8 Z" transform="rotate(270) translate(0 -16)"/>
+    <circle r="5"/>
+  </g>
+  <path d="M50 52 Q58 72 62 86" fill="none" stroke="#c49a35" stroke-width="5" stroke-linecap="round"/>
 </svg>

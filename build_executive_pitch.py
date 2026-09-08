@@ -113,9 +113,9 @@ def headline(slide, text):
              text, size=24, bold=True, color=NAVY)
 
 
-def footnote(slide, text, y=7.0):
-    add_text(slide, Inches(0.7), Inches(y), Inches(12), Inches(0.4),
-             text, size=10, color=DGRAY)
+def footnote(slide, text, y=6.95):
+    add_text(slide, Inches(0.7), Inches(y), Inches(12), Inches(0.45),
+             text, size=12, color=INK)
 
 
 # ============================================================
@@ -188,11 +188,11 @@ tf = tb.text_frame; tf.word_wrap = True
 tf.paragraphs[0].text = "How support is directed today:"
 tf.paragraphs[0].font.size = Pt(16); tf.paragraphs[0].font.bold = True; tf.paragraphs[0].font.color.rgb = NAVY
 add_para(tf, "\u2022  Many NGO programs concentrate on arid and semi-arid lands (ASAL), while students elsewhere also face fee pressure and dropout risk.", size=14, color=INK)
-add_para(tf, "\u2022  Most individual donors rely on personal contacts, so students without connections are overlooked.", size=14, color=INK)
+add_para(tf, "\u2022  Most individual helpers rely on personal contacts, so students without connections are overlooked.", size=14, color=INK)
 add_para(tf, "\u2022  Bursary contests run once a year with heavy paperwork, leaving gaps the rest of the time.", size=14, color=INK)
 add_para(tf, "\u2022  Crowdfunding and school lists rarely rank who is most at risk of leaving.", size=14, color=INK)
 add_para(tf, "", size=10)
-add_para(tf, "ElimuMatch covers all 47 counties: donors can choose any place, and priority follows measured risk, not geography alone.", size=15, color=TEAL, bold=True)
+add_para(tf, "ElimuMatch covers all 47 counties: helpers can choose any place, and priority follows measured risk, not geography alone.", size=15, color=TEAL, bold=True)
 
 footnote(s, "ASAL focus is a common NGO pattern; ElimuMatch does not claim ASAL work is unnecessary. Bursaries and ElimuMatch are complements.")
 
@@ -205,34 +205,32 @@ s = add_blank()
 fill_bg(s, SAND)
 stripe(s, "OUR SOLUTION")
 
-headline(s, "ElimuMatch identifies at-risk students and lets donors support them in four simple steps")
+headline(s, "ElimuMatch identifies at-risk students and lets helpers support them in four simple steps")
 
 img(s, os.path.join(RF, "01_product_layers.png"),
-    Inches(0.5), Inches(1.6), width=Inches(6.0))
+    Inches(0.5), Inches(1.55), width=Inches(6.0))
 
-tb = add_text(s, Inches(7.0), Inches(1.6), Inches(5.5), Inches(4.0), "", size=15, color=INK)
+tb = add_text(s, Inches(7.0), Inches(1.55), Inches(5.5), Inches(5.0), "", size=15, color=INK)
 tf = tb.text_frame; tf.word_wrap = True
-tf.paragraphs[0].text = "What donors experience:"
+tf.paragraphs[0].text = "What helpers experience:"
 tf.paragraphs[0].font.size = Pt(16); tf.paragraphs[0].font.bold = True; tf.paragraphs[0].font.color.rgb = GREEN
-add_para(tf, "They pick a county, choose a school, see a student's fee balance, give, and get a receipt.", size=15, color=INK)
-add_para(tf, "", size=8)
-add_para(tf, "What happens behind the scenes:", size=16, bold=True, color=TEAL)
-add_para(tf, "Our system scores each student's risk of dropping out. Only students who need fee help appear. School staff can see the reasons behind each score.", size=15, color=INK)
-add_para(tf, "", size=8)
-add_para(tf, "Every shilling goes directly to the school's fee account. ElimuMatch does not take a cut.", size=15, color=NAVY, bold=True)
+add_para(tf, "They pick a county, choose a school, see a student's fee balance, give, and get a receipt.", size=15, color=INK, space_before=Pt(14))
+add_para(tf, "What happens behind the scenes:", size=16, bold=True, color=TEAL, space_before=Pt(22))
+add_para(tf, "Our system scores each student's risk of dropping out. Only students who need fee help appear. School staff can see the reasons behind each score.", size=15, color=INK, space_before=Pt(14))
+add_para(tf, "Every shilling goes directly to the school's fee account. ElimuMatch does not take a cut.", size=15, color=NAVY, bold=True, space_before=Pt(22))
 
-footnote(s, "Privacy: donors see anonymized profiles only. Student identities are protected. Orphan status is never used as an input.")
+footnote(s, "Privacy: helpers see first name only. No surname or student ID on the helper screen. Orphan status is never used as an input.")
 
 
 # ============================================================
 # SLIDE 5  HOW IT WORKS (gift journey)
-# Horizontal logic: show the donor path visually
+# Horizontal logic: show the helper path visually
 # ============================================================
 s = add_blank()
 fill_bg(s, SAND)
 stripe(s, "HOW IT WORKS")
 
-headline(s, "A donor chooses where to give, pays school fees, and gets a receipt")
+headline(s, "A helper chooses where to give, pays school fees, and gets a receipt")
 
 img(s, os.path.join(RF, "10_gift_journey.png"),
     Inches(1.4), Inches(1.55), height=Inches(3.5))
@@ -257,17 +255,15 @@ stripe(s, "KEY INSIGHT")
 headline(s, "Our system identifies about two out of three students who would drop out, twice the nearest alternative")
 
 img(s, os.path.join(RF, "08_selection_rule.png"),
-    Inches(0.7), Inches(1.6), width=Inches(7.0))
+    Inches(0.5), Inches(1.5), width=Inches(7.4))
 
-tb = add_text(s, Inches(8.2), Inches(1.6), Inches(4.5), Inches(4.5), "", size=15, color=INK)
+tb = add_text(s, Inches(8.2), Inches(1.55), Inches(4.5), Inches(4.8), "", size=15, color=INK)
 tf = tb.text_frame; tf.word_wrap = True
 tf.paragraphs[0].text = "We tested four different approaches."
 tf.paragraphs[0].font.size = Pt(15); tf.paragraphs[0].font.color.rgb = INK
-add_para(tf, "Logistic Regression is the one we selected: it catches about 67% of students who later drop out. Gradient Boosting catches only about 33%.", size=15, color=INK)
-add_para(tf, "", size=10)
-add_para(tf, "The strongest warning signs are health problems, family economic pressure, and falling grades.", size=15, color=NAVY, bold=True)
-add_para(tf, "", size=10)
-add_para(tf, "School staff see why each student is flagged, so they can take informed action. Donors see only a simple, clear profile.", size=14, color=INK)
+add_para(tf, "Logistic Regression is the one we selected: it catches about 67% of students who later drop out. Gradient Boosting catches only about 33%.", size=15, color=INK, space_before=Pt(16))
+add_para(tf, "The strongest warning signs are health problems, family economic pressure, and falling grades.", size=15, color=NAVY, bold=True, space_before=Pt(18))
+add_para(tf, "School staff see why each student is flagged, so they can take informed action. Helpers see only a simple, clear profile.", size=14, color=INK, space_before=Pt(16))
 
 footnote(s, "Results from proof-of-concept data (1,000 students). Real school validation is the next step. Detection is weaker where nearly all students stay enrolled.")
 
@@ -291,7 +287,7 @@ tf.paragraphs[0].text = "Year-1 pilot: 8 schools, about 1,000 students"
 tf.paragraphs[0].font.size = Pt(17); tf.paragraphs[0].font.bold = True; tf.paragraphs[0].font.color.rgb = NAVY
 add_para(tf, "", size=6)
 add_para(tf, "It costs about KES 2.0M to set up and run the platform for one year.", size=15, color=INK)
-add_para(tf, "Donor gifts of about KES 4.0M pass through to schools separately.", size=15, color=INK)
+add_para(tf, "Helper gifts of about KES 4.0M pass through to schools separately.", size=15, color=INK)
 add_para(tf, "The estimated benefits total about KES 5.2M from better targeting, fewer dropouts, and staff time saved.", size=15, color=LEAF, bold=True)
 add_para(tf, "", size=6)
 add_para(tf, "Conservative estimate: roughly break-even.", size=14, color=DGRAY)
@@ -311,7 +307,7 @@ s = add_blank()
 fill_bg(s, SAND)
 stripe(s, "IMPLEMENTATION ROADMAP")
 
-headline(s, "We scale only if the pilot clears three decision gates")
+headline(s, "Our pilot runs through six stages and proceeds only if hard results clear")
 
 phases = [
     ("1. Legal Gate",
@@ -324,7 +320,7 @@ phases = [
      "Rank students on real\ndata. Review every list\nbefore anything is\nmade public.",
      "Term 1", LEAF_DEEP, WHITE),
     ("4. Live Giving",
-     "Donors give through\nthe platform. Money\ngoes to school fee\naccounts.",
+     "Helpers give through\nthe platform. Money\ngoes to school fee\naccounts.",
      "Terms 1-2", LEAF, WHITE),
     ("5. Measure",
      "Track whether helped\nstudents stay enrolled.\nCheck payments and\nfairness each term.",
@@ -388,7 +384,7 @@ add_text(s, Inches(1.5), Inches(1.6), Inches(10), Inches(0.9),
          size=22, color=CREAM, align=PP_ALIGN.CENTER)
 
 items = [
-    "About KES 2.0M for platform setup and operations (donor gifts go to schools separately).",
+    "About KES 2.0M for platform setup and operations (helper gifts go to schools separately).",
     "A part-time analyst and school liaison to run the pilot.",
     "Access to partner school records under signed agreements.",
     "Live fee giving with human review of every student list before it is published.",
@@ -465,7 +461,12 @@ add_text(s, Inches(0.7), Inches(6.9), Inches(12), Inches(0.4),
 
 # ============================================================
 out = os.path.join(BASE, "ElimuMatch_Executive_Pitch.pptx")
+ready = os.path.join(BASE, "ElimuMatch_Executive_Pitch_READY.pptx")
 prs.save(out)
+try:
+    prs.save(ready)
+except Exception as e:
+    print(f"Note: could not also save READY copy: {e}")
 print(f"Saved: {out}")
 print(f"Slides: {len(prs.slides)}")
 
@@ -474,11 +475,11 @@ titles = [
     "ElimuMatch: A data-driven platform for fee support to Kenyan secondary students",
     "Kenya expanded access, but nearly half of students still do not finish secondary school",
     "NGO help often focuses on ASAL, while students elsewhere also face fee pressure and dropout risk",
-    "ElimuMatch identifies at-risk students and lets donors support them in four simple steps",
-    "A donor chooses where to give, pays school fees, and gets a receipt",
+    "ElimuMatch identifies at-risk students and lets helpers support them in four simple steps",
+    "A helper chooses where to give, pays school fees, and gets a receipt",
     "Our system identifies about two out of three students who would drop out, twice the nearest alternative",
     "An 8-school pilot returns about KES 2.6 for every KES 1 of platform cost",
-    "We scale only if the pilot clears three decision gates",
+    "Our pilot runs through six stages and proceeds only if hard results clear",
     "Fund an 8-school Year-1 pilot to prove fee-support matching on real school data",
     "Sources",
 ]
