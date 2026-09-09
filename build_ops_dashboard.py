@@ -392,7 +392,7 @@ TEMPLATE = r"""<!DOCTYPE html>
       <div class="actions">
         <a class="btn solid" href="index.html">Project home</a>
         <button class="btn" type="button" id="refreshBtn">Refresh numbers</button>
-        <a class="btn" href="sponsor_portal.html">Helper portal</a>
+        <a class="btn" href="sponsor_portal.html">Sponsor portal</a>
         <a class="btn" href="dashboard.html">Analytics dashboard</a>
       </div>
     </div>
@@ -429,7 +429,7 @@ TEMPLATE = r"""<!DOCTYPE html>
     </section>
 
     <p class="section-kicker" id="issues">2. What to work next</p>
-    <p class="section-lead">Automatic alerts from unpaid fees and risk scores. Use the helper portal when a student needs a gift.</p>
+    <p class="section-lead">Automatic alerts from unpaid fees and risk scores. Use the sponsor portal when a student needs a gift.</p>
     <div class="grid">
       <section class="panel">
         <h2>Cases needing attention</h2>
@@ -444,7 +444,7 @@ TEMPLATE = r"""<!DOCTYPE html>
     </div>
 
     <p class="section-kicker" id="schools">3. Where to place resources</p>
-    <p class="section-lead">Fee help goes to the Helper portal. Other needs go to school or partner owners, with the school table as the handoff worklist.</p>
+    <p class="section-lead">Fee help goes to the Sponsor portal. Other needs go to school or partner owners, with the school table as the handoff worklist.</p>
 
     <section class="panel full" style="margin-top:0">
       <h2>Support channels</h2>
@@ -589,7 +589,7 @@ TEMPLATE = r"""<!DOCTYPE html>
     </section>
 
     <p class="footer-note">
-      ElimuMatch Support Hub · Fee gifts settle on the Helper portal · Other needs hand off to school and partner owners.
+      ElimuMatch Support Hub · Fee gifts settle on the Sponsor portal · Other needs hand off to school and partner owners.
     </p>
   </div>
 
@@ -636,7 +636,7 @@ TEMPLATE = r"""<!DOCTYPE html>
         + `${k.gifts_completed || 0} gift${k.gifts_completed === 1 ? '' : 's'} recorded so far.`;
       const nextEl = document.getElementById('todayNext');
       if (Number(coverage) < 25) {
-        nextEl.innerHTML = `<strong>Next:</strong> Open the <a href="sponsor_portal.html">helper portal</a> and give toward a student. Fewer than 1 in 4 recommended students have received help yet. Then click Refresh numbers.`;
+        nextEl.innerHTML = `<strong>Next:</strong> Open the <a href="sponsor_portal.html">sponsor portal</a> and give toward a student. Fewer than 1 in 4 recommended students have received help yet. Then click Refresh numbers.`;
       } else if (topIssue && topIssue.code !== 'all_clear') {
         nextEl.innerHTML = `<strong>Next:</strong> ${topIssue.title}. ${topIssue.action || 'Review the cases below.'} <a href="#issues">See cases</a>`;
       } else {
@@ -706,7 +706,7 @@ TEMPLATE = r"""<!DOCTYPE html>
             <span class="sev">${sevLabel[iss.severity] || 'Note'} · ${iss.count ?? 0}</span>
           </div>
           <p>${iss.detail || ''}</p>
-          <p class="action"><strong>Next:</strong> ${iss.action || '-'}${['fee_queue_untouched','high_risk_large_arrears','stuck_partial_pay'].includes(iss.code) ? ' <a href="sponsor_portal.html">Open helper portal</a>' : ''}</p>
+          <p class="action"><strong>Next:</strong> ${iss.action || '-'}${['fee_queue_untouched','high_risk_large_arrears','stuck_partial_pay'].includes(iss.code) ? ' <a href="sponsor_portal.html">Open sponsor portal</a>' : ''}</p>
           ${sample}
         </article>`;
       }).join('') || '<p class="muted">Nothing urgent right now.</p>';
@@ -792,15 +792,15 @@ TEMPLATE = r"""<!DOCTYPE html>
         lanesEl.innerHTML = `
           <p class="lane-note">${lanes.note || ''}</p>
           <div class="fee-channel">
-            <div class="status">${feeCh.handoff_label || 'Helper portal'}</div>
+            <div class="status">${feeCh.handoff_label || 'Sponsor portal'}</div>
             <h3>${feeCh.label || 'School fee support'}</h3>
             <p class="meta">
               <strong>${feeCh.students || 0}</strong> students recommended ·
-              Owner: ${feeCh.owner || 'Helpers via Helper portal'}
+              Owner: ${feeCh.owner || 'Helpers via Sponsor portal'}
             </p>
             <p class="action">
               ${feeCh.action || ''}
-              <a href="sponsor_portal.html">Open Helper portal</a>
+              <a href="sponsor_portal.html">Open Sponsor portal</a>
             </p>
           </div>
           <div class="lane-strip">

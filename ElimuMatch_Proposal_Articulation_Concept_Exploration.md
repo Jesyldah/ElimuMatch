@@ -176,7 +176,7 @@ A higher share of support reaches priority students, administrative friction dec
 ## 5. Feasibility and responsibility
 
 **Technical feasibility**  
-The proof of concept is implemented in Python with a lightweight database and HTML interfaces for the helper portal, Support Hub, and analytics views. Live school data feeds, production authentication, and mobile-money payouts are planned for the partner pilot phase.
+The proof of concept is implemented in Python with a lightweight database and HTML interfaces for the Sponsor portal, Support Hub, and analytics views. Live school data feeds, production authentication, and mobile-money payouts are planned for the partner pilot phase.
 
 **Ethics and transparency**  
 Donors see anonymized profiles. Limits of synthetic data are stated explicitly. Staff can review why a student was prioritized. Fairness is assessed. Human approval is required before any live student list is published.

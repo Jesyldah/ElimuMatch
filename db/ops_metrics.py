@@ -513,7 +513,7 @@ def _rejected_settlements(conn: sqlite3.Connection) -> dict:
 
 
 # Non-fee lanes: ownership + next step (handoff, not fulfillment).
-# Fee support stays on the Helper portal; these stay school/partner channels.
+# Fee support stays on the Sponsor portal; these stay school/partner channels.
 _SUPPORT_LANE_META = {
     'academic_tutoring': {
         'label': 'Academic tutoring',
@@ -648,13 +648,13 @@ def _support_lanes(conn: sqlite3.Connection, rid: int | None) -> dict:
     fee_channel = {
         'code': 'school_fee_support',
         'label': 'School fee support',
-        'owner': 'Helpers via Helper portal',
-        'channel': 'Helper portal',
+        'owner': 'Helpers via Sponsor portal',
+        'channel': 'Sponsor portal',
         'students': fee_students,
         'high_risk': fee_high,
-        'action': 'Open the Helper portal and place gifts against school fee balances.',
+        'action': 'Open the Sponsor portal and place gifts against school fee balances.',
         'handoff_status': 'live_channel',
-        'handoff_label': 'Live on Helper portal',
+        'handoff_label': 'Live on Sponsor portal',
         'top_schools': [],
     }
 
@@ -704,7 +704,7 @@ def _support_lanes(conn: sqlite3.Connection, rid: int | None) -> dict:
 
     return {
         'note': (
-            'Fee help settles on the Helper portal. '
+            'Fee help settles on the Sponsor portal. '
             'Other needs are handed to school or partner owners using the school worklist below. '
             'Progress here means handoff, not completed tutoring or clinic visits.'
         ),
@@ -1104,7 +1104,7 @@ def _issues(
                 'still owe fees, and have not received a gift.'
             ),
             'count': fee_no_gift,
-            'action': 'Open the helper portal and give toward one of these students.',
+            'action': 'Open the sponsor portal and give toward one of these students.',
         })
 
     urgent = []
@@ -1139,7 +1139,7 @@ def _issues(
                 f'and unpaid fees of at least {LARGE_ARREARS_KES:,} KES.'
             ),
             'count': len(urgent),
-            'action': 'Review these cases first and open the helper portal for fee support.',
+            'action': 'Review these cases first and open the sponsor portal for fee support.',
             'sample': urgent,
         })
 

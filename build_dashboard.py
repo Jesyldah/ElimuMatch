@@ -81,7 +81,7 @@ CHART_SECTIONS = [
         ('39_signal_intervention_matrix.png', 'Signal Eligibility Guide', 'Which risk signals unlock which help channels.'),
         ('40_intervention_assignment_mix.png', 'Assignments Applied', 'How the matrix maps onto the student cohort by channel.'),
         ('18_sponsor_matching.png', 'Budget Portfolio', 'Illustrative allocation across support types including school fees.'),
-        ('19_fee_support_priority.png', 'Fee Channel Queue', 'Top students prioritized for term-fee support via the helper portal.'),
+        ('19_fee_support_priority.png', 'Fee Channel Queue', 'Top students prioritized for term-fee support via the sponsor portal.'),
     ]),
 ]
 
@@ -509,7 +509,7 @@ def build_html(metrics: dict) -> str:
       <div class="hero-actions">
         <a class="primary" href="index.html">← Project home</a>
         <a href="ops_dashboard.html">Support Hub</a>
-        <a href="sponsor_portal.html">Helper portal</a>
+        <a href="sponsor_portal.html">Sponsor portal</a>
         <a href="db/schema_dashboard.html">Schema docs</a>
       </div>
     </div>
@@ -554,7 +554,7 @@ def build_html(metrics: dict) -> str:
           <strong>How ElimuMatch uses this:</strong>
           Predict dropout risk → explain drivers → assign a primary channel
           (fees · tutoring · health · digital · enrichment) → match helpers to students
-          and surface school-level need for foundations. The helper portal deepens the fee channel;
+          and surface school-level need for foundations. The sponsor portal deepens the fee channel;
           the Support Hub tracks every channel and school support needs.
         </div>
         <div class="callout">

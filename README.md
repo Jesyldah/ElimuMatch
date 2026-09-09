@@ -2,7 +2,7 @@
 
 **→ Reviewers: open [`START_HERE.md`](START_HERE.md) first** (or `START_HERE.txt`).
 
-EdTech proof of concept: **dropout-risk analytics**, multi-channel intervention routing, a working **fee helper portal** with term ledger, and **HTML** ops / analytics demos (GitHub Pages).
+EdTech proof of concept: **dropout-risk analytics**, multi-channel intervention routing, a working **Sponsor portal** (fee gifts + term ledger), and **HTML** ops / analytics demos (GitHub Pages).
 
 **Capstone scope = MVP only.** Full multi-channel marketplaces, live school feeds, and M-Pesa are roadmap — not required for this submission.
 
@@ -24,7 +24,7 @@ Hosted gifts use offline demo mode (not a live shared ledger).
 1. Double-click `OPEN_DEMO.bat`  
    **or** run: `python db/portal_server.py --open`
 2. Browser opens `http://127.0.0.1:8765/`
-3. Use **Helper portal**, **ElimuMatch Support Hub**, **Analytics dashboard**
+3. Use **Sponsor portal**, **ElimuMatch Support Hub**, **Analytics dashboard**
 
 Offline: open `index.html` (relative links work). Live gifts / ops API need the local server.
 
@@ -124,7 +124,7 @@ Committed / shared HTML files already embed charts where needed, so reviewers ca
 
 | Artefact | Role |
 |---|---|
-| `sponsor_portal.html` | Fee helper channel (MVP depth) |
+| `sponsor_portal.html` | Sponsor portal — fee channel (MVP depth) |
 | `ops_dashboard.html` | ElimuMatch Support Hub (delivery, cases, school support) |
 | `dashboard.html` | Analytics gallery (EDA / model / SHAP) |
 | `index.html` | Project home |

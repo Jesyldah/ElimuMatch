@@ -940,7 +940,7 @@ def build_html(payload: dict) -> str:
 
   <footer class="note" id="siteFooter">
     <p class="footer-mode" id="footerMode">
-      ElimuMatch Helper portal · Run <code>python db/portal_server.py</code> for a live local ledger · First-name display only (no surnames)
+      ElimuMatch Sponsor portal · Run <code>python db/portal_server.py</code> for a live local ledger · First-name display only (no surnames)
     </p>
   </footer>
 

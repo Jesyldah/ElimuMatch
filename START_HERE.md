@@ -11,7 +11,7 @@ You do **not** need to run the full analytics pipeline to review this MVP.
 Open: **https://jesyldah.github.io/ElimuMatch/**
 
 Then click:
-- **Helper portal** — fee sponsorship flow  
+- **Sponsor portal** — fee sponsorship flow  
 - **ElimuMatch Support Hub** — whether fee help is reaching students & school support needs  
 - **Retention analytics** — model / SHAP / personas  
 
@@ -57,7 +57,7 @@ That notebook is the guided, cell-by-cell path. You do **not** need the rest of 
 
 ### Cloned GitHub repo
 1. Open **`index.html`** or run **`OPEN_DEMO.bat`**.
-2. Use **Helper portal**, **ElimuMatch Support Hub**, and **Analytics** from the home page.
+2. Use **Sponsor portal**, **ElimuMatch Support Hub**, and **Analytics** from the home page.
 
 Live gifts / ops API need the local server (`OPEN_DEMO.bat` or `python db/portal_server.py --open`).
 
