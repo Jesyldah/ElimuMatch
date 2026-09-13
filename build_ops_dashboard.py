@@ -78,8 +78,11 @@ TEMPLATE = r"""<!DOCTYPE html>
     .wrap { max-width: 1180px; margin: 0 auto; padding: 0 1.25rem 2.5rem; }
     header .wrap { padding-bottom: 0; }
     .eyebrow {
-      font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase;
+      font-size: 0.72rem; letter-spacing: 0.04em;
       opacity: 0.8; margin-bottom: 0.35rem;
+    }
+    .eyebrow.section-label {
+      letter-spacing: 0.1em; text-transform: uppercase;
     }
     h1 { font-family: "Fraunces", serif; font-size: 1.85rem; font-weight: 700; margin-bottom: 0.35rem; }
     .sub { opacity: 0.85; max-width: 42rem; font-size: 0.95rem; }
@@ -411,7 +414,7 @@ TEMPLATE = r"""<!DOCTYPE html>
     </nav>
 
     <section class="today" id="today">
-      <div class="eyebrow" style="opacity:1;color:var(--leaf-deep)">Today</div>
+      <div class="eyebrow section-label" style="opacity:1;color:var(--leaf-deep)">Today</div>
       <h2>What needs attention</h2>
       <p class="pulse" id="todayPulse">Loading snapshot…</p>
       <p class="next" id="todayNext"></p>
